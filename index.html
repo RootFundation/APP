@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Corporation - Privacy Protection Services</title>
+    <style>
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    --accent: #22d3ee;
+    --bg-dark: #0a0a0f;
+    --bg-card: #12121a;
+    --bg-card-hover: #1a1a25;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border: #1e293b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+    --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 0;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+    background: var(--gradient-1);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3); }
+
+/* Hero */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    animation: pulse 15s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.hero .container { position: relative; z-index: 1; text-align: center; }
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    margin-bottom: 24px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; }
+
+.btn {
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4); }
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--bg-card); border-color: var(--primary); }
+
+/* Section Styles */
+section { padding: 100px 0; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+.section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+/* Apps Grid (Main Page) */
+#apps { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); }
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.app-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+}
+
+.app-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--gradient-1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.app-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
+.app-card .app-hash { font-family: monospace; font-size: 0.7rem; color: var(--text-dim); word-break: break-all; margin-bottom: 16px; }
+.app-card .app-cta { color: var(--primary-light); font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.app-card .app-cta::after { content: '→'; transition: transform 0.2s; }
+.app-card:hover .app-cta::after { transform: translateX(4px); }
+
+/* Features */
+#features { background: var(--bg-dark); }
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s;
+}
+
+.feature-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+
+.feature-icon {
+    width: 48px; height: 48px;
+    background: var(--gradient-1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+.feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+/* Pricing */
+#pricing { background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%); }
+
+.pricing-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.pricing-nav {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 1.25rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.pricing-nav:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.pricing-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pricing-nav:disabled:hover {
+    background: var(--bg-card);
+    border-color: var(--border);
+}
+
+.pricing-wrapper {
+    overflow-x: hidden;
+    overflow-y: visible;
+    flex: 1;
+    min-width: 0;
+    padding-top: 16px;
+}
+
+.pricing-grid {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.3s ease;
+}
+
+.pricing-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    padding-top: 40px;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+    flex: 0 0 calc((100% - 48px) / 3);
+    box-sizing: border-box;
+}
+
+.pricing-card.featured {
+    border-color: var(--primary);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, var(--bg-card) 100%);
+}
+
+.pricing-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient-1);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.pricing-name { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
+.pricing-period { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+.pricing-price { font-size: 2rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.pricing-price .currency { font-size: 1.25rem; color: var(--text-muted); font-weight: 400; }
+.pricing-price .amount { font-size: 2.5rem; }
+.pricing-price .unit { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; margin-left: 4px; }
+
+.pricing-features { list-style: none; margin-bottom: 32px; }
+.pricing-features li { padding: 10px 0; color: var(--text-muted); display: flex; align-items: center; gap: 12px; font-size: 0.95rem; }
+.pricing-features li::before { content: '✓'; color: var(--success); font-weight: 600; }
+.pricing-card .btn { width: 100%; text-align: center; }
+
+/* Servers */
+#servers { background: var(--bg-dark); }
+
+.servers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.server-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+}
+
+.server-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+.server-flag { font-size: 2rem; }
+.server-info h4 { font-size: 1rem; margin-bottom: 4px; }
+.server-info p { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Bonuses */
+#bonuses { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); }
+
+.bonus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.bonus-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.bonus-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.bonus-icon { margin-bottom: 16px; color: var(--accent); }
+.bonus-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+.bonus-value { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+.bonus-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+/* Affiliate */
+#affiliate { background: var(--bg-dark); }
+
+.affiliate-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.affiliate-hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.affiliate-hero h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.affiliate-hero p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 32px;
+}
+
+.affiliate-benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.affiliate-benefit {
+    text-align: center;
+}
+
+.affiliate-benefit-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    margin-bottom: 8px;
+}
+
+.affiliate-benefit-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.affiliate-tiers-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.affiliate-tier-badge {
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.affiliate-tier-badge svg {
+    flex-shrink: 0;
+}
+
+.affiliate-cta {
+    display: flex;
+    justify-content: center;
+}
+
+/* Legal */
+#legal { background: var(--bg-card); }
+
+.legal-tabs { display: flex; gap: 8px; margin-bottom: 32px; justify-content: center; }
+
+.legal-tab {
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.legal-tab:hover { border-color: var(--primary); }
+.legal-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+.legal-content {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.legal-content h1 { font-size: 1.5rem; margin-top: 32px; margin-bottom: 16px; color: var(--text); }
+.legal-content h2 { font-size: 1.25rem; margin-top: 28px; margin-bottom: 14px; color: var(--text); }
+.legal-content h3 { font-size: 1.1rem; margin-top: 24px; margin-bottom: 12px; color: var(--text); }
+.legal-content h1:first-child, .legal-content h2:first-child, .legal-content h3:first-child { margin-top: 0; }
+.legal-content p { margin-bottom: 16px; color: var(--text-muted); line-height: 1.8; }
+.legal-content ul, .legal-content ol { margin-left: 24px; margin-bottom: 16px; color: var(--text-muted); line-height: 1.8; }
+.legal-content li { margin-bottom: 8px; }
+.legal-content strong { color: var(--text); }
+.legal-content a { color: var(--primary-light); }
+
+/* Footer */
+footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 60px 0 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-brand .logo { margin-bottom: 16px; display: inline-block; }
+.footer-brand p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
+.footer-links h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+.footer-links ul { list-style: none; }
+.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: block; padding: 6px 0; transition: color 0.2s; }
+.footer-links a:hover { color: var(--primary-light); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 30px; text-align: center; color: var(--text-dim); font-size: 0.85rem; }
+
+/* Loading */
+.loading { display: flex; align-items: center; justify-content: center; min-height: 200px; }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hidden { display: none !important; }
+
+/* Form focus states */
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    .footer-content { grid-template-columns: 1fr !important; text-align: center; }
+    .footer-brand p { max-width: 100%; }
+    .btn { width: 100%; max-width: 300px; }
+}
+
+@media (max-width: 900px) {
+    #contact .container > div:last-child {
+        grid-template-columns: 1fr !important;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#/" class="logo" id="nav-logo">Root Corporation</a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#apps">Our Apps</a></li>
+                <li><a href="#features">Features</a></li>
+            </ul>
+            <a href="#apps" class="nav-cta" id="nav-cta">Explore Apps</a>
+        </div>
+    </nav>
+
+    <!-- ==================== MAIN PAGE ==================== -->
+    <div id="main-page">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">
+                    <span>Enterprise-Grade Security</span>
+                </div>
+                <h1>Your Privacy<br>Is Our Priority</h1>
+                <p>Protect your digital footprint with our advanced privacy protection solutions. Take control of your online identity and browse with confidence.</p>
+                <a href="#apps" class="btn btn-primary">Explore Solutions</a>
+            </div>
+        </section>
+
+        <!-- Apps Section -->
+        <section id="apps">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Privacy Solutions</h2>
+                    <p>Choose the privacy protection service that best fits your needs.</p>
+                </div>
+                <div id="apps-grid" class="apps-grid">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Why Choose Us</h2>
+                    <p>Industry-leading privacy protection across all our services.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <h3>Zero Data Collection</h3>
+                        <p>We never track, collect, or share your personal data. Your privacy is guaranteed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                        <h3>End-to-End Encryption</h3>
+                        <p>Advanced encryption protocols ensure your communications remain private and secure.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                        <h3>Anonymous Browsing</h3>
+                        <p>Protect your identity online and prevent tracking by third parties.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                        <h3>Global Infrastructure</h3>
+                        <p>Distributed network ensures reliable privacy protection worldwide.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                        <h3>Multi-Platform</h3>
+                        <p>Protect all your devices with a single subscription - desktop, mobile, and more.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                        <h3>24/7 Support</h3>
+                        <p>Our privacy experts are available around the clock to assist you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== APP PAGE ==================== -->
+    <div id="app-page" class="hidden">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">
+                    <span>Privacy Protection</span>
+                </div>
+                <h1 id="app-hero-title">App Name</h1>
+                <p>Advanced privacy protection with end-to-end encryption, zero data logging, and global infrastructure. Take control of your digital privacy.</p>
+                <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                    <a href="javascript:void(0)" onclick="scrollToSection('pricing')" class="btn btn-primary">View Plans</a>
+                    <a href="#/" class="btn btn-secondary">← All Solutions</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Simple, Transparent Pricing</h2>
+                    <p>Choose the plan that works best for you. All plans include full access.</p>
+                </div>
+                <div class="pricing-container">
+                    <button class="pricing-nav" id="pricing-prev" aria-label="Previous">&lt;</button>
+                    <div class="pricing-wrapper">
+                        <div id="pricing-grid" class="pricing-grid">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                    <button class="pricing-nav" id="pricing-next" aria-label="Next">&gt;</button>
+                </div>
+                <div id="pricing-dots" style="display: flex; justify-content: center; gap: 8px; margin-top: 24px;"></div>
+            </div>
+        </section>
+
+        <!-- Servers -->
+        <section id="servers">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Global Infrastructure</h2>
+                    <p>Privacy protection nodes distributed worldwide for optimal performance.</p>
+                </div>
+                <div id="servers-grid" class="servers-grid">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonuses -->
+        <section id="bonuses">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Exclusive Bonuses</h2>
+                    <p>Get rewarded for joining and sharing with friends.</p>
+                </div>
+                <div id="bonus-grid" class="bonus-grid">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Affiliate -->
+        <section id="affiliate">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Affiliate Program</h2>
+                    <p>Join our partner network and grow with us.</p>
+                </div>
+                <div id="affiliate-content" class="affiliate-content">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Legal -->
+        <section id="legal">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Legal Information</h2>
+                    <p>Transparency is important to us.</p>
+                </div>
+                <div class="legal-tabs">
+                    <button class="legal-tab active" data-tab="agreement">User Agreement</button>
+                    <button class="legal-tab" data-tab="privacy">Privacy Policy</button>
+                </div>
+                <div id="legal-content" class="legal-content">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%); padding: 100px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <p>We're here to help. Reach out to our team for any questions or support.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1000px; margin: 0 auto;">
+                <!-- Contact Info -->
+                <div>
+                    <h3 style="font-size: 1.25rem; margin-bottom: 24px; color: var(--text);">Contact Information</h3>
+
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-light);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9rem; color: var(--text); margin-bottom: 4px;">Headquarters</h4>
+                                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                                    Root Corporation Pty Ltd<br>
+                                    28A Marquis St, Greenslopes<br>
+                                    Queensland 4120, Australia
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-light);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9rem; color: var(--text); margin-bottom: 4px;">Email</h4>
+                                <a href="mailto:developer@root-corporation.com" style="color: var(--primary-light); text-decoration: none; font-size: 0.9rem;">developer@root-corporation.com</a>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-light);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9rem; color: var(--text); margin-bottom: 4px;">Phone</h4>
+                                <a href="tel:+610490785190" style="color: var(--primary-light); text-decoration: none; font-size: 0.9rem;">+61 0490 785 190</a>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-light);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9rem; color: var(--text); margin-bottom: 4px;">Business Registration</h4>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">ABN 34 686 229 532</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div>
+                    <h3 style="font-size: 1.25rem; margin-bottom: 24px; color: var(--text);">Send us a Message</h3>
+                    <form id="contact-form" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Name</label>
+                                <input type="text" id="contact-name" placeholder="John Doe" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; transition: border-color 0.2s;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Email</label>
+                                <input type="email" id="contact-email" placeholder="john@example.com" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; transition: border-color 0.2s;">
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Subject</label>
+                            <input type="text" id="contact-subject" placeholder="How can we help?" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; transition: border-color 0.2s;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Message</label>
+                            <textarea id="contact-message" placeholder="Tell us more about your inquiry..." rows="5" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; resize: vertical; transition: border-color 0.2s;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="align-self: flex-start; margin-top: 8px;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content" style="grid-template-columns: 2fr 1fr 1fr 1.5fr;">
+                <div class="footer-brand">
+                    <a href="#/" class="logo">Root Corporation</a>
+                    <p style="margin-top: 16px;">Protect your digital privacy with our advanced privacy protection services. Trusted by users worldwide.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Solutions</h4>
+                    <ul id="footer-apps"></ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#legal">Legal</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact Us</h4>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem;">
+                        <li style="padding: 6px 0;">28A Marquis St, Greenslopes, QLD 4120</li>
+                        <li style="padding: 6px 0;"><a href="mailto:developer@root-corporation.com">developer@root-corporation.com</a></li>
+                        <li style="padding: 6px 0;"><a href="tel:+610490785190">+61 0490 785 190</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border); padding-top: 30px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <p style="color: var(--text-dim); font-size: 0.85rem;">&copy; 2025 Root Corporation Pty Ltd. All rights reserved.</p>
+                <p style="color: var(--text-dim); font-size: 0.85rem;">ABN 34 686 229 532 · Australia</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+import init, { HydraClient } from './pkg/wasm.js';
+
+const ENDPOINT_DISCOVERY_URL = 'https://raw.githubusercontent.com/RootFundation/API/refs/heads/master/endpoint.txt';
+
+let client = null;
+let roomsCache = [];
+let currentRoom = null;
+let legalData = null;
+let currentProductIndex = 0;
+let productsCache = [];
+
+// Helper to convert Map to Object (serde_wasm_bindgen returns Maps)
+function mapToObject(obj) {
+    if (obj instanceof Map) {
+        const result = {};
+        for (const [key, value] of obj) {
+            result[key] = mapToObject(value);
+        }
+        return result;
+    }
+    if (Array.isArray(obj)) {
+        return obj.map(mapToObject);
+    }
+    if (obj && typeof obj === 'object') {
+        const result = {};
+        for (const key of Object.keys(obj)) {
+            result[key] = mapToObject(obj[key]);
+        }
+        return result;
+    }
+    return obj;
+}
+
+async function discoverEndpoint() {
+    const response = await fetch(ENDPOINT_DISCOVERY_URL);
+    if (!response.ok) throw new Error(`Failed to fetch endpoint: HTTP ${response.status}`);
+    const content = await response.text();
+    const encodedNames = content.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    if (encodedNames.length === 0) throw new Error('No endpoints found');
+    return encodedNames[Math.floor(Math.random() * encodedNames.length)];
+}
+
+async function initApp() {
+    try {
+        await init();
+        const encodedName = await discoverEndpoint();
+        client = new HydraClient(encodedName);
+
+        const response = mapToObject(await client.fetch_rooms());
+        roomsCache = response.data?.rooms || [];
+
+        if (roomsCache.length === 0) {
+            document.getElementById('apps-grid').innerHTML = '<p style="text-align:center;color:var(--text-muted)">Failed to load applications. Please refresh the page.</p>';
+            return;
+        }
+
+        renderAppsGrid();
+        renderFooterApps();
+        handleRoute();
+    } catch (e) {
+        console.error('Initialization error:', e);
+        document.getElementById('apps-grid').innerHTML = `<p style="text-align:center;color:var(--error)">Error: ${e.message || e}</p>`;
+    }
+}
+
+function renderAppsGrid() {
+    const grid = document.getElementById('apps-grid');
+    if (!roomsCache.length) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No applications available</p>';
+        return;
+    }
+
+    grid.innerHTML = roomsCache.map(room => `
+        <a href="#/${escapeHtml(room.name)}" class="app-card">
+            <div class="app-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <h3>${escapeHtml(room.name)}</h3>
+            <span class="app-cta">View Details</span>
+        </a>
+    `).join('');
+}
+
+function renderFooterApps() {
+    const container = document.getElementById('footer-apps');
+    container.innerHTML = roomsCache.map(room =>
+        `<li><a href="#/${escapeHtml(room.name)}">${escapeHtml(room.name)}</a></li>`
+    ).join('');
+}
+
+async function handleRoute() {
+    const hash = window.location.hash.slice(1) || '/';
+
+    if (hash === '/' || hash === '') {
+        showMainPage();
+        return;
+    }
+
+    const roomName = hash.slice(1); // Remove leading /
+    const room = roomsCache.find(r => r.name === roomName);
+
+    if (room) {
+        await showAppPage(room);
+    } else {
+        showMainPage();
+    }
+}
+
+function showMainPage() {
+    currentRoom = null;
+    document.getElementById('main-page').classList.remove('hidden');
+    document.getElementById('app-page').classList.add('hidden');
+
+    document.getElementById('nav-logo').textContent = 'Root Corporation';
+    document.getElementById('nav-logo').href = '#/';
+
+    // Show apps directly in nav
+    const appsLinks = roomsCache.map(room =>
+        `<li><a href="#/${escapeHtml(room.name)}">${escapeHtml(room.name)}</a></li>`
+    ).join('');
+    document.getElementById('nav-links').innerHTML = appsLinks + `<li><a href="#features">Features</a></li>`;
+
+    document.getElementById('nav-cta').textContent = 'Get Started';
+    document.getElementById('nav-cta').href = '#apps';
+    document.title = 'Root Corporation';
+}
+
+async function showAppPage(room) {
+    currentRoom = room;
+    document.getElementById('main-page').classList.add('hidden');
+    document.getElementById('app-page').classList.remove('hidden');
+
+    document.getElementById('nav-logo').textContent = room.name;
+    document.getElementById('nav-logo').href = `#/${room.name}`;
+    document.getElementById('nav-links').innerHTML = `
+        <li><a href="javascript:void(0)" onclick="scrollToSection('pricing')">Pricing</a></li>
+        <li><a href="javascript:void(0)" onclick="scrollToSection('servers')">Infrastructure</a></li>
+        <li><a href="javascript:void(0)" onclick="scrollToSection('bonuses')">Bonuses</a></li>
+        <li><a href="javascript:void(0)" onclick="scrollToSection('affiliate')">Affiliate</a></li>
+        <li><a href="javascript:void(0)" onclick="scrollToSection('legal')">Legal</a></li>
+    `;
+    document.getElementById('nav-cta').textContent = 'Get Started';
+    document.getElementById('nav-cta').href = 'javascript:void(0)';
+    document.getElementById('nav-cta').onclick = () => scrollToSection('pricing');
+
+    document.getElementById('app-hero-title').textContent = room.name;
+    document.title = `${room.name} - Privacy Protection`;
+
+    // Reset loading states
+    document.getElementById('pricing-grid').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    document.getElementById('servers-grid').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    document.getElementById('bonus-grid').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    document.getElementById('affiliate-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    document.getElementById('legal-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+    await Promise.all([
+        loadProducts(),
+        loadServers(),
+        loadBonuses(),
+        loadRules(),
+        loadLegal()
+    ]);
+}
+
+async function loadProducts() {
+    try {
+        const response = mapToObject(await client.fetch_products(currentRoom.hash));
+        const products = response.data?.products || [];
+        renderProducts(products);
+    } catch (e) { console.error('Failed to load products:', e); }
+}
+
+function renderProducts(products) {
+    const grid = document.getElementById('pricing-grid');
+    const dotsContainer = document.getElementById('pricing-dots');
+    const prevBtn = document.getElementById('pricing-prev');
+    const nextBtn = document.getElementById('pricing-next');
+
+    if (!products.length) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No plans available</p>';
+        dotsContainer.innerHTML = '';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        return;
+    }
+
+    prevBtn.style.display = 'flex';
+    nextBtn.style.display = 'flex';
+
+    productsCache = [...products].sort((a, b) => a.period - b.period);
+    currentProductIndex = 0;
+    const featuredIndex = Math.floor(productsCache.length / 2);
+
+    grid.innerHTML = productsCache.map((product, i) => `
+        <div class="pricing-card ${i === featuredIndex ? 'featured' : ''}" data-index="${i}">
+            <div class="pricing-name">${escapeHtml(product.name)}</div>
+            <div class="pricing-period">${product.period} Day${product.period !== 1 ? 's' : ''}</div>
+            <div class="pricing-price"><span class="currency">A$</span><span class="amount">${formatPrice(product.price)}</span></div>
+            <ul class="pricing-features">
+                <li>Full Privacy Protection</li>
+                <li>All Global Nodes</li>
+                <li>Unlimited Bandwidth</li>
+                <li>24/7 Privacy Support</li>
+            </ul>
+            <a href="#" class="btn btn-primary">Get Started</a>
+        </div>
+    `).join('');
+
+    // Render dots
+    dotsContainer.innerHTML = productsCache.map((_, i) =>
+        `<button class="pricing-dot ${i === 0 ? 'active' : ''}" data-index="${i}" style="width: 10px; height: 10px; border-radius: 50%; border: none; background: ${i === 0 ? 'var(--primary)' : 'var(--border)'}; cursor: pointer; transition: background 0.2s;"></button>`
+    ).join('');
+
+    updatePricingCarousel();
+}
+
+function updatePricingCarousel() {
+    const grid = document.getElementById('pricing-grid');
+    const dots = document.querySelectorAll('.pricing-dot');
+    const prevBtn = document.getElementById('pricing-prev');
+    const nextBtn = document.getElementById('pricing-next');
+    const cards = grid.querySelectorAll('.pricing-card');
+
+    if (!cards.length) return;
+
+    const visibleCount = 3;
+    const gap = 24;
+    const cardWidth = cards[0].offsetWidth;
+    const slideAmount = (cardWidth + gap) * currentProductIndex;
+
+    grid.style.transform = `translateX(-${slideAmount}px)`;
+
+    // Update dots - highlight range of visible items
+    dots.forEach((dot, i) => {
+        const isVisible = i >= currentProductIndex && i < currentProductIndex + visibleCount;
+        dot.style.background = isVisible ? 'var(--primary)' : 'var(--border)';
+        dot.classList.toggle('active', isVisible);
+    });
+
+    // Update button states - can't go past showing last 3
+    const maxIndex = Math.max(0, productsCache.length - visibleCount);
+    prevBtn.disabled = currentProductIndex === 0;
+    nextBtn.disabled = currentProductIndex >= maxIndex;
+}
+
+function setupPricingNavigation() {
+    const prevBtn = document.getElementById('pricing-prev');
+    const nextBtn = document.getElementById('pricing-next');
+    const dotsContainer = document.getElementById('pricing-dots');
+
+    const visibleCount = 3;
+
+    prevBtn.addEventListener('click', () => {
+        if (currentProductIndex > 0) {
+            currentProductIndex--;
+            updatePricingCarousel();
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        const maxIndex = Math.max(0, productsCache.length - visibleCount);
+        if (currentProductIndex < maxIndex) {
+            currentProductIndex++;
+            updatePricingCarousel();
+        }
+    });
+
+    dotsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('pricing-dot')) {
+            const maxIndex = Math.max(0, productsCache.length - visibleCount);
+            currentProductIndex = Math.min(parseInt(e.target.dataset.index), maxIndex);
+            updatePricingCarousel();
+        }
+    });
+}
+
+async function loadServers() {
+    try {
+        const response = mapToObject(await client.fetch_servers(currentRoom.hash));
+        const servers = response.data?.servers || [];
+        renderServers(servers);
+    } catch (e) { console.error('Failed to load servers:', e); }
+}
+
+function renderServers(servers) {
+    const grid = document.getElementById('servers-grid');
+    if (!servers.length) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No nodes available</p>';
+        return;
+    }
+
+    grid.innerHTML = servers.map(server => `
+        <div class="server-card">
+            <div class="server-flag">${escapeHtml(server.country)}</div>
+            <div class="server-info">
+                <h4>${escapeHtml(server.city)}</h4>
+                <p>${escapeHtml(server.zone)}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function loadBonuses() {
+    try {
+        const response = mapToObject(await client.fetch_bonus(currentRoom.hash));
+        const bonuses = response.data || [];
+        renderBonuses(bonuses);
+    } catch (e) { console.error('Failed to load bonuses:', e); }
+}
+
+function renderBonuses(bonuses) {
+    const grid = document.getElementById('bonus-grid');
+    const titles = { welcome_bonus: 'Welcome Bonus', refer_bonus: 'Referral Bonus', share_bonus: 'Share Bonus' };
+    const descriptions = {
+        welcome_bonus: 'Get free access when you sign up',
+        refer_bonus: 'Earn days for each friend you refer',
+        share_bonus: 'Share on social media and get rewarded'
+    };
+    const icons = {
+        welcome_bonus: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>',
+        refer_bonus: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        share_bonus: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'
+    };
+    const defaultIcon = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+
+    if (!bonuses.length) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No bonuses available</p>';
+        return;
+    }
+
+    grid.innerHTML = bonuses.map(bonus => `
+        <div class="bonus-card">
+            <div class="bonus-icon">${icons[bonus.name] || defaultIcon}</div>
+            <h3>${titles[bonus.name] || bonus.name}</h3>
+            <div class="bonus-value">${formatBonusDays(bonus.days)}</div>
+            <p>${descriptions[bonus.name] || 'Special bonus reward'}</p>
+        </div>
+    `).join('');
+}
+
+async function loadRules() {
+    try {
+        const response = mapToObject(await client.fetch_rules(currentRoom.hash));
+        const rule = response.data?.rule;
+        if (rule) renderRules(rule);
+    } catch (e) { console.error('Failed to load rules:', e); }
+}
+
+function renderRules(rule) {
+    const container = document.getElementById('affiliate-content');
+    const levels = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+    const tierCount = rule.commission_rates?.length || 5;
+    const startingRate = rule.commission_rates?.[0] ? (rule.commission_rates[0] * 100).toFixed(0) : '10';
+    const tierIcons = [
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cd7f32" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffd700" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a0e0e0" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>',
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 17l-6.3 4 2.3-7-6-4.6h7.6z"/></svg>'
+    ];
+
+    container.innerHTML = `
+        <div class="affiliate-hero">
+            <h3>Earn With Every Referral</h3>
+            <p>Turn your network into income. Share privacy protection and get rewarded for every successful referral.</p>
+            <div class="affiliate-benefits">
+                <div class="affiliate-benefit">
+                    <div class="affiliate-benefit-value">${startingRate}%+</div>
+                    <div class="affiliate-benefit-label">Starting Commission</div>
+                </div>
+                <div class="affiliate-benefit">
+                    <div class="affiliate-benefit-value">${tierCount}</div>
+                    <div class="affiliate-benefit-label">Commission Tiers</div>
+                </div>
+                <div class="affiliate-benefit">
+                    <div class="affiliate-benefit-value">Anytime</div>
+                    <div class="affiliate-benefit-label">Payouts</div>
+                </div>
+            </div>
+            <div class="affiliate-tiers-row">
+                ${rule.commission_rates.map((_, i) => `
+                    <span class="affiliate-tier-badge">${tierIcons[i] || ''} ${levels[i] || `Level ${i + 1}`}</span>
+                `).join('')}
+            </div>
+            <div class="affiliate-cta">
+                <a href="javascript:void(0)" onclick="scrollToSection('contact')" class="btn btn-primary">Become a Partner</a>
+            </div>
+        </div>
+    `;
+}
+
+async function loadLegal() {
+    try {
+        const response = mapToObject(await client.fetch_legal(currentRoom.hash));
+        legalData = response.data?.legal || {};
+        renderLegal('agreement');
+    } catch (e) { console.error('Failed to load legal:', e); }
+}
+
+function renderLegal(tab) {
+    const container = document.getElementById('legal-content');
+    if (!legalData) {
+        container.innerHTML = '<p>Loading...</p>';
+        return;
+    }
+    let content = tab === 'agreement' ? legalData.user_agreement : legalData.privacy_policy;
+    if (content) {
+        // Convert \n to <br> for plain text, preserve if already HTML
+        if (!content.includes('<p>') && !content.includes('<div>')) {
+            content = content.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+            content = '<p>' + content + '</p>';
+        }
+    }
+    container.innerHTML = content || '<p>No content available.</p>';
+}
+
+function setupTabs() {
+    document.querySelectorAll('.legal-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.legal-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderLegal(btn.dataset.tab);
+        });
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatPrice(cents) { return (cents / 100).toFixed(2); }
+
+function formatPeriod(days) {
+    if (days >= 365) return `${Math.round(days / 365)} Year${days >= 730 ? 's' : ''}`;
+    if (days >= 30) return `${Math.round(days / 30)} Month${days >= 60 ? 's' : ''}`;
+    return `${Math.round(days)} Day${days > 1 ? 's' : ''}`;
+}
+
+function formatBonusDays(days) {
+    if (days < 1/24) {
+        // Less than 1 hour, show minutes
+        const minutes = Math.round(days * 24 * 60);
+        return `${minutes} Minute${minutes !== 1 ? 's' : ''} Free`;
+    }
+    if (days < 1) {
+        const hours = Math.round(days * 24);
+        if (hours === 0) {
+            const minutes = Math.round(days * 24 * 60);
+            return `${minutes} Minute${minutes !== 1 ? 's' : ''} Free`;
+        }
+        return `${hours} Hour${hours !== 1 ? 's' : ''} Free`;
+    }
+    return `${Math.round(days)} Day${days !== 1 ? 's' : ''} Free`;
+}
+
+window.addEventListener('hashchange', handleRoute);
+
+// Global function for scrolling to sections without changing hash
+window.scrollToSection = function(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
+function setupContactForm() {
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const subject = document.getElementById('contact-subject').value;
+            const message = document.getElementById('contact-message').value;
+
+            const body = `Name: ${name}
+Email: ${email}
+
+Message:
+${message}`;
+
+            const mailtoUrl = `mailto:developer@root-corporation.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoUrl;
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+    setupTabs();
+    setupContactForm();
+    setupPricingNavigation();
+});
+    </script>
+</body>
+</html>
