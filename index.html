@@ -655,26 +655,33 @@ input:focus, textarea:focus {
     .features-grid { grid-template-columns: 1fr; gap: 16px; }
     .feature-card { padding: 24px; }
 
-    /* Pricing */
+    /* Pricing - mobile swipe carousel */
     .pricing-container { flex-direction: column; gap: 16px; }
     .pricing-nav { display: none; }
-    .pricing-wrapper { overflow-x: auto; overflow-y: visible; width: 100%; padding-bottom: 8px; }
+    .pricing-wrapper {
+        overflow: hidden;
+        width: 100%;
+        padding: 16px 0;
+        touch-action: pan-x;
+    }
     .pricing-grid {
-        flex-direction: column;
-        gap: 16px;
-        transform: none !important;
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+        transition: transform 0.3s ease;
     }
     .pricing-card {
-        flex: none;
+        flex: 0 0 100%;
         width: 100%;
         padding: 24px;
         padding-top: 32px;
+        box-sizing: border-box;
     }
     .pricing-card.featured::before { top: -10px; font-size: 0.7rem; padding: 4px 12px; }
     .pricing-name { font-size: 1.1rem; }
     .pricing-price .amount { font-size: 2rem; }
     .pricing-features li { font-size: 0.9rem; padding: 8px 0; }
-    #pricing-dots { display: none !important; }
+    #pricing-dots { display: flex !important; }
 
     /* Servers Grid */
     .servers-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -709,6 +716,7 @@ input:focus, textarea:focus {
     #contact { padding: 60px 0; }
     #contact .container > div:last-child { gap: 40px; }
     #contact h3 { font-size: 1.1rem; }
+    #contact-form .btn { align-self: center; }
 
     /* Footer */
     footer { padding: 40px 0 20px; }
@@ -1280,6 +1288,10 @@ function renderProducts(products) {
     updatePricingCarousel();
 }
 
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
 function updatePricingCarousel() {
     const grid = document.getElementById('pricing-grid');
     const dots = document.querySelectorAll('.pricing-dot');
@@ -1289,32 +1301,45 @@ function updatePricingCarousel() {
 
     if (!cards.length) return;
 
-    const visibleCount = 3;
-    const gap = 24;
-    const cardWidth = cards[0].offsetWidth;
-    const slideAmount = (cardWidth + gap) * currentProductIndex;
+    if (isMobile()) {
+        // Mobile: show one card at a time
+        const slideAmount = currentProductIndex * 100;
+        grid.style.transform = `translateX(-${slideAmount}%)`;
 
-    grid.style.transform = `translateX(-${slideAmount}px)`;
+        // Update dots - highlight current item only
+        dots.forEach((dot, i) => {
+            const isActive = i === currentProductIndex;
+            dot.style.background = isActive ? 'var(--primary)' : 'var(--border)';
+            dot.classList.toggle('active', isActive);
+        });
+    } else {
+        // Desktop: show 3 cards at a time
+        const visibleCount = 3;
+        const gap = 24;
+        const cardWidth = cards[0].offsetWidth;
+        const slideAmount = (cardWidth + gap) * currentProductIndex;
 
-    // Update dots - highlight range of visible items
-    dots.forEach((dot, i) => {
-        const isVisible = i >= currentProductIndex && i < currentProductIndex + visibleCount;
-        dot.style.background = isVisible ? 'var(--primary)' : 'var(--border)';
-        dot.classList.toggle('active', isVisible);
-    });
+        grid.style.transform = `translateX(-${slideAmount}px)`;
 
-    // Update button states - can't go past showing last 3
-    const maxIndex = Math.max(0, productsCache.length - visibleCount);
-    prevBtn.disabled = currentProductIndex === 0;
-    nextBtn.disabled = currentProductIndex >= maxIndex;
+        // Update dots - highlight range of visible items
+        dots.forEach((dot, i) => {
+            const isVisible = i >= currentProductIndex && i < currentProductIndex + visibleCount;
+            dot.style.background = isVisible ? 'var(--primary)' : 'var(--border)';
+            dot.classList.toggle('active', isVisible);
+        });
+
+        // Update button states - can't go past showing last 3
+        const maxIndex = Math.max(0, productsCache.length - visibleCount);
+        prevBtn.disabled = currentProductIndex === 0;
+        nextBtn.disabled = currentProductIndex >= maxIndex;
+    }
 }
 
 function setupPricingNavigation() {
     const prevBtn = document.getElementById('pricing-prev');
     const nextBtn = document.getElementById('pricing-next');
     const dotsContainer = document.getElementById('pricing-dots');
-
-    const visibleCount = 3;
+    const wrapper = document.getElementById('pricing-grid').parentElement;
 
     prevBtn.addEventListener('click', () => {
         if (currentProductIndex > 0) {
@@ -1324,6 +1349,7 @@ function setupPricingNavigation() {
     });
 
     nextBtn.addEventListener('click', () => {
+        const visibleCount = isMobile() ? 1 : 3;
         const maxIndex = Math.max(0, productsCache.length - visibleCount);
         if (currentProductIndex < maxIndex) {
             currentProductIndex++;
@@ -1333,8 +1359,60 @@ function setupPricingNavigation() {
 
     dotsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('pricing-dot')) {
+            const visibleCount = isMobile() ? 1 : 3;
             const maxIndex = Math.max(0, productsCache.length - visibleCount);
             currentProductIndex = Math.min(parseInt(e.target.dataset.index), maxIndex);
+            updatePricingCarousel();
+        }
+    });
+
+    // Mobile swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let isDragging = false;
+
+    wrapper.addEventListener('touchstart', (e) => {
+        if (!isMobile()) return;
+        touchStartX = e.touches[0].clientX;
+        isDragging = true;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchmove', (e) => {
+        if (!isMobile() || !isDragging) return;
+        touchEndX = e.touches[0].clientX;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', () => {
+        if (!isMobile() || !isDragging) return;
+        isDragging = false;
+
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0 && currentProductIndex < productsCache.length - 1) {
+                // Swipe left - next
+                currentProductIndex++;
+                updatePricingCarousel();
+            } else if (diff < 0 && currentProductIndex > 0) {
+                // Swipe right - previous
+                currentProductIndex--;
+                updatePricingCarousel();
+            }
+        }
+
+        touchStartX = 0;
+        touchEndX = 0;
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (productsCache.length > 0) {
+            const visibleCount = isMobile() ? 1 : 3;
+            const maxIndex = Math.max(0, productsCache.length - visibleCount);
+            if (currentProductIndex > maxIndex) {
+                currentProductIndex = maxIndex;
+            }
             updatePricingCarousel();
         }
     });
