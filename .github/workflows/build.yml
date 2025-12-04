@@ -11,80 +11,62 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Fetch API data
+      - name: Fetch API data and embed in index.html
         run: |
           API='https://api.root-corporation.com'
           HASH='RqWhZb7hdJnt9a+y+zr+Q7Ojgi4JPAyoHzcWBJZa8bk='
 
           echo "Fetching API data..."
 
-          mkdir -p .api-data
-
-          # Fetch public endpoints
-          curl -sX GET "$API/v1/ed25519.pub" > .api-data/ed25519.pub.json
-          curl -sX GET "$API/v1/public/server" > .api-data/public_server.json
-          curl -sX GET "$API/v1/public/legal" > .api-data/public_legal.json
-          curl -sX GET "$API/v1/public/rule" > .api-data/public_rule.json
-          curl -sX GET "$API/v1/public/room" > .api-data/public_room.json
-
-          # Fetch room-specific endpoints
-          curl -sX GET "$API/v1/public/server" -H "X-Room-Id: $HASH" > .api-data/room_server.json
-          curl -sX GET "$API/v1/public/rule" -H "X-Room-Id: $HASH" > .api-data/room_rule.json
-          curl -sX GET "$API/v1/public/legal" -H "X-Room-Id: $HASH" > .api-data/room_legal.json
-          curl -sX POST "$API/v1/public/product" -H "X-Room-Id: $HASH" > .api-data/room_product.json
-          curl -sX POST "$API/v1/public/bonus" -H "X-Room-Id: $HASH" > .api-data/room_bonus.json
+          API_DATA=$(jq -n \
+            --argjson ed25519_pub "$(curl -sX GET "$API/v1/ed25519.pub")" \
+            --argjson public_server "$(curl -sX GET "$API/v1/public/server")" \
+            --argjson public_legal "$(curl -sX GET "$API/v1/public/legal")" \
+            --argjson public_rule "$(curl -sX GET "$API/v1/public/rule")" \
+            --argjson public_room "$(curl -sX GET "$API/v1/public/room")" \
+            --argjson room_server "$(curl -sX GET "$API/v1/public/server" -H "X-Room-Id: $HASH")" \
+            --argjson room_rule "$(curl -sX GET "$API/v1/public/rule" -H "X-Room-Id: $HASH")" \
+            --argjson room_legal "$(curl -sX GET "$API/v1/public/legal" -H "X-Room-Id: $HASH")" \
+            --argjson room_product "$(curl -sX POST "$API/v1/public/product" -H "X-Room-Id: $HASH")" \
+            --argjson room_bonus "$(curl -sX POST "$API/v1/public/bonus" -H "X-Room-Id: $HASH")" \
+            '{
+              ed25519_pub: $ed25519_pub,
+              public: {
+                server: $public_server,
+                legal: $public_legal,
+                rule: $public_rule,
+                room: $public_room
+              },
+              room: {
+                server: $room_server,
+                rule: $room_rule,
+                legal: $room_legal,
+                product: $room_product,
+                bonus: $room_bonus
+              }
+            }')
 
           echo "API data fetched successfully"
 
-      - name: Embed data in index.html
-        run: |
-          node << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
+          # Create embedded script
+          EMBEDDED_SCRIPT="<script>
+          window.EMBEDDED_API_DATA = $API_DATA;
+          </script>"
 
-          const dataDir = '.api-data';
-          const apiData = {
-            ed25519_pub: JSON.parse(fs.readFileSync(path.join(dataDir, 'ed25519.pub.json'), 'utf8')),
-            public: {
-              server: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_server.json'), 'utf8')),
-              legal: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_legal.json'), 'utf8')),
-              rule: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_rule.json'), 'utf8')),
-              room: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_room.json'), 'utf8'))
-            },
-            room: {
-              server: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_server.json'), 'utf8')),
-              rule: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_rule.json'), 'utf8')),
-              legal: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_legal.json'), 'utf8')),
-              product: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_product.json'), 'utf8')),
-              bonus: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_bonus.json'), 'utf8'))
-            }
-          };
+          # Remove existing embedded data and insert new one
+          sed -i '/<script>\s*window\.EMBEDDED_API_DATA/,/<\/script>/d' index.html
+          sed -i "s|</head>|$EMBEDDED_SCRIPT\n</head>|" index.html
 
-          const embeddedScript = `<script>
-          window.EMBEDDED_API_DATA = ${JSON.stringify(apiData, null, 2)};
-          </script>`;
-
-          let html = fs.readFileSync('index.html', 'utf8');
-          html = html.replace(/<script>\s*\n?\s*window\.EMBEDDED_API_DATA\s*=[\s\S]*?<\/script>\n?/g, '');
-          html = html.replace('</head>', embeddedScript + '\n</head>');
-          fs.writeFileSync('index.html', html);
-
-          console.log('Embedded API data into index.html');
-          EOF
-
-      - name: Cleanup temporary files
-        run: rm -rf .api-data
+          echo "Embedded data injected into index.html"
 
       - name: Commit and push changes
         run: |
