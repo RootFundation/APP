@@ -1,8 +1,8 @@
-name: Build with Embedded API Data
+name: Build
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Run daily at 8:00 AM UTC
+    - cron: '0 8 * * *'
   push:
     paths:
       - '.github/workflows/build.yml'
