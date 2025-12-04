@@ -1067,290 +1067,52 @@ input:focus, textarea:focus {
         </div>
     </footer>
 
-    <script type="module">
-import init, { HydraClient } from './pkg/wasm.js';
-
-const ENDPOINT_DISCOVERY_URL = 'https://raw.githubusercontent.com/RootFundation/API/refs/heads/master/endpoint.txt';
-
-let client = null;
-let roomsCache = [];
-let currentRoom = null;
-let legalData = null;
+    <script>
+// UI state
 let currentProductIndex = 0;
-let productsCache = [];
 
-const EMBEDDED_DATA = window.EMBEDDED_API_DATA || null;
-
-function mapToObject(obj) {
-    if (obj instanceof Map) {
-        const result = {};
-        for (const [key, value] of obj) {
-            result[key] = mapToObject(value);
-        }
-        return result;
-    }
-    if (Array.isArray(obj)) {
-        return obj.map(mapToObject);
-    }
-    if (obj && typeof obj === 'object') {
-        const result = {};
-        for (const key of Object.keys(obj)) {
-            result[key] = mapToObject(obj[key]);
-        }
-        return result;
-    }
-    return obj;
-}
-
-async function discoverEndpoint() {
-    const response = await fetch(ENDPOINT_DISCOVERY_URL);
-    if (!response.ok) throw new Error(`Failed to fetch endpoint: HTTP ${response.status}`);
-    const content = await response.text();
-    const encodedNames = content.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-    if (encodedNames.length === 0) throw new Error('No endpoints found');
-    return encodedNames[Math.floor(Math.random() * encodedNames.length)];
-}
-
-async function initApp() {
-    try {
-        if (EMBEDDED_DATA) {
-            console.log('Using embedded API data');
-            roomsCache = EMBEDDED_DATA.public?.room?.data?.rooms || [];
-        } else {
-            await init();
-            const encodedName = await discoverEndpoint();
-            client = new HydraClient(encodedName);
-
-            const response = mapToObject(await client.fetch_rooms());
-            roomsCache = response.data?.rooms || [];
-        }
-
-        if (roomsCache.length === 0) {
-            document.getElementById('apps-grid').innerHTML = '<p style="text-align:center;color:var(--text-muted)">Failed to load applications. Please refresh the page.</p>';
-            return;
-        }
-
-        renderAppsGrid();
-        renderFooterApps();
-        handleRoute();
-    } catch (e) {
-        console.error('Initialization error:', e);
-        document.getElementById('apps-grid').innerHTML = `<p style="text-align:center;color:var(--error)">Error: ${e.message || e}</p>`;
-    }
-}
-
-function renderAppsGrid() {
-    const grid = document.getElementById('apps-grid');
-    if (!roomsCache.length) {
-        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No applications available</p>';
-        return;
-    }
-
-    grid.innerHTML = roomsCache.map(room => `
-        <a href="#/${escapeHtml(room.name)}" class="app-card">
-            <div class="app-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <h3>${escapeHtml(room.name)}</h3>
-            <span class="app-cta">View Details</span>
-        </a>
-    `).join('');
-}
-
-function renderFooterApps() {
-    const container = document.getElementById('footer-apps');
-    container.innerHTML = roomsCache.map(room =>
-        `<li><a href="#/${escapeHtml(room.name)}">${escapeHtml(room.name)}</a></li>`
-    ).join('');
-}
-
-async function handleRoute() {
+// Handle page routing
+function handleRoute() {
     const hash = window.location.hash.slice(1) || '/';
+    const isAppPage = hash !== '/' && hash !== '';
 
-    if (hash === '/' || hash === '') {
-        showMainPage();
-        return;
-    }
+    document.getElementById('main-page').classList.toggle('hidden', isAppPage);
+    document.getElementById('app-page').classList.toggle('hidden', !isAppPage);
 
-    const roomName = hash.slice(1); // Remove leading /
-    const room = roomsCache.find(r => r.name === roomName);
-
-    if (room) {
-        await showAppPage(room);
+    if (isAppPage) {
+        const roomName = hash.slice(1);
+        document.getElementById('app-hero-title').textContent = roomName;
+        document.getElementById('nav-logo').textContent = roomName;
+        document.title = `${roomName} - Privacy Protection`;
     } else {
-        showMainPage();
+        document.getElementById('nav-logo').textContent = 'Root Corporation';
+        document.title = 'Root Corporation';
     }
 }
 
-function showMainPage() {
-    currentRoom = null;
-    document.getElementById('main-page').classList.remove('hidden');
-    document.getElementById('app-page').classList.add('hidden');
-
-    document.getElementById('nav-logo').textContent = 'Root Corporation';
-    document.getElementById('nav-logo').href = '#/';
-
-    // Show apps directly in nav
-    const appsLinks = roomsCache.map(room =>
-        `<li><a href="#/${escapeHtml(room.name)}">${escapeHtml(room.name)}</a></li>`
-    ).join('');
-    document.getElementById('nav-links').innerHTML = appsLinks + `<li><a href="#features">Features</a></li>`;
-
-    document.getElementById('nav-cta').textContent = 'Get Started';
-    document.getElementById('nav-cta').href = '#apps';
-    document.title = 'Root Corporation';
-
-    // Update mobile menu for main page
-    updateMobileMenu('main');
-}
-
-async function showAppPage(room) {
-    currentRoom = room;
-    document.getElementById('main-page').classList.add('hidden');
-    document.getElementById('app-page').classList.remove('hidden');
-
-    document.getElementById('nav-logo').textContent = room.name;
-    document.getElementById('nav-logo').href = `#/${room.name}`;
-    document.getElementById('nav-links').innerHTML = `
-        <li><a href="javascript:void(0)" onclick="scrollToSection('pricing')">Pricing</a></li>
-        <li><a href="javascript:void(0)" onclick="scrollToSection('servers')">Infrastructure</a></li>
-        <li><a href="javascript:void(0)" onclick="scrollToSection('bonuses')">Bonuses</a></li>
-        <li><a href="javascript:void(0)" onclick="scrollToSection('affiliate')">Affiliate</a></li>
-        <li><a href="javascript:void(0)" onclick="scrollToSection('legal')">Legal</a></li>
-    `;
-    document.getElementById('nav-cta').textContent = 'Get Started';
-    document.getElementById('nav-cta').href = 'javascript:void(0)';
-    document.getElementById('nav-cta').onclick = () => scrollToSection('pricing');
-
-    document.getElementById('app-hero-title').textContent = room.name;
-    document.title = `${room.name} - Privacy Protection`;
-
-    // Update mobile menu for app page
-    updateMobileMenu('app', room.name);
-
-    // Reset loading states
-    document.getElementById('pricing-grid').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    document.getElementById('servers-grid').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    document.getElementById('bonus-grid').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    document.getElementById('affiliate-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    document.getElementById('legal-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-
-    await Promise.all([
-        loadProducts(),
-        loadServers(),
-        loadBonuses(),
-        loadRules(),
-        loadLegal()
-    ]);
-}
-
-async function loadProducts() {
-    try {
-        let products;
-        if (EMBEDDED_DATA) {
-            products = EMBEDDED_DATA.room?.product?.data?.products || [];
-        } else {
-            const response = mapToObject(await client.fetch_products(currentRoom.hash));
-            products = response.data?.products || [];
-        }
-        renderProducts(products);
-    } catch (e) { console.error('Failed to load products:', e); }
-}
-
-function renderProducts(products) {
-    const grid = document.getElementById('pricing-grid');
-    const dotsContainer = document.getElementById('pricing-dots');
-    const prevBtn = document.getElementById('pricing-prev');
-    const nextBtn = document.getElementById('pricing-next');
-
-    if (!products.length) {
-        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No plans available</p>';
-        dotsContainer.innerHTML = '';
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-        return;
-    }
-
-    prevBtn.style.display = 'flex';
-    nextBtn.style.display = 'flex';
-
-    productsCache = [...products].sort((a, b) => a.period - b.period);
-    currentProductIndex = 0;
-    const featuredIndex = Math.floor(productsCache.length / 2);
-
-    grid.innerHTML = productsCache.map((product, i) => `
-        <div class="pricing-card ${i === featuredIndex ? 'featured' : ''}" data-index="${i}">
-            <div class="pricing-name">${escapeHtml(product.name)}</div>
-            <div class="pricing-period">${product.period} Day${product.period !== 1 ? 's' : ''}</div>
-            <div class="pricing-price"><span class="currency">A$</span><span class="amount">${formatPrice(product.price)}</span></div>
-            <ul class="pricing-features">
-                <li>Full Privacy Protection</li>
-                <li>All Global Nodes</li>
-                <li>Unlimited Bandwidth</li>
-                <li>24/7 Privacy Support</li>
-            </ul>
-            <a href="#" class="btn btn-primary">Get Started</a>
-        </div>
-    `).join('');
-
-    // Render dots
-    dotsContainer.innerHTML = productsCache.map((_, i) =>
-        `<button class="pricing-dot ${i === 0 ? 'active' : ''}" data-index="${i}" style="width: 10px; height: 10px; border-radius: 50%; border: none; background: ${i === 0 ? 'var(--primary)' : 'var(--border)'}; cursor: pointer; transition: background 0.2s;"></button>`
-    ).join('');
-
-    updatePricingCarousel();
-}
-
-function isMobile() {
-    return window.innerWidth <= 768;
-}
+// Pricing carousel
+function isMobile() { return window.innerWidth <= 768; }
 
 function updatePricingCarousel() {
     const grid = document.getElementById('pricing-grid');
-    const dots = document.querySelectorAll('.pricing-dot');
-    const prevBtn = document.getElementById('pricing-prev');
-    const nextBtn = document.getElementById('pricing-next');
     const cards = grid.querySelectorAll('.pricing-card');
-
     if (!cards.length) return;
 
     if (isMobile()) {
-        // Mobile: show one card at a time
-        const slideAmount = currentProductIndex * 100;
-        grid.style.transform = `translateX(-${slideAmount}%)`;
-
-        // Update dots - highlight current item only
-        dots.forEach((dot, i) => {
-            const isActive = i === currentProductIndex;
-            dot.style.background = isActive ? 'var(--primary)' : 'var(--border)';
-            dot.classList.toggle('active', isActive);
-        });
+        grid.style.transform = `translateX(-${currentProductIndex * 100}%)`;
     } else {
-        // Desktop: show 3 cards at a time
-        const visibleCount = 3;
-        const gap = 24;
         const cardWidth = cards[0].offsetWidth;
-        const slideAmount = (cardWidth + gap) * currentProductIndex;
-
-        grid.style.transform = `translateX(-${slideAmount}px)`;
-
-        // Update dots - highlight range of visible items
-        dots.forEach((dot, i) => {
-            const isVisible = i >= currentProductIndex && i < currentProductIndex + visibleCount;
-            dot.style.background = isVisible ? 'var(--primary)' : 'var(--border)';
-            dot.classList.toggle('active', isVisible);
-        });
-
-        // Update button states - can't go past showing last 3
-        const maxIndex = Math.max(0, productsCache.length - visibleCount);
-        prevBtn.disabled = currentProductIndex === 0;
-        nextBtn.disabled = currentProductIndex >= maxIndex;
+        grid.style.transform = `translateX(-${(cardWidth + 24) * currentProductIndex}px)`;
     }
 }
 
 function setupPricingNavigation() {
+    const grid = document.getElementById('pricing-grid');
+    const cards = grid.querySelectorAll('.pricing-card');
     const prevBtn = document.getElementById('pricing-prev');
     const nextBtn = document.getElementById('pricing-next');
-    const dotsContainer = document.getElementById('pricing-dots');
-    const wrapper = document.getElementById('pricing-grid').parentElement;
+
+    if (!cards.length) return;
 
     prevBtn.addEventListener('click', () => {
         if (currentProductIndex > 0) {
@@ -1361,380 +1123,74 @@ function setupPricingNavigation() {
 
     nextBtn.addEventListener('click', () => {
         const visibleCount = isMobile() ? 1 : 3;
-        const maxIndex = Math.max(0, productsCache.length - visibleCount);
+        const maxIndex = Math.max(0, cards.length - visibleCount);
         if (currentProductIndex < maxIndex) {
             currentProductIndex++;
             updatePricingCarousel();
         }
     });
 
-    dotsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('pricing-dot')) {
-            const visibleCount = isMobile() ? 1 : 3;
-            const maxIndex = Math.max(0, productsCache.length - visibleCount);
-            currentProductIndex = Math.min(parseInt(e.target.dataset.index), maxIndex);
-            updatePricingCarousel();
-        }
-    });
-
-    // Mobile swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let isDragging = false;
-
-    wrapper.addEventListener('touchstart', (e) => {
-        if (!isMobile()) return;
-        touchStartX = e.touches[0].clientX;
-        isDragging = true;
-    }, { passive: true });
-
-    wrapper.addEventListener('touchmove', (e) => {
-        if (!isMobile() || !isDragging) return;
-        touchEndX = e.touches[0].clientX;
-    }, { passive: true });
-
-    wrapper.addEventListener('touchend', () => {
-        if (!isMobile() || !isDragging) return;
-        isDragging = false;
-
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0 && currentProductIndex < productsCache.length - 1) {
-                // Swipe left - next
-                currentProductIndex++;
-                updatePricingCarousel();
-            } else if (diff < 0 && currentProductIndex > 0) {
-                // Swipe right - previous
-                currentProductIndex--;
-                updatePricingCarousel();
-            }
-        }
-
-        touchStartX = 0;
-        touchEndX = 0;
-    });
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        if (productsCache.length > 0) {
-            const visibleCount = isMobile() ? 1 : 3;
-            const maxIndex = Math.max(0, productsCache.length - visibleCount);
-            if (currentProductIndex > maxIndex) {
-                currentProductIndex = maxIndex;
-            }
-            updatePricingCarousel();
-        }
-    });
+    window.addEventListener('resize', updatePricingCarousel);
 }
 
-async function loadServers() {
-    try {
-        let servers;
-        if (EMBEDDED_DATA) {
-            servers = EMBEDDED_DATA.room?.server?.data?.servers || [];
-        } else {
-            const response = mapToObject(await client.fetch_servers(currentRoom.hash));
-            servers = response.data?.servers || [];
-        }
-        renderServers(servers);
-    } catch (e) { console.error('Failed to load servers:', e); }
-}
-
-function renderServers(servers) {
-    const grid = document.getElementById('servers-grid');
-    if (!servers.length) {
-        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No nodes available</p>';
-        return;
-    }
-
-    grid.innerHTML = servers.map(server => `
-        <div class="server-card">
-            <div class="server-flag">${escapeHtml(server.country)}</div>
-            <div class="server-info">
-                <h4>${escapeHtml(server.city)}</h4>
-                <p>${escapeHtml(server.zone)}</p>
-            </div>
-        </div>
-    `).join('');
-}
-
-async function loadBonuses() {
-    try {
-        let bonuses;
-        if (EMBEDDED_DATA) {
-            bonuses = EMBEDDED_DATA.room?.bonus?.data || [];
-        } else {
-            const response = mapToObject(await client.fetch_bonus(currentRoom.hash));
-            bonuses = response.data || [];
-        }
-        renderBonuses(bonuses);
-    } catch (e) { console.error('Failed to load bonuses:', e); }
-}
-
-function renderBonuses(bonuses) {
-    const grid = document.getElementById('bonus-grid');
-    const titles = { welcome_bonus: 'Welcome Bonus', refer_bonus: 'Referral Bonus', share_bonus: 'Share Bonus' };
-    const descriptions = {
-        welcome_bonus: 'Get free access when you sign up',
-        refer_bonus: 'Earn days for each friend you refer',
-        share_bonus: 'Share on social media and get rewarded'
-    };
-    const icons = {
-        welcome_bonus: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>',
-        refer_bonus: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-        share_bonus: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'
-    };
-    const defaultIcon = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-
-    if (!bonuses.length) {
-        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No bonuses available</p>';
-        return;
-    }
-
-    grid.innerHTML = bonuses.map(bonus => `
-        <div class="bonus-card">
-            <div class="bonus-icon">${icons[bonus.name] || defaultIcon}</div>
-            <h3>${titles[bonus.name] || bonus.name}</h3>
-            <div class="bonus-value">${formatBonusDays(bonus.days)}</div>
-            <p>${descriptions[bonus.name] || 'Special bonus reward'}</p>
-        </div>
-    `).join('');
-}
-
-async function loadRules() {
-    try {
-        let rule;
-        if (EMBEDDED_DATA) {
-            rule = EMBEDDED_DATA.room?.rule?.data?.rule;
-        } else {
-            const response = mapToObject(await client.fetch_rules(currentRoom.hash));
-            rule = response.data?.rule;
-        }
-        if (rule) renderRules(rule);
-    } catch (e) { console.error('Failed to load rules:', e); }
-}
-
-function renderRules(rule) {
-    const container = document.getElementById('affiliate-content');
-    const levels = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
-    const tierCount = rule.commission_rates?.length || 5;
-    const startingRate = rule.commission_rates?.[0] ? (rule.commission_rates[0] * 100).toFixed(0) : '10';
-    const tierIcons = [
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cd7f32" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffd700" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a0e0e0" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>',
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 17l-6.3 4 2.3-7-6-4.6h7.6z"/></svg>'
-    ];
-
-    container.innerHTML = `
-        <div class="affiliate-hero">
-            <h3>Earn With Every Referral</h3>
-            <p>Turn your network into income. Share privacy protection and get rewarded for every successful referral.</p>
-            <div class="affiliate-benefits">
-                <div class="affiliate-benefit">
-                    <div class="affiliate-benefit-value">${startingRate}%+</div>
-                    <div class="affiliate-benefit-label">Starting Commission</div>
-                </div>
-                <div class="affiliate-benefit">
-                    <div class="affiliate-benefit-value">${tierCount}</div>
-                    <div class="affiliate-benefit-label">Commission Tiers</div>
-                </div>
-                <div class="affiliate-benefit">
-                    <div class="affiliate-benefit-value">Anytime</div>
-                    <div class="affiliate-benefit-label">Payouts</div>
-                </div>
-            </div>
-            <div class="affiliate-tiers-row">
-                ${rule.commission_rates.map((_, i) => `
-                    <span class="affiliate-tier-badge">${tierIcons[i] || ''} ${levels[i] || `Level ${i + 1}`}</span>
-                `).join('')}
-            </div>
-            <div class="affiliate-cta">
-                <a href="javascript:void(0)" onclick="scrollToSection('contact')" class="btn btn-primary">Become a Partner</a>
-            </div>
-        </div>
-    `;
-}
-
-async function loadLegal() {
-    try {
-        if (EMBEDDED_DATA) {
-            legalData = EMBEDDED_DATA.room?.legal?.data?.legal || {};
-        } else {
-            const response = mapToObject(await client.fetch_legal(currentRoom.hash));
-            legalData = response.data?.legal || {};
-        }
-        renderLegal('agreement');
-    } catch (e) { console.error('Failed to load legal:', e); }
-}
-
-function renderLegal(tab) {
-    const container = document.getElementById('legal-content');
-    if (!legalData) {
-        container.innerHTML = '<p>Loading...</p>';
-        return;
-    }
-    let content = tab === 'agreement' ? legalData.user_agreement : legalData.privacy_policy;
-    if (content) {
-        // Convert \n to <br> for plain text, preserve if already HTML
-        if (!content.includes('<p>') && !content.includes('<div>')) {
-            content = content.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
-            content = '<p>' + content + '</p>';
-        }
-    }
-    container.innerHTML = content || '<p>No content available.</p>';
-}
-
-function setupTabs() {
+// Legal tabs
+function setupLegalTabs() {
     document.querySelectorAll('.legal-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.legal-tab').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            renderLegal(btn.dataset.tab);
+            const tab = btn.dataset.tab;
+            document.getElementById('legal-agreement')?.classList.toggle('hidden', tab !== 'agreement');
+            document.getElementById('legal-privacy')?.classList.toggle('hidden', tab !== 'privacy');
         });
     });
 }
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function formatPrice(cents) { return (cents / 100).toFixed(2); }
-
-function formatPeriod(days) {
-    if (days >= 365) return `${Math.round(days / 365)} Year${days >= 730 ? 's' : ''}`;
-    if (days >= 30) return `${Math.round(days / 30)} Month${days >= 60 ? 's' : ''}`;
-    return `${Math.round(days)} Day${days > 1 ? 's' : ''}`;
-}
-
-function formatBonusDays(days) {
-    if (days < 1/24) {
-        // Less than 1 hour, show minutes
-        const minutes = Math.round(days * 24 * 60);
-        return `${minutes} Minute${minutes !== 1 ? 's' : ''} Free`;
-    }
-    if (days < 1) {
-        const hours = Math.round(days * 24);
-        if (hours === 0) {
-            const minutes = Math.round(days * 24 * 60);
-            return `${minutes} Minute${minutes !== 1 ? 's' : ''} Free`;
-        }
-        return `${hours} Hour${hours !== 1 ? 's' : ''} Free`;
-    }
-    return `${Math.round(days)} Day${days !== 1 ? 's' : ''} Free`;
-}
-
-window.addEventListener('hashchange', handleRoute);
-
-// Global function for scrolling to sections without changing hash
-window.scrollToSection = function(sectionId) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        closeMobileMenu();
-    }
-};
-
-// Mobile menu functions
+// Mobile menu
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
 
     menuBtn.addEventListener('click', () => {
         const isOpen = menu.classList.contains('active');
-        if (isOpen) {
-            closeMobileMenu();
-        } else {
-            menu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            menuBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>`;
-        }
+        menu.classList.toggle('active', !isOpen);
+        document.body.style.overflow = isOpen ? '' : 'hidden';
     });
 
-    // Close menu when clicking a link
     menu.addEventListener('click', (e) => {
         if (e.target.classList.contains('mobile-menu-link')) {
-            closeMobileMenu();
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
         }
     });
 }
 
-function closeMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    menu.classList.remove('active');
-    document.body.style.overflow = '';
-    menuBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-    </svg>`;
-}
+// Scroll to section
+window.scrollToSection = function(sectionId) {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+};
 
-function updateMobileMenu(page, roomName = '') {
-    const menu = document.getElementById('mobile-menu');
-
-    if (page === 'main') {
-        const appsLinks = roomsCache.map(room =>
-            `<a href="#/${escapeHtml(room.name)}" class="mobile-menu-link">${escapeHtml(room.name)}</a>`
-        ).join('');
-        menu.innerHTML = `
-            ${appsLinks}
-            <a href="#features" class="mobile-menu-link">Features</a>
-            <a href="#contact" class="mobile-menu-link">Contact</a>
-            <a href="#apps" class="mobile-cta mobile-menu-link">Get Started</a>
-        `;
-    } else if (page === 'app') {
-        menu.innerHTML = `
-            <a href="#/" class="mobile-menu-link">← All Solutions</a>
-            <a href="javascript:void(0)" onclick="scrollToSection('pricing')" class="mobile-menu-link">Pricing</a>
-            <a href="javascript:void(0)" onclick="scrollToSection('servers')" class="mobile-menu-link">Infrastructure</a>
-            <a href="javascript:void(0)" onclick="scrollToSection('bonuses')" class="mobile-menu-link">Bonuses</a>
-            <a href="javascript:void(0)" onclick="scrollToSection('affiliate')" class="mobile-menu-link">Affiliate</a>
-            <a href="javascript:void(0)" onclick="scrollToSection('legal')" class="mobile-menu-link">Legal</a>
-            <a href="#contact" class="mobile-menu-link">Contact</a>
-            <a href="javascript:void(0)" onclick="scrollToSection('pricing')" class="mobile-cta mobile-menu-link">Get Started</a>
-        `;
-    }
-}
-
+// Contact form
 function setupContactForm() {
-    const form = document.getElementById('contact-form');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const subject = document.getElementById('contact-subject').value;
-            const message = document.getElementById('contact-message').value;
-
-            const body = `Name: ${name}
-Email: ${email}
-
-Message:
-${message}`;
-
-            const mailtoUrl = `mailto:developer@root-corporation.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoUrl;
-        });
-    }
+    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contact-name').value;
+        const email = document.getElementById('contact-email').value;
+        const subject = document.getElementById('contact-subject').value;
+        const message = document.getElementById('contact-message').value;
+        const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+        window.location.href = `mailto:developer@root-corporation.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
 }
 
+// Initialize
+window.addEventListener('hashchange', handleRoute);
 document.addEventListener('DOMContentLoaded', () => {
-    initApp();
-    setupTabs();
-    setupContactForm();
+    handleRoute();
     setupPricingNavigation();
+    setupLegalTabs();
     setupMobileMenu();
+    setupContactForm();
 });
     </script>
 </body>
