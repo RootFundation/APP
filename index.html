@@ -1068,84 +1068,6 @@ input:focus, textarea:focus {
     </footer>
 
     <script>
-// UI state
-let currentProductIndex = 0;
-
-// Handle page routing
-function handleRoute() {
-    const hash = window.location.hash.slice(1) || '/';
-    const isAppPage = hash !== '/' && hash !== '';
-
-    document.getElementById('main-page').classList.toggle('hidden', isAppPage);
-    document.getElementById('app-page').classList.toggle('hidden', !isAppPage);
-
-    if (isAppPage) {
-        const roomName = hash.slice(1);
-        document.getElementById('app-hero-title').textContent = roomName;
-        document.getElementById('nav-logo').textContent = roomName;
-        document.title = `${roomName} - Privacy Protection`;
-    } else {
-        document.getElementById('nav-logo').textContent = 'Root Corporation';
-        document.title = 'Root Corporation';
-    }
-}
-
-// Pricing carousel
-function isMobile() { return window.innerWidth <= 768; }
-
-function updatePricingCarousel() {
-    const grid = document.getElementById('pricing-grid');
-    const cards = grid.querySelectorAll('.pricing-card');
-    if (!cards.length) return;
-
-    if (isMobile()) {
-        grid.style.transform = `translateX(-${currentProductIndex * 100}%)`;
-    } else {
-        const cardWidth = cards[0].offsetWidth;
-        grid.style.transform = `translateX(-${(cardWidth + 24) * currentProductIndex}px)`;
-    }
-}
-
-function setupPricingNavigation() {
-    const grid = document.getElementById('pricing-grid');
-    const cards = grid.querySelectorAll('.pricing-card');
-    const prevBtn = document.getElementById('pricing-prev');
-    const nextBtn = document.getElementById('pricing-next');
-
-    if (!cards.length) return;
-
-    prevBtn.addEventListener('click', () => {
-        if (currentProductIndex > 0) {
-            currentProductIndex--;
-            updatePricingCarousel();
-        }
-    });
-
-    nextBtn.addEventListener('click', () => {
-        const visibleCount = isMobile() ? 1 : 3;
-        const maxIndex = Math.max(0, cards.length - visibleCount);
-        if (currentProductIndex < maxIndex) {
-            currentProductIndex++;
-            updatePricingCarousel();
-        }
-    });
-
-    window.addEventListener('resize', updatePricingCarousel);
-}
-
-// Legal tabs
-function setupLegalTabs() {
-    document.querySelectorAll('.legal-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.legal-tab').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const tab = btn.dataset.tab;
-            document.getElementById('legal-agreement')?.classList.toggle('hidden', tab !== 'agreement');
-            document.getElementById('legal-privacy')?.classList.toggle('hidden', tab !== 'privacy');
-        });
-    });
-}
-
 // Mobile menu
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
@@ -1165,11 +1087,6 @@ function setupMobileMenu() {
     });
 }
 
-// Scroll to section
-window.scrollToSection = function(sectionId) {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-};
-
 // Contact form
 function setupContactForm() {
     document.getElementById('contact-form')?.addEventListener('submit', (e) => {
@@ -1183,12 +1100,7 @@ function setupContactForm() {
     });
 }
 
-// Initialize
-window.addEventListener('hashchange', handleRoute);
 document.addEventListener('DOMContentLoaded', () => {
-    handleRoute();
-    setupPricingNavigation();
-    setupLegalTabs();
     setupMobileMenu();
     setupContactForm();
 });
