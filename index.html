@@ -293,282 +293,6 @@ section { padding: 100px 0; }
 .feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
 .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
 
-/* Pricing */
-#pricing { background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%); }
-
-.pricing-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.pricing-nav {
-    width: 48px;
-    height: 48px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--text);
-    font-size: 1.25rem;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
-
-.pricing-nav:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-}
-
-.pricing-nav:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.pricing-nav:disabled:hover {
-    background: var(--bg-card);
-    border-color: var(--border);
-}
-
-.pricing-wrapper {
-    overflow-x: hidden;
-    overflow-y: visible;
-    flex: 1;
-    min-width: 0;
-    padding-top: 16px;
-}
-
-.pricing-grid {
-    display: flex;
-    gap: 24px;
-    transition: transform 0.3s ease;
-}
-
-.pricing-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px;
-    padding-top: 40px;
-    position: relative;
-    transition: border-color 0.3s, background 0.3s;
-    flex: 0 0 calc((100% - 48px) / 3);
-    box-sizing: border-box;
-}
-
-.pricing-card.featured {
-    border-color: var(--primary);
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, var(--bg-card) 100%);
-}
-
-.pricing-card.featured::before {
-    content: 'Most Popular';
-    position: absolute;
-    top: -12px; left: 50%;
-    transform: translateX(-50%);
-    background: var(--gradient-1);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.pricing-name { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
-.pricing-period { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
-.pricing-price { font-size: 2rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 4px; }
-.pricing-price .currency { font-size: 1.25rem; color: var(--text-muted); font-weight: 400; }
-.pricing-price .amount { font-size: 2.5rem; }
-.pricing-price .unit { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; margin-left: 4px; }
-
-.pricing-features { list-style: none; margin-bottom: 32px; }
-.pricing-features li { padding: 10px 0; color: var(--text-muted); display: flex; align-items: center; gap: 12px; font-size: 0.95rem; }
-.pricing-features li::before { content: '✓'; color: var(--success); font-weight: 600; }
-.pricing-card .btn { width: 100%; text-align: center; }
-
-/* Servers */
-#servers { background: var(--bg-dark); }
-
-.servers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.server-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: all 0.2s;
-}
-
-.server-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-.server-flag { font-size: 2rem; }
-.server-info h4 { font-size: 1rem; margin-bottom: 4px; }
-.server-info p { font-size: 0.8rem; color: var(--text-muted); }
-
-/* Bonuses */
-#bonuses { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); }
-
-.bonus-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-}
-
-.bonus-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    text-align: center;
-    transition: all 0.3s;
-}
-
-.bonus-card:hover { transform: translateY(-4px); border-color: var(--accent); }
-.bonus-icon { margin-bottom: 16px; color: var(--accent); }
-.bonus-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
-.bonus-value { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
-.bonus-card p { color: var(--text-muted); font-size: 0.9rem; }
-
-/* Affiliate */
-#affiliate { background: var(--bg-dark); }
-
-.affiliate-content {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.affiliate-hero {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
-    border: 1px solid rgba(99, 102, 241, 0.3);
-    border-radius: 24px;
-    padding: 48px;
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.affiliate-hero h3 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    background: var(--gradient-1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.affiliate-hero p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    max-width: 500px;
-    margin: 0 auto 32px;
-}
-
-.affiliate-benefits {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-.affiliate-benefit {
-    text-align: center;
-}
-
-.affiliate-benefit-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary-light);
-    margin-bottom: 8px;
-}
-
-.affiliate-benefit-label {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.affiliate-tiers-row {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-}
-
-.affiliate-tier-badge {
-    padding: 10px 20px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    color: var(--text);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.affiliate-tier-badge svg {
-    flex-shrink: 0;
-}
-
-.affiliate-cta {
-    display: flex;
-    justify-content: center;
-}
-
-/* Legal */
-#legal { background: var(--bg-card); }
-
-.legal-tabs { display: flex; gap: 8px; margin-bottom: 32px; justify-content: center; }
-
-.legal-tab {
-    padding: 12px 24px;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-}
-
-.legal-tab:hover { border-color: var(--primary); }
-.legal-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
-
-.legal-content {
-    background: var(--bg-dark);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 40px;
-    max-width: 800px;
-    margin: 0 auto;
-    max-height: 500px;
-    overflow-y: auto;
-}
-
-.legal-content h1 { font-size: 1.5rem; margin-top: 32px; margin-bottom: 16px; color: var(--text); }
-.legal-content h2 { font-size: 1.25rem; margin-top: 28px; margin-bottom: 14px; color: var(--text); }
-.legal-content h3 { font-size: 1.1rem; margin-top: 24px; margin-bottom: 12px; color: var(--text); }
-.legal-content h1:first-child, .legal-content h2:first-child, .legal-content h3:first-child { margin-top: 0; }
-.legal-content p { margin-bottom: 16px; color: var(--text-muted); line-height: 1.8; }
-.legal-content ul, .legal-content ol { margin-left: 24px; margin-bottom: 16px; color: var(--text-muted); line-height: 1.8; }
-.legal-content li { margin-bottom: 8px; }
-.legal-content strong { color: var(--text); }
-.legal-content a { color: var(--primary-light); }
-
 /* Footer */
 footer {
     background: var(--bg-card);
@@ -591,13 +315,6 @@ footer {
 .footer-links a:hover { color: var(--primary-light); }
 .footer-bottom { border-top: 1px solid var(--border); padding-top: 30px; text-align: center; color: var(--text-dim); font-size: 0.85rem; }
 
-/* Loading */
-.loading { display: flex; align-items: center; justify-content: center; min-height: 200px; }
-.spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.hidden { display: none !important; }
-
 /* Form focus states */
 input:focus, textarea:focus {
     outline: none;
@@ -609,145 +326,50 @@ input:focus, textarea:focus {
     #contact .container > div:last-child {
         grid-template-columns: 1fr !important;
     }
-
-    /* Pricing carousel - show 2 cards */
-    .pricing-card {
-        flex: 0 0 calc((100% - 24px) / 2);
-    }
-
-    .affiliate-benefits {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-    }
-
-    .affiliate-benefit-value {
-        font-size: 2rem;
-    }
 }
 
 @media (max-width: 768px) {
-    /* Navigation */
     .nav-links { display: none; }
     nav .container { padding: 0 16px; }
     .nav-cta { padding: 8px 16px; font-size: 0.85rem; }
     .logo { font-size: 1.25rem; }
 
-    /* Hero */
     .hero { padding: 100px 0 60px; min-height: auto; }
     .hero h1 { font-size: 2rem; }
     .hero p { font-size: 1rem; margin-bottom: 32px; }
     .hero-badge { font-size: 0.75rem; padding: 6px 12px; }
 
-    /* Sections */
     section { padding: 60px 0; }
     .section-header { margin-bottom: 40px; }
     .section-header h2 { font-size: 1.75rem; }
     .section-header p { font-size: 0.95rem; }
     .container { padding: 0 16px; }
 
-    /* Apps Grid */
     .apps-grid { grid-template-columns: 1fr; gap: 16px; }
     .app-card { padding: 24px; }
     .app-icon { width: 56px; height: 56px; font-size: 1.75rem; }
     .app-card h3 { font-size: 1.25rem; }
 
-    /* Features Grid */
     .features-grid { grid-template-columns: 1fr; gap: 16px; }
     .feature-card { padding: 24px; }
 
-    /* Pricing - mobile swipe carousel */
-    .pricing-container { flex-direction: column; gap: 16px; }
-    .pricing-nav { display: none; }
-    .pricing-wrapper {
-        overflow: hidden;
-        width: 100%;
-        padding: 16px 0;
-        touch-action: pan-x;
-    }
-    .pricing-grid {
-        display: flex;
-        flex-direction: row;
-        gap: 0;
-        transition: transform 0.3s ease;
-    }
-    .pricing-card {
-        flex: 0 0 100%;
-        width: 100%;
-        padding: 24px;
-        padding-top: 32px;
-        box-sizing: border-box;
-    }
-    .pricing-card.featured::before { top: -10px; font-size: 0.7rem; padding: 4px 12px; }
-    .pricing-name { font-size: 1.1rem; }
-    .pricing-price .amount { font-size: 2rem; }
-    .pricing-features li { font-size: 0.9rem; padding: 8px 0; }
-    #pricing-dots { display: flex !important; }
-
-    /* Servers Grid */
-    .servers-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .server-card { padding: 16px; gap: 12px; }
-    .server-flag { font-size: 1.5rem; }
-    .server-info h4 { font-size: 0.9rem; }
-    .server-info p { font-size: 0.75rem; }
-
-    /* Bonuses */
-    .bonus-grid { grid-template-columns: 1fr; gap: 16px; }
-    .bonus-card { padding: 24px; }
-    .bonus-value { font-size: 1.5rem; }
-
-    /* Affiliate */
-    .affiliate-hero { padding: 32px 20px; }
-    .affiliate-hero h3 { font-size: 1.5rem; }
-    .affiliate-hero p { font-size: 0.95rem; }
-    .affiliate-benefits { grid-template-columns: 1fr; gap: 20px; margin-bottom: 24px; }
-    .affiliate-benefit-value { font-size: 2rem; }
-    .affiliate-tiers-row { gap: 6px; }
-    .affiliate-tier-badge { padding: 8px 12px; font-size: 0.8rem; }
-
-    /* Legal */
-    .legal-tabs { flex-wrap: wrap; gap: 8px; }
-    .legal-tab { padding: 10px 16px; font-size: 0.85rem; flex: 1; min-width: 120px; text-align: center; }
-    .legal-content { padding: 24px; max-height: 400px; }
-    .legal-content h1 { font-size: 1.25rem; }
-    .legal-content h2 { font-size: 1.1rem; }
-    .legal-content p, .legal-content ul, .legal-content ol { font-size: 0.9rem; }
-
-    /* Contact */
     #contact { padding: 60px 0; }
     #contact .container > div:last-child { gap: 40px; }
     #contact h3 { font-size: 1.1rem; }
     #contact-form .btn { align-self: center; }
 
-    /* Footer */
     footer { padding: 40px 0 20px; }
     .footer-content { grid-template-columns: 1fr !important; text-align: center; gap: 32px; }
     .footer-brand p { max-width: 100%; }
     .footer-links h4 { margin-bottom: 12px; }
 
-    /* Buttons */
     .btn { width: 100%; max-width: 300px; padding: 12px 24px; }
     .hero .btn { max-width: none; }
-
-    /* Hero buttons on app page */
-    .hero div[style*="display:flex"] {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px !important;
-    }
 }
 
 @media (max-width: 480px) {
-    /* Extra small screens */
     .hero h1 { font-size: 1.75rem; }
     .section-header h2 { font-size: 1.5rem; }
-
-    .servers-grid { grid-template-columns: 1fr; }
-
-    .affiliate-tier-badge { padding: 6px 10px; font-size: 0.75rem; }
-    .affiliate-tier-badge svg { width: 16px; height: 16px; }
-
-    .pricing-price .amount { font-size: 1.75rem; }
-    .pricing-price .currency { font-size: 1rem; }
 }
     </style>
 </head>
@@ -755,12 +377,12 @@ input:focus, textarea:focus {
     <!-- Navigation -->
     <nav>
         <div class="container">
-            <a href="#/" class="logo" id="nav-logo">Root Corporation</a>
-            <ul class="nav-links" id="nav-links">
+            <a href="index.html" class="logo">Root Corporation</a>
+            <ul class="nav-links">
                 <li><a href="#apps">Our Apps</a></li>
                 <li><a href="#features">Features</a></li>
             </ul>
-            <a href="#apps" class="nav-cta" id="nav-cta">Explore Apps</a>
+            <a href="#apps" class="nav-cta">Explore Apps</a>
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -779,169 +401,70 @@ input:focus, textarea:focus {
         <a href="#apps" class="mobile-cta mobile-menu-link">Get Started</a>
     </div>
 
-    <!-- ==================== MAIN PAGE ==================== -->
-    <div id="main-page">
-        <!-- Hero -->
-        <section class="hero">
-            <div class="container">
-                <div class="hero-badge">
-                    <span>Enterprise-Grade Security</span>
-                </div>
-                <h1>Your Privacy<br>Is Our Priority</h1>
-                <p>Protect your digital footprint with our advanced privacy protection solutions. Take control of your online identity and browse with confidence.</p>
-                <a href="#apps" class="btn btn-primary">Explore Solutions</a>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span>Enterprise-Grade Security</span>
             </div>
-        </section>
+            <h1>Your Privacy<br>Is Our Priority</h1>
+            <p>Protect your digital footprint with our advanced privacy protection solutions. Take control of your online identity and browse with confidence.</p>
+            <a href="#apps" class="btn btn-primary">Explore Solutions</a>
+        </div>
+    </section>
 
-        <!-- Apps Section -->
-        <section id="apps">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Privacy Solutions</h2>
-                    <p>Choose the privacy protection service that best fits your needs.</p>
-                </div>
-                <div id="apps-grid" class="apps-grid">
-                    <div class="loading"><div class="spinner"></div></div>
-                </div>
+    <!-- Apps Section -->
+    <section id="apps">
+        <div class="container">
+            <div class="section-header">
+                <h2>Privacy Solutions</h2>
+                <p>Choose the privacy protection service that best fits your needs.</p>
             </div>
-        </section>
+            <div id="apps-grid" class="apps-grid"><!-- CI:APPS_GRID --></div>
+        </div>
+    </section>
 
-        <!-- Features Section -->
-        <section id="features">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Why Choose Us</h2>
-                    <p>Industry-leading privacy protection across all our services.</p>
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Us</h2>
+                <p>Industry-leading privacy protection across all our services.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <h3>Zero Data Collection</h3>
+                    <p>We never track, collect, or share your personal data. Your privacy is guaranteed.</p>
                 </div>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                        <h3>Zero Data Collection</h3>
-                        <p>We never track, collect, or share your personal data. Your privacy is guaranteed.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-                        <h3>End-to-End Encryption</h3>
-                        <p>Advanced encryption protocols ensure your communications remain private and secure.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                        <h3>Anonymous Browsing</h3>
-                        <p>Protect your identity online and prevent tracking by third parties.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-                        <h3>Global Infrastructure</h3>
-                        <p>Distributed network ensures reliable privacy protection worldwide.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
-                        <h3>Multi-Platform</h3>
-                        <p>Protect all your devices with a single subscription - desktop, mobile, and more.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-                        <h3>24/7 Support</h3>
-                        <p>Our privacy experts are available around the clock to assist you.</p>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                    <h3>End-to-End Encryption</h3>
+                    <p>Advanced encryption protocols ensure your communications remain private and secure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <h3>Anonymous Browsing</h3>
+                    <p>Protect your identity online and prevent tracking by third parties.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                    <h3>Global Infrastructure</h3>
+                    <p>Distributed network ensures reliable privacy protection worldwide.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                    <h3>Multi-Platform</h3>
+                    <p>Protect all your devices with a single subscription - desktop, mobile, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                    <h3>24/7 Support</h3>
+                    <p>Our privacy experts are available around the clock to assist you.</p>
                 </div>
             </div>
-        </section>
-    </div>
-
-    <!-- ==================== APP PAGE ==================== -->
-    <div id="app-page" class="hidden">
-        <!-- Hero -->
-        <section class="hero">
-            <div class="container">
-                <div class="hero-badge">
-                    <span>Privacy Protection</span>
-                </div>
-                <h1 id="app-hero-title">App Name</h1>
-                <p>Advanced privacy protection with end-to-end encryption, zero data logging, and global infrastructure. Take control of your digital privacy.</p>
-                <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-                    <a href="javascript:void(0)" onclick="scrollToSection('pricing')" class="btn btn-primary">View Plans</a>
-                    <a href="#/" class="btn btn-secondary">← All Solutions</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pricing -->
-        <section id="pricing">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Simple, Transparent Pricing</h2>
-                    <p>Choose the plan that works best for you. All plans include full access.</p>
-                </div>
-                <div class="pricing-container">
-                    <button class="pricing-nav" id="pricing-prev" aria-label="Previous">&lt;</button>
-                    <div class="pricing-wrapper">
-                        <div id="pricing-grid" class="pricing-grid">
-                            <div class="loading"><div class="spinner"></div></div>
-                        </div>
-                    </div>
-                    <button class="pricing-nav" id="pricing-next" aria-label="Next">&gt;</button>
-                </div>
-                <div id="pricing-dots" style="display: flex; justify-content: center; gap: 8px; margin-top: 24px;"></div>
-            </div>
-        </section>
-
-        <!-- Servers -->
-        <section id="servers">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Global Infrastructure</h2>
-                    <p>Privacy protection nodes distributed worldwide for optimal performance.</p>
-                </div>
-                <div id="servers-grid" class="servers-grid">
-                    <div class="loading"><div class="spinner"></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Bonuses -->
-        <section id="bonuses">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Exclusive Bonuses</h2>
-                    <p>Get rewarded for joining and sharing with friends.</p>
-                </div>
-                <div id="bonus-grid" class="bonus-grid">
-                    <div class="loading"><div class="spinner"></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Affiliate -->
-        <section id="affiliate">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Affiliate Program</h2>
-                    <p>Join our partner network and grow with us.</p>
-                </div>
-                <div id="affiliate-content" class="affiliate-content">
-                    <div class="loading"><div class="spinner"></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Legal -->
-        <section id="legal">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Legal Information</h2>
-                    <p>Transparency is important to us.</p>
-                </div>
-                <div class="legal-tabs">
-                    <button class="legal-tab active" data-tab="agreement">User Agreement</button>
-                    <button class="legal-tab" data-tab="privacy">Privacy Policy</button>
-                </div>
-                <div id="legal-content" class="legal-content">
-                    <div class="loading"><div class="spinner"></div></div>
-                </div>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
     <!-- Contact Section -->
     <section id="contact" style="background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%); padding: 100px 0;">
@@ -1036,18 +559,17 @@ input:focus, textarea:focus {
         <div class="container">
             <div class="footer-content" style="grid-template-columns: 2fr 1fr 1fr 1.5fr;">
                 <div class="footer-brand">
-                    <a href="#/" class="logo">Root Corporation</a>
+                    <a href="index.html" class="logo">Root Corporation</a>
                     <p style="margin-top: 16px;">Protect your digital privacy with our advanced privacy protection services. Trusted by users worldwide.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Solutions</h4>
-                    <ul id="footer-apps"></ul>
+                    <ul id="footer-apps"><!-- CI:FOOTER_APPS --></ul>
                 </div>
                 <div class="footer-links">
                     <h4>Company</h4>
                     <ul>
                         <li><a href="#features">Features</a></li>
-                        <li><a href="#legal">Legal</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>

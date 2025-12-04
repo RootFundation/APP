@@ -46,8 +46,8 @@ jobs:
             my $html = rf("index.html");
             my $apps = rf("/tmp/apps.html");
             my $footer = rf("/tmp/footer.html");
-            $html =~ s|<div id="apps-grid" class="apps-grid">.*?</div>|<div id="apps-grid" class="apps-grid">$apps</div>|s;
-            $html =~ s|<ul id="footer-apps">.*?</ul>|<ul id="footer-apps">$footer</ul>|s;
+            $html =~ s/<!-- CI:APPS_GRID -->/$apps/g;
+            $html =~ s/<!-- CI:FOOTER_APPS -->/$footer/g;
             open my $out, ">", "index.html"; print $out $html; close $out;
           '
 
