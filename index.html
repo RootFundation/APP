@@ -1079,7 +1079,8 @@ let legalData = null;
 let currentProductIndex = 0;
 let productsCache = [];
 
-// Helper to convert Map to Object (serde_wasm_bindgen returns Maps)
+const EMBEDDED_DATA = window.EMBEDDED_API_DATA || null;
+
 function mapToObject(obj) {
     if (obj instanceof Map) {
         const result = {};
@@ -1112,12 +1113,17 @@ async function discoverEndpoint() {
 
 async function initApp() {
     try {
-        await init();
-        const encodedName = await discoverEndpoint();
-        client = new HydraClient(encodedName);
+        if (EMBEDDED_DATA) {
+            console.log('Using embedded API data');
+            roomsCache = EMBEDDED_DATA.public?.room?.data?.rooms || [];
+        } else {
+            await init();
+            const encodedName = await discoverEndpoint();
+            client = new HydraClient(encodedName);
 
-        const response = mapToObject(await client.fetch_rooms());
-        roomsCache = response.data?.rooms || [];
+            const response = mapToObject(await client.fetch_rooms());
+            roomsCache = response.data?.rooms || [];
+        }
 
         if (roomsCache.length === 0) {
             document.getElementById('apps-grid').innerHTML = '<p style="text-align:center;color:var(--text-muted)">Failed to load applications. Please refresh the page.</p>';
@@ -1238,8 +1244,13 @@ async function showAppPage(room) {
 
 async function loadProducts() {
     try {
-        const response = mapToObject(await client.fetch_products(currentRoom.hash));
-        const products = response.data?.products || [];
+        let products;
+        if (EMBEDDED_DATA) {
+            products = EMBEDDED_DATA.room?.product?.data?.products || [];
+        } else {
+            const response = mapToObject(await client.fetch_products(currentRoom.hash));
+            products = response.data?.products || [];
+        }
         renderProducts(products);
     } catch (e) { console.error('Failed to load products:', e); }
 }
@@ -1420,8 +1431,13 @@ function setupPricingNavigation() {
 
 async function loadServers() {
     try {
-        const response = mapToObject(await client.fetch_servers(currentRoom.hash));
-        const servers = response.data?.servers || [];
+        let servers;
+        if (EMBEDDED_DATA) {
+            servers = EMBEDDED_DATA.room?.server?.data?.servers || [];
+        } else {
+            const response = mapToObject(await client.fetch_servers(currentRoom.hash));
+            servers = response.data?.servers || [];
+        }
         renderServers(servers);
     } catch (e) { console.error('Failed to load servers:', e); }
 }
@@ -1446,8 +1462,13 @@ function renderServers(servers) {
 
 async function loadBonuses() {
     try {
-        const response = mapToObject(await client.fetch_bonus(currentRoom.hash));
-        const bonuses = response.data || [];
+        let bonuses;
+        if (EMBEDDED_DATA) {
+            bonuses = EMBEDDED_DATA.room?.bonus?.data || [];
+        } else {
+            const response = mapToObject(await client.fetch_bonus(currentRoom.hash));
+            bonuses = response.data || [];
+        }
         renderBonuses(bonuses);
     } catch (e) { console.error('Failed to load bonuses:', e); }
 }
@@ -1484,8 +1505,13 @@ function renderBonuses(bonuses) {
 
 async function loadRules() {
     try {
-        const response = mapToObject(await client.fetch_rules(currentRoom.hash));
-        const rule = response.data?.rule;
+        let rule;
+        if (EMBEDDED_DATA) {
+            rule = EMBEDDED_DATA.room?.rule?.data?.rule;
+        } else {
+            const response = mapToObject(await client.fetch_rules(currentRoom.hash));
+            rule = response.data?.rule;
+        }
         if (rule) renderRules(rule);
     } catch (e) { console.error('Failed to load rules:', e); }
 }
@@ -1535,8 +1561,12 @@ function renderRules(rule) {
 
 async function loadLegal() {
     try {
-        const response = mapToObject(await client.fetch_legal(currentRoom.hash));
-        legalData = response.data?.legal || {};
+        if (EMBEDDED_DATA) {
+            legalData = EMBEDDED_DATA.room?.legal?.data?.legal || {};
+        } else {
+            const response = mapToObject(await client.fetch_legal(currentRoom.hash));
+            legalData = response.data?.legal || {};
+        }
         renderLegal('agreement');
     } catch (e) { console.error('Failed to load legal:', e); }
 }

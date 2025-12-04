@@ -1,0 +1,99 @@
+name: Build with Embedded API Data
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Run daily at 8:00 AM UTC
+  push:
+    paths:
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch API data
+        run: |
+          API='https://api.root-corporation.com'
+          HASH='RqWhZb7hdJnt9a+y+zr+Q7Ojgi4JPAyoHzcWBJZa8bk='
+
+          echo "Fetching API data..."
+
+          mkdir -p .api-data
+
+          # Fetch public endpoints
+          curl -sX GET "$API/v1/ed25519.pub" > .api-data/ed25519.pub.json
+          curl -sX GET "$API/v1/public/server" > .api-data/public_server.json
+          curl -sX GET "$API/v1/public/legal" > .api-data/public_legal.json
+          curl -sX GET "$API/v1/public/rule" > .api-data/public_rule.json
+          curl -sX GET "$API/v1/public/room" > .api-data/public_room.json
+
+          # Fetch room-specific endpoints
+          curl -sX GET "$API/v1/public/server" -H "X-Room-Id: $HASH" > .api-data/room_server.json
+          curl -sX GET "$API/v1/public/rule" -H "X-Room-Id: $HASH" > .api-data/room_rule.json
+          curl -sX GET "$API/v1/public/legal" -H "X-Room-Id: $HASH" > .api-data/room_legal.json
+          curl -sX POST "$API/v1/public/product" -H "X-Room-Id: $HASH" > .api-data/room_product.json
+          curl -sX POST "$API/v1/public/bonus" -H "X-Room-Id: $HASH" > .api-data/room_bonus.json
+
+          echo "API data fetched successfully"
+
+      - name: Embed data in index.html
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const dataDir = '.api-data';
+          const apiData = {
+            ed25519_pub: JSON.parse(fs.readFileSync(path.join(dataDir, 'ed25519.pub.json'), 'utf8')),
+            public: {
+              server: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_server.json'), 'utf8')),
+              legal: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_legal.json'), 'utf8')),
+              rule: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_rule.json'), 'utf8')),
+              room: JSON.parse(fs.readFileSync(path.join(dataDir, 'public_room.json'), 'utf8'))
+            },
+            room: {
+              server: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_server.json'), 'utf8')),
+              rule: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_rule.json'), 'utf8')),
+              legal: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_legal.json'), 'utf8')),
+              product: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_product.json'), 'utf8')),
+              bonus: JSON.parse(fs.readFileSync(path.join(dataDir, 'room_bonus.json'), 'utf8'))
+            }
+          };
+
+          const embeddedScript = `<script>
+          window.EMBEDDED_API_DATA = ${JSON.stringify(apiData, null, 2)};
+          </script>`;
+
+          let html = fs.readFileSync('index.html', 'utf8');
+          html = html.replace(/<script>\s*\n?\s*window\.EMBEDDED_API_DATA\s*=[\s\S]*?<\/script>\n?/g, '');
+          html = html.replace('</head>', embeddedScript + '\n</head>');
+          fs.writeFileSync('index.html', html);
+
+          console.log('Embedded API data into index.html');
+          EOF
+
+      - name: Cleanup temporary files
+        run: rm -rf .api-data
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update embedded API data"
+            git push
+          fi
