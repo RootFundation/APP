@@ -44,8 +44,10 @@ jobs:
           perl -0777 -e '
             sub rf { local $/; open my $f, "<", $_[0] or return ""; my $c = <$f>; close $f; $c }
             my $html = rf("index.html");
-            $html =~ s|<div id="apps-grid" class="apps-grid">.*?</div>|<div id="apps-grid" class="apps-grid">".rf("/tmp/apps.html")."</div>|se;
-            $html =~ s|<ul id="footer-apps">.*?</ul>|<ul id="footer-apps">".rf("/tmp/footer.html")."</ul>|se;
+            my $apps = rf("/tmp/apps.html");
+            my $footer = rf("/tmp/footer.html");
+            $html =~ s|<div id="apps-grid" class="apps-grid">.*?</div>|<div id="apps-grid" class="apps-grid">$apps</div>|s;
+            $html =~ s|<ul id="footer-apps">.*?</ul>|<ul id="footer-apps">$footer</ul>|s;
             open my $out, ">", "index.html"; print $out $html; close $out;
           '
 
@@ -111,14 +113,21 @@ jobs:
               sub rf { local $/; open my $f, "<", $_[0] or return ""; my $c = <$f>; close $f; chomp $c; $c }
               my $html = rf("pkg/template.html");
               my $name = rf("/tmp/room_name.txt");
+              my $servers = rf("/tmp/servers.html");
+              my $pricing = rf("/tmp/pricing.html");
+              my $bonuses = rf("/tmp/bonuses.html");
+              my $affiliate = rf("/tmp/affiliate.html");
+              my $legal_agreement = rf("/tmp/legal_agreement.html");
+              my $legal_privacy = rf("/tmp/legal_privacy.html");
+              my $footer = rf("/tmp/footer.html");
               $html =~ s/\{\{ROOM_NAME\}\}/$name/g;
-              $html =~ s/\{\{SERVERS\}\}/rf("\/tmp\/servers.html")/ge;
-              $html =~ s/\{\{PRICING\}\}/rf("\/tmp\/pricing.html")/ge;
-              $html =~ s/\{\{BONUSES\}\}/rf("\/tmp\/bonuses.html")/ge;
-              $html =~ s/\{\{AFFILIATE\}\}/rf("\/tmp\/affiliate.html")/ge;
-              $html =~ s/\{\{LEGAL_AGREEMENT\}\}/rf("\/tmp\/legal_agreement.html")/ge;
-              $html =~ s/\{\{LEGAL_PRIVACY\}\}/rf("\/tmp\/legal_privacy.html")/ge;
-              $html =~ s/\{\{FOOTER_APPS\}\}/rf("\/tmp\/footer.html")/ge;
+              $html =~ s/\{\{SERVERS\}\}/$servers/g;
+              $html =~ s/\{\{PRICING\}\}/$pricing/g;
+              $html =~ s/\{\{BONUSES\}\}/$bonuses/g;
+              $html =~ s/\{\{AFFILIATE\}\}/$affiliate/g;
+              $html =~ s/\{\{LEGAL_AGREEMENT\}\}/$legal_agreement/g;
+              $html =~ s/\{\{LEGAL_PRIVACY\}\}/$legal_privacy/g;
+              $html =~ s/\{\{FOOTER_APPS\}\}/$footer/g;
               open my $out, ">", "$name.html"; print $out $html; close $out;
             '
 
