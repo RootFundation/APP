@@ -56,15 +56,15 @@ jobs:
             }')
 
           echo "API data fetched successfully"
+          awk '/<script>/{if(/EMBEDDED_API_DATA/){skip=1}} !skip; /<\/script>/{skip=0}' index.html > index.tmp && mv index.tmp index.html
 
-          # Create embedded script
-          EMBEDDED_SCRIPT="<script>
-          window.EMBEDDED_API_DATA = $API_DATA;
-          </script>"
+          echo '<script>' > embed.tmp
+          echo "window.EMBEDDED_API_DATA = $API_DATA;" >> embed.tmp
+          echo '</script>' >> embed.tmp
 
-          # Remove existing embedded data and insert new one
-          sed -i '/<script>\s*window\.EMBEDDED_API_DATA/,/<\/script>/d' index.html
-          sed -i "s|</head>|$EMBEDDED_SCRIPT\n</head>|" index.html
+          # Insert before </head> using awk
+          awk -v embed="$(cat embed.tmp)" '/<\/head>/{print embed} {print}' index.html > index.tmp && mv index.tmp index.html
+          rm embed.tmp
 
           echo "Embedded data injected into index.html"
 
