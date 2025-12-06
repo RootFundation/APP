@@ -27,17 +27,13 @@ jobs:
           echo "Fetching rooms list..."
           ROOMS_JSON=$(curl -sX GET "$API/v1/public/room")
 
-          # Extract room names and hashes
           ROOM_COUNT=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | length')
           echo "Found $ROOM_COUNT rooms"
 
-          # Generate apps grid HTML (links to {room_name}.html)
-          APPS_HTML=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | map("<a href=\"\(.name).html\" class=\"app-card\"><div class=\"app-icon\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg></div><h3>\(.name)</h3><span class=\"app-cta\">View Details</span></a>") | join("")')
+          APPS_HTML=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | map("<a href=\"\(.hash).html\" class=\"app-card\"><div class=\"app-icon\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg></div><h3>\(.name)</h3><span class=\"app-cta\">View Details</span></a>") | join("")')
 
-          # Generate footer apps HTML
-          FOOTER_APPS_HTML=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | map("<li><a href=\"\(.name).html\">\(.name)</a></li>") | join("")')
+          FOOTER_APPS_HTML=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | map("<li><a href=\"\(.hash).html\">\(.name)</a></li>") | join("")')
 
-          # Update index.html with apps grid and footer
           printf '%s' "$APPS_HTML" > /tmp/apps.html
           printf '%s' "$FOOTER_APPS_HTML" > /tmp/footer.html
 
@@ -53,31 +49,26 @@ jobs:
 
           echo "Updated index.html"
 
-          # Process each room
           echo "$ROOMS_JSON" | jq -c '.data.rooms // [] | .[]' | while read -r room; do
             ROOM_NAME=$(echo "$room" | jq -r '.name')
             ROOM_HASH=$(echo "$room" | jq -r '.hash')
 
             echo "Processing room: $ROOM_NAME"
 
-            # Fetch room-specific data
             SERVERS=$(curl -sX GET "$API/v1/public/server" -H "X-Room-Id: $ROOM_HASH")
             PRODUCTS=$(curl -sX POST "$API/v1/public/product" -H "X-Room-Id: $ROOM_HASH")
             BONUSES=$(curl -sX POST "$API/v1/public/bonus" -H "X-Room-Id: $ROOM_HASH")
             RULES=$(curl -sX GET "$API/v1/public/rule" -H "X-Room-Id: $ROOM_HASH")
             LEGAL=$(curl -sX GET "$API/v1/public/legal" -H "X-Room-Id: $ROOM_HASH")
 
-            # Generate servers grid HTML
             SERVERS_HTML=$(echo "$SERVERS" | jq -r '.data.servers // [] | map("<div class=\"server-card\"><div class=\"server-flag\">\(.country)</div><div class=\"server-info\"><h4>\(.city)</h4><p>\(.zone)</p></div></div>") | join("")')
             [ -z "$SERVERS_HTML" ] && SERVERS_HTML='<p style="text-align:center;color:var(--text-muted)">No nodes available</p>'
 
-            # Generate pricing grid HTML
             PRICING_HTML=$(echo "$PRODUCTS" | jq -r '
               [.data.products // [] | sort_by(.period) | to_entries[] | {i: .key, p: .value}] |
               map("<div class=\"pricing-card\(if .i == 1 then " featured" else "" end)\" data-index=\"\(.i)\"><div class=\"pricing-name\">\(.p.name)</div><div class=\"pricing-period\">\(.p.period) Day\(if .p.period != 1 then "s" else "" end)</div><div class=\"pricing-price\"><span class=\"currency\">A$</span><span class=\"amount\">\(.p.price / 100 | tostring | if contains(".") then . else . + ".00" end)</span></div><ul class=\"pricing-features\"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href=\"#\" class=\"btn btn-primary\">Get Started</a></div>") | join("")')
             [ -z "$PRICING_HTML" ] && PRICING_HTML='<p style="text-align:center;color:var(--text-muted)">No plans available</p>'
 
-            # Generate bonuses grid HTML
             BONUSES_HTML=$(echo "$BONUSES" | jq -r '
               def format_days: if . < (1/24) then "\(. * 24 * 60 | round) Minutes Free" elif . < 1 then "\(. * 24 | round) Hours Free" else "\(. | round) Days Free" end;
               def get_title: {"welcome_bonus": "Welcome Bonus", "refer_bonus": "Referral Bonus", "share_bonus": "Share Bonus"}[.] // .;
@@ -86,7 +77,6 @@ jobs:
               .data // [] | map("<div class=\"bonus-card\"><div class=\"bonus-icon\">\(.name | get_icon)</div><h3>\(.name | get_title)</h3><div class=\"bonus-value\">\(.days | format_days)</div><p>\(.name | get_desc)</p></div>") | join("")')
             [ -z "$BONUSES_HTML" ] && BONUSES_HTML='<p style="text-align:center;color:var(--text-muted)">No bonuses available</p>'
 
-            # Generate affiliate HTML
             AFFILIATE_HTML=$(echo "$RULES" | jq -r '
               .data.rule as $rule |
               ($rule.commission_rates // [] | length) as $tierCount |
@@ -94,11 +84,9 @@ jobs:
               ["Bronze", "Silver", "Gold", "Platinum", "Diamond"] as $levels |
               "<div class=\"affiliate-hero\"><h3>Earn With Every Referral</h3><p>Turn your network into income. Share privacy protection and get rewarded for every successful referral.</p><div class=\"affiliate-benefits\"><div class=\"affiliate-benefit\"><div class=\"affiliate-benefit-value\">\($startingRate)%+</div><div class=\"affiliate-benefit-label\">Starting Commission</div></div><div class=\"affiliate-benefit\"><div class=\"affiliate-benefit-value\">\($tierCount)</div><div class=\"affiliate-benefit-label\">Commission Tiers</div></div><div class=\"affiliate-benefit\"><div class=\"affiliate-benefit-value\">Anytime</div><div class=\"affiliate-benefit-label\">Payouts</div></div></div><div class=\"affiliate-tiers-row\">" + ([$rule.commission_rates // [] | to_entries[] | "<span class=\"affiliate-tier-badge\">\($levels[.key] // "Level \(.key + 1)")</span>"] | join("")) + "</div><div class=\"affiliate-cta\"><a href=\"index.html#contact\" class=\"btn btn-primary\">Become a Partner</a></div></div>"')
 
-            # Generate legal content HTML
             LEGAL_AGREEMENT=$(echo "$LEGAL" | jq -r '.data.legal.user_agreement // "No content available." | gsub("\n\n"; "</p><p>") | gsub("\n"; "<br>") | "<p>" + . + "</p>"')
             LEGAL_PRIVACY=$(echo "$LEGAL" | jq -r '.data.legal.privacy_policy // "No content available." | gsub("\n\n"; "</p><p>") | gsub("\n"; "<br>") | "<p>" + . + "</p>"')
 
-            # Write temp files
             printf '%s' "$SERVERS_HTML" > /tmp/servers.html
             printf '%s' "$PRICING_HTML" > /tmp/pricing.html
             printf '%s' "$BONUSES_HTML" > /tmp/bonuses.html
@@ -106,13 +94,14 @@ jobs:
             printf '%s' "$LEGAL_AGREEMENT" > /tmp/legal_agreement.html
             printf '%s' "$LEGAL_PRIVACY" > /tmp/legal_privacy.html
             printf '%s' "$ROOM_NAME" > /tmp/room_name.txt
+            printf '%s' "$ROOM_HASH" > /tmp/room_hash.txt
             printf '%s' "$FOOTER_APPS_HTML" > /tmp/footer.html
 
-            # Generate room HTML from template
             perl -0777 -e '
               sub rf { local $/; open my $f, "<", $_[0] or return ""; my $c = <$f>; close $f; chomp $c; $c }
-              my $html = rf("pkg/template.html");
+              my $html = rf("assets/template.html");
               my $name = rf("/tmp/room_name.txt");
+              my $hash = rf("/tmp/room_hash.txt");
               my $servers = rf("/tmp/servers.html");
               my $pricing = rf("/tmp/pricing.html");
               my $bonuses = rf("/tmp/bonuses.html");
@@ -128,13 +117,13 @@ jobs:
               $html =~ s/\{\{LEGAL_AGREEMENT\}\}/$legal_agreement/g;
               $html =~ s/\{\{LEGAL_PRIVACY\}\}/$legal_privacy/g;
               $html =~ s/\{\{FOOTER_APPS\}\}/$footer/g;
-              open my $out, ">", "$name.html"; print $out $html; close $out;
+              open my $out, ">", "$hash.html"; print $out $html; close $out;
             '
 
-            echo "Generated $ROOM_NAME.html"
+            echo "Generated $ROOM_HASH.html"
           done
 
-          rm -f /tmp/*.html /tmp/room_name.txt
+          rm -f /tmp/*.html /tmp/room_name.txt /tmp/room_hash.txt
           echo "Static HTML generation complete"
 
       - name: Commit and push changes
