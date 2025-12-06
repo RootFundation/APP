@@ -42,7 +42,7 @@ jobs:
             my $html = rf("index.html");
             my $apps = rf("/tmp/apps.html");
             my $footer = rf("/tmp/footer.html");
-            $html =~ s/(<div id="apps-grid" class="apps-grid">).*?(<\/div>)/$1$apps$2/s;
+            $html =~ s/<div id="apps-grid" class="apps-grid">.*?<\/div>\s*<\/div>\s*<\/section>/<div id="apps-grid" class="apps-grid">$apps<\/div>\n        <\/div>\n    <\/section>/s;
             $html =~ s/(<ul id="footer-apps">).*?(<\/ul>)/$1$footer$2/s;
             open my $out, ">", "index.html"; print $out $html; close $out;
           '
