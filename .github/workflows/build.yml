@@ -60,6 +60,7 @@ jobs:
             BONUSES=$(curl -sX POST "$API/v1/public/bonus" -H "X-Room-Id: $ROOM_HASH")
             RULES=$(curl -sX GET "$API/v1/public/rule" -H "X-Room-Id: $ROOM_HASH")
             LEGAL=$(curl -sX GET "$API/v1/public/legal" -H "X-Room-Id: $ROOM_HASH")
+            PACKAGES=$(curl -sX GET "$API/v1/public/pkg" -H "X-Room-Id: $ROOM_HASH")
 
             SERVERS_HTML=$(echo "$SERVERS" | jq -r '.data.servers // [] | map("<div class=\"server-card\"><div class=\"server-flag\">\(.country)</div><div class=\"server-info\"><h4>\(.city)</h4><p>\(.zone)</p></div></div>") | join("")')
             [ -z "$SERVERS_HTML" ] && SERVERS_HTML='<p style="text-align:center;color:var(--text-muted)">No nodes available</p>'
@@ -88,14 +89,40 @@ jobs:
             LEGAL_AGREEMENT=$(echo "$LEGAL" | jq -r '.data.legal.user_agreement // "No content available." | gsub("\n\n"; "</p><p>") | gsub("\n"; "<br>") | "<p>" + . + "</p>"')
             LEGAL_PRIVACY=$(echo "$LEGAL" | jq -r '.data.legal.privacy_policy // "No content available." | gsub("\n\n"; "</p><p>") | gsub("\n"; "<br>") | "<p>" + . + "</p>"')
 
+            # Generate packages/download section HTML
+            PACKAGES_HTML=$(echo "$PACKAGES" | jq -r '
+              def platform_icon:
+                if . == "windows" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801\"/></svg>"
+                elif . == "android" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M17.523 15.341c-.5 0-.919-.176-1.254-.524-.336-.349-.504-.782-.504-1.3 0-.518.168-.948.504-1.29.335-.342.754-.513 1.254-.513.501 0 .92.171 1.255.513.335.342.504.772.504 1.29 0 .518-.169.951-.504 1.3-.336.348-.754.524-1.255.524zm-11.046 0c-.5 0-.919-.176-1.254-.524-.336-.349-.504-.782-.504-1.3 0-.518.168-.948.504-1.29.335-.342.754-.513 1.254-.513.5 0 .919.171 1.254.513.336.342.504.772.504 1.29 0 .518-.168.951-.504 1.3-.335.348-.754.524-1.254.524zM17.839 5.55l1.645-2.985c.09-.164.038-.306-.157-.427-.195-.12-.384-.1-.567.061L17.073 5.24c-1.425-.65-3.015-.975-4.773-.975-1.758 0-3.348.325-4.773.975L5.84 2.199c-.183-.161-.372-.181-.567-.061-.195.121-.247.263-.157.427L6.761 5.55C3.556 7.297 1.954 9.904 1.954 13.37h20.092c0-3.466-1.602-6.073-4.207-7.82z\"/><path d=\"M6.954 14.37v7.629c0 .553.447 1 1 1h1.5v3c0 .553.447 1 1 1s1-.447 1-1v-3h3v3c0 .553.447 1 1 1s1-.447 1-1v-3h1.5c.553 0 1-.447 1-1V14.37h-12z\"/><path d=\"M4.454 14.37c-.553 0-1 .447-1 1v6c0 .553.447 1 1 1s1-.447 1-1v-6c0-.553-.447-1-1-1zm15.092 0c-.553 0-1 .447-1 1v6c0 .553.447 1 1 1s1-.447 1-1v-6c0-.553-.447-1-1-1z\"/></svg>"
+                elif . == "ios" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z\"/></svg>"
+                else "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>" end;
+              def platform_name: if . == "windows" then "Windows" elif . == "android" then "Android" elif . == "ios" then "iOS" else . end;
+              def platform_badge: if . == "windows" then "assets/badges/windows.svg" elif . == "android" then "assets/badges/android.svg" elif . == "ios" then "assets/badges/apple.svg" else "" end;
+              def platform_store_label: if . == "windows" then "Microsoft Store" elif . == "android" then "Google Play" elif . == "ios" then "App Store" else "Store" end;
+              def platform_direct_label: if . == "windows" then "Download .exe" elif . == "android" then "Download .apk" elif . == "ios" then "Download .ipa" else "Download" end;
+              .data.pkgs // [] | map(
+                "<div class=\"download-card\"><div class=\"download-card-header\"><div class=\"download-platform-icon\">\(.platform | platform_icon)</div><div class=\"download-platform-info\"><h3>\(.platform | platform_name)</h3><div class=\"download-version\"><span class=\"download-version-badge\">v\(.version)</span><span>Latest</span></div></div></div><div class=\"download-options\">" +
+                (if .store and .store != "" then "<a href=\"\(.store)\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"download-badge-link\"><img src=\"\(.platform | platform_badge)\" alt=\"Get it on \(.platform | platform_store_label)\" class=\"download-btn-badge\"></a>" else "" end) +
+                (if .store and .store != "" and .link and .link != "" then "<div class=\"download-divider\">or</div>" else "" end) +
+                (if .link and .link != "" then "<a href=\"\(.link)\" class=\"download-btn download-btn-secondary\" target=\"_blank\" rel=\"noopener noreferrer\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\(.platform | platform_direct_label)</a>" else "" end) +
+                "</div></div>"
+              ) | join("")')
+            [ -z "$PACKAGES_HTML" ] && PACKAGES_HTML='<div class="download-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin: 0 auto 16px; color: var(--text-dim);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>No downloads available at this time.</p></div>'
+
+            # Generate packages JSON for popup (escaped for embedding)
+            PACKAGES_JSON=$(echo "$PACKAGES" | jq -c '.data.pkgs // []' | sed 's/"/\\"/g')
+
             printf '%s' "$SERVERS_HTML" > /tmp/servers.html
             printf '%s' "$PRICING_HTML" > /tmp/pricing.html
             printf '%s' "$BONUSES_HTML" > /tmp/bonuses.html
             printf '%s' "$AFFILIATE_HTML" > /tmp/affiliate.html
             printf '%s' "$LEGAL_AGREEMENT" > /tmp/legal_agreement.html
             printf '%s' "$LEGAL_PRIVACY" > /tmp/legal_privacy.html
+            printf '%s' "$PACKAGES_HTML" > /tmp/packages.html
+            printf '%s' "$PACKAGES_JSON" > /tmp/packages_json.txt
             printf '%s' "$ROOM_NAME" > /tmp/room_name.txt
             printf '%s' "$ROOM_HASH" > /tmp/room_hash.txt
+            printf '%s' "$API" > /tmp/api_base.txt
             printf '%s' "$FOOTER_APPS_HTML" > /tmp/footer.html
 
             perl -0777 -e '
@@ -103,20 +130,27 @@ jobs:
               my $html = rf("assets/template.html");
               my $name = rf("/tmp/room_name.txt");
               my $hash = rf("/tmp/room_hash.txt");
+              my $api_base = rf("/tmp/api_base.txt");
               my $servers = rf("/tmp/servers.html");
               my $pricing = rf("/tmp/pricing.html");
               my $bonuses = rf("/tmp/bonuses.html");
               my $affiliate = rf("/tmp/affiliate.html");
               my $legal_agreement = rf("/tmp/legal_agreement.html");
               my $legal_privacy = rf("/tmp/legal_privacy.html");
+              my $packages = rf("/tmp/packages.html");
+              my $packages_json = rf("/tmp/packages_json.txt");
               my $footer = rf("/tmp/footer.html");
               $html =~ s/\{\{ROOM_NAME\}\}/$name/g;
+              $html =~ s/\{\{ROOM_HASH\}\}/$hash/g;
+              $html =~ s/\{\{API_BASE\}\}/$api_base/g;
               $html =~ s/\{\{SERVERS\}\}/$servers/g;
               $html =~ s/\{\{PRICING\}\}/$pricing/g;
               $html =~ s/\{\{BONUSES\}\}/$bonuses/g;
               $html =~ s/\{\{AFFILIATE\}\}/$affiliate/g;
               $html =~ s/\{\{LEGAL_AGREEMENT\}\}/$legal_agreement/g;
               $html =~ s/\{\{LEGAL_PRIVACY\}\}/$legal_privacy/g;
+              $html =~ s/\{\{PACKAGES\}\}/$packages/g;
+              $html =~ s/\{\{PACKAGES_JSON\}\}/$packages_json/g;
               $html =~ s/\{\{FOOTER_APPS\}\}/$footer/g;
               open my $out, ">", "$hash.html"; print $out $html; close $out;
             '
@@ -124,7 +158,7 @@ jobs:
             echo "Generated $ROOM_HASH.html"
           done
 
-          rm -f /tmp/*.html /tmp/room_name.txt /tmp/room_hash.txt
+          rm -f /tmp/*.html /tmp/*.txt
           echo "Static HTML generation complete"
 
       - name: Commit and push changes
