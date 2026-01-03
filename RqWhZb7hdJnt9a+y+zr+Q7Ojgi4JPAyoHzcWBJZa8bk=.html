@@ -124,6 +124,9 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 @media (max-width: 768px) {
     .mobile-menu-btn { display: block; }
     .nav-cta { display: none; }
+    #download { padding: 60px 0; }
+    .download-grid { gap: 20px; }
+    .download-card { padding: 24px; min-width: 100%; }
 }
 
 .hero {
@@ -445,6 +448,409 @@ footer {
 
 input:focus, textarea:focus { outline: none; border-color: var(--primary) !important; }
 
+/* Download Section */
+#download { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); padding: 80px 0; }
+
+.download-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.download-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    min-width: 280px;
+    max-width: 400px;
+    flex: 1;
+    transition: all 0.3s;
+}
+
+.download-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+}
+
+.download-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.download-platform-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.download-platform-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.download-platform-info h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.download-version {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.download-version-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.download-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.download-btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+}
+
+.download-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+}
+
+.download-btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.download-btn-secondary:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--primary);
+}
+
+.download-badge-link {
+    display: flex;
+    justify-content: center;
+}
+
+.download-btn-badge {
+    height: 40px;
+    width: auto;
+    border-radius: 8px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.download-btn-badge:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+.download-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.download-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.download-divider::before,
+.download-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.download-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.download-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.download-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
+.download-error-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: var(--warning);
+}
+
+.download-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+/* Platform Popup Modal */
+.platform-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.platform-popup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.platform-popup {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s;
+    position: relative;
+}
+
+.platform-popup-overlay.active .platform-popup {
+    transform: scale(1) translateY(0);
+}
+
+.platform-popup-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.platform-popup-close:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.platform-popup-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--gradient-1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+}
+
+.platform-popup-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+}
+
+.platform-popup h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.platform-popup-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+}
+
+.platform-popup-version {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--success);
+    margin-bottom: 24px;
+}
+
+.platform-popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.platform-popup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.platform-popup-btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.platform-popup-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.platform-popup-btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.platform-popup-btn-secondary:hover {
+    color: var(--text);
+}
+
+.platform-popup-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.platform-popup-badge-link {
+    display: flex;
+    justify-content: center;
+}
+
+.platform-popup-badge {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.platform-popup-badge:hover {
+    transform: scale(1.02);
+}
+
+.platform-popup-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin: 4px 0;
+}
+
+.platform-popup-divider::before,
+.platform-popup-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+@media (max-width: 480px) {
+    .platform-popup { padding: 24px; }
+    .platform-popup h3 { font-size: 1.25rem; }
+    .platform-popup-icon { width: 64px; height: 64px; }
+    .platform-popup-icon svg { width: 32px; height: 32px; }
+}
+
 @media (max-width: 900px) {
     .pricing-card { flex: 0 0 calc((100% - 24px) / 2); }
     .affiliate-benefits { grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -488,10 +894,28 @@ input:focus, textarea:focus { outline: none; border-color: var(--primary) !impor
     </style>
 </head>
 <body>
+    <!-- Platform Detection Popup -->
+    <div class="platform-popup-overlay" id="platform-popup">
+        <div class="platform-popup">
+            <button class="platform-popup-close" id="popup-close" aria-label="Close">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="platform-popup-icon" id="popup-icon"></div>
+            <h3 id="popup-title">Download for Your Device</h3>
+            <p class="platform-popup-subtitle" id="popup-subtitle">Get the app optimized for your platform</p>
+            <div class="platform-popup-version" id="popup-version"></div>
+            <div class="platform-popup-actions" id="popup-actions"></div>
+        </div>
+    </div>
+
     <nav>
         <div class="container">
             <a href="index.html" class="logo">12345APP</a>
             <ul class="nav-links">
+                <li><a href="#download">Download</a></li>
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#servers">Infrastructure</a></li>
                 <li><a href="#bonuses">Bonuses</a></li>
@@ -511,6 +935,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--primary) !impor
 
     <div class="mobile-menu" id="mobile-menu">
         <a href="index.html" class="mobile-menu-link">← All Solutions</a>
+        <a href="#download" class="mobile-menu-link">Download</a>
         <a href="#pricing" class="mobile-menu-link">Pricing</a>
         <a href="#servers" class="mobile-menu-link">Infrastructure</a>
         <a href="#bonuses" class="mobile-menu-link">Bonuses</a>
@@ -531,6 +956,16 @@ input:focus, textarea:focus { outline: none; border-color: var(--primary) !impor
         </div>
     </section>
 
+    <section id="download">
+        <div class="container">
+            <div class="section-header">
+                <h2>Download App</h2>
+                <p>Get the app for your device. Choose your platform below.</p>
+            </div>
+            <div id="download-content" class="download-grid"><div class="download-card"><div class="download-card-header"><div class="download-platform-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg></div><div class="download-platform-info"><h3>Windows</h3><div class="download-version"><span class="download-version-badge">v1.0.3</span><span>Latest</span></div></div></div><div class="download-options"><a href="https://bit.ly/12345APPWindows" target="_blank" rel="noopener noreferrer" class="download-badge-link"><img src="assets/badges/windows.svg" alt="Get it on Microsoft Store" class="download-btn-badge"></a><div class="download-divider">or</div><a href="https://bit.ly/12345APPWindows-v103" class="download-btn download-btn-secondary" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .exe</a></div></div><div class="download-card"><div class="download-card-header"><div class="download-platform-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.5 0-.919-.176-1.254-.524-.336-.349-.504-.782-.504-1.3 0-.518.168-.948.504-1.29.335-.342.754-.513 1.254-.513.501 0 .92.171 1.255.513.335.342.504.772.504 1.29 0 .518-.169.951-.504 1.3-.336.348-.754.524-1.255.524zm-11.046 0c-.5 0-.919-.176-1.254-.524-.336-.349-.504-.782-.504-1.3 0-.518.168-.948.504-1.29.335-.342.754-.513 1.254-.513.5 0 .919.171 1.254.513.336.342.504.772.504 1.29 0 .518-.168.951-.504 1.3-.335.348-.754.524-1.254.524zM17.839 5.55l1.645-2.985c.09-.164.038-.306-.157-.427-.195-.12-.384-.1-.567.061L17.073 5.24c-1.425-.65-3.015-.975-4.773-.975-1.758 0-3.348.325-4.773.975L5.84 2.199c-.183-.161-.372-.181-.567-.061-.195.121-.247.263-.157.427L6.761 5.55C3.556 7.297 1.954 9.904 1.954 13.37h20.092c0-3.466-1.602-6.073-4.207-7.82z"/><path d="M6.954 14.37v7.629c0 .553.447 1 1 1h1.5v3c0 .553.447 1 1 1s1-.447 1-1v-3h3v3c0 .553.447 1 1 1s1-.447 1-1v-3h1.5c.553 0 1-.447 1-1V14.37h-12z"/><path d="M4.454 14.37c-.553 0-1 .447-1 1v6c0 .553.447 1 1 1s1-.447 1-1v-6c0-.553-.447-1-1-1zm15.092 0c-.553 0-1 .447-1 1v6c0 .553.447 1 1 1s1-.447 1-1v-6c0-.553-.447-1-1-1z"/></svg></div><div class="download-platform-info"><h3>Android</h3><div class="download-version"><span class="download-version-badge">v1.0.3</span><span>Latest</span></div></div></div><div class="download-options"><a href="https://bit.ly/12345APPAndroid" target="_blank" rel="noopener noreferrer" class="download-badge-link"><img src="assets/badges/android.svg" alt="Get it on Google Play" class="download-btn-badge"></a><div class="download-divider">or</div><a href="https://bit.ly/12345APPAndroid-v103" class="download-btn download-btn-secondary" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .apk</a></div></div></div>
+        </div>
+    </section>
+
     <section id="pricing">
         <div class="container">
             <div class="section-header">
@@ -540,7 +975,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--primary) !impor
             <div class="pricing-container">
                 <button class="pricing-nav" id="pricing-prev" aria-label="Previous">&lt;</button>
                 <div class="pricing-wrapper">
-                    <div id="pricing-grid" class="pricing-grid"><div class="pricing-card" data-index="0"><div class="pricing-name">Daily</div><div class="pricing-period">1.0 Day</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">1.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card featured" data-index="1"><div class="pricing-name">Monthly</div><div class="pricing-period">30.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">4.98</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card" data-index="2"><div class="pricing-name">Quarterly</div><div class="pricing-period">90.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">11.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card" data-index="3"><div class="pricing-name">Semi-Annual</div><div class="pricing-period">180.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">21.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card" data-index="4"><div class="pricing-name">Annual</div><div class="pricing-period">365.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">38.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div></div>
+                    <div id="pricing-grid" class="pricing-grid"><div class="pricing-card" data-index="0"><div class="pricing-name">Daily</div><div class="pricing-period">1.0 Day</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">1.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card featured" data-index="1"><div class="pricing-name">Monthly</div><div class="pricing-period">30.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">4.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card" data-index="2"><div class="pricing-name">Quarterly</div><div class="pricing-period">90.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">11.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div><div class="pricing-card" data-index="3"><div class="pricing-name">Annual</div><div class="pricing-period">365.0 Days</div><div class="pricing-price"><span class="currency">A$</span><span class="amount">38.99</span></div><ul class="pricing-features"><li>Full Privacy Protection</li><li>All Global Nodes</li><li>Unlimited Bandwidth</li><li>24/7 Privacy Support</li></ul><a href="#" class="btn btn-primary">Get Started</a></div></div>
                 </div>
                 <button class="pricing-nav" id="pricing-next" aria-label="Next">&gt;</button>
             </div>
@@ -553,7 +988,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--primary) !impor
                 <h2>Global Infrastructure</h2>
                 <p>Privacy protection nodes distributed worldwide for optimal performance.</p>
             </div>
-            <div class="servers-grid"><div class="server-card"><div class="server-flag">AU</div><div class="server-info"><h4>Sydney</h4><p>AU001</p></div></div><div class="server-card"><div class="server-flag">AU</div><div class="server-info"><h4>Sydney</h4><p>AU002</p></div></div></div>
+            <div class="servers-grid"><div class="server-card"><div class="server-flag">AU</div><div class="server-info"><h4>Sydney</h4><p>AU001</p></div></div><div class="server-card"><div class="server-flag">AU</div><div class="server-info"><h4>Sydney</h4><p>AU002</p></div></div><div class="server-card"><div class="server-flag">DE</div><div class="server-info"><h4>Frankfurt Am Main</h4><p>DE001</p></div></div><div class="server-card"><div class="server-flag">GB</div><div class="server-info"><h4>London</h4><p>GB001</p></div></div><div class="server-card"><div class="server-flag">LU</div><div class="server-info"><h4>Luxembourg</h4><p>LU001</p></div></div><div class="server-card"><div class="server-flag">US</div><div class="server-info"><h4>Las Vegas</h4><p>US001</p></div></div></div>
         </div>
     </section>
 
@@ -588,8 +1023,8 @@ input:focus, textarea:focus { outline: none; border-color: var(--primary) !impor
                 <button class="legal-tab" data-tab="privacy">Privacy Policy</button>
             </div>
             <div class="legal-content">
-                <div id="legal-agreement"><p>TERMS OF SERVICE</p><p>Last Updated: December 06, 2025</p><p>1. ACCEPTANCE OF TERMS</p><p>By downloading, installing, or using the 12345APP application ("Service", "App", "we", "us", or "our"), you ("User", "you", or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree, you must immediately cease using the Service and uninstall the App.</p><p>AGE REQUIREMENT: You must be at least 18 years of age to use this Service. By using the Service, you represent and warrant that you are 18 years or older. We do not knowingly collect information from or direct any of our content specifically to children under 18.</p><p>2. SERVICE DESCRIPTION</p><p>The Service provides privacy protection and secure network access through encrypted tunnel technology and our global server infrastructure. Our core mission is to protect your online privacy. All user data is stored exclusively in Australia. Available on iOS (Apple App Store), Android (Google Play Store), Windows (Microsoft Store), and macOS (Mac App Store). Services include encrypted tunnel connections, multiple server locations worldwide for traffic routing (tunnel servers do not store user data), privacy-focused traffic management, account management, and customer support.</p><p>3. ACCOUNT REGISTRATION AND SECURITY</p><p>You must provide accurate and complete information during registration. You are responsible for maintaining the confidentiality of your account credentials. Each account is limited to a specified number of concurrent device connections. You must notify us immediately of any unauthorized access or security breach.</p><p>4. PAYMENT AND ACCESS PERIODS</p><p>Payment Processing: All payments are processed through Stripe as single purchases. We do not process payments through app stores. Your payment card details are forwarded to Stripe at frontend for processing and are NEVER stored on our servers. We only retain transaction records (amount, date, status) for accounting purposes.</p><p>Access Period Packages: We offer various time-based access packages (e.g., 30 days, 90 days, etc.). Each purchase is a one-time payment for a specific access period. Prices displayed in Australian dollars (AUD). Access periods do NOT automatically renew - you must purchase a new access period before expiration to continue using the service.</p><p>Account Access: You can access your account on any supported platform (iOS, Android, Windows, macOS) by logging in with your credentials.</p><p>5. REFUND POLICY</p><p>General Policy: Due to the nature of our service, all sales are final. When you purchase an access period package, our infrastructure costs (server resources, bandwidth, encrypted tunnel capacity) are incurred immediately upon activation. These operational costs cannot be recovered once service access has been provided.</p><p>Important Notice: Refunds are generally not available for digital services after activation. This includes but is not limited to: change of mind, failure to use the service, dissatisfaction with performance, account termination for policy violations, inability to access due to external factors (local network restrictions, government regulations, device compatibility), or user error.</p><p>Refund Requests: In exceptional circumstances and at our sole discretion, we may evaluate refund requests on a case-by-case basis. All refund decisions are final and non-appealable. To request consideration, contact support@root-corporation.com within 7 days of purchase with your order details.</p><p>Approved Refunds: If approved, refunds are partial only (calculated based on infrastructure costs already incurred and service usage). Refunds are NOT processed through Stripe. You must provide valid government-issued identification (passport or driver's license) and corresponding bank account information for identity verification. Refunds are processed exclusively via Wise international bank transfer. Processing takes 5-10 business days after identity verification and bank details are confirmed. Original Stripe payment processing fees are non-refundable and will be deducted from any approved refund amount.</p><p>Legal Compliance: This policy does not affect your statutory rights under mandatory consumer protection laws where applicable.</p><p>6. ACCEPTABLE USE POLICY</p><p>You agree NOT to use the Service for: any illegal activities, distributing malware, unauthorized access to systems (hacking), harassment or threats, distributing child exploitation material, spamming or phishing, copyright infringement, DDoS attacks, or any activity that violates the rights of others. Accounts found violating this policy will be immediately terminated without refund.</p><p>7. SERVICE AVAILABILITY</p><p>We strive to maintain high uptime but do not guarantee uninterrupted service. Server availability may vary by location. Brief service interruptions for maintenance, updates, or technical issues may occur. We reserve the right to modify, suspend, or discontinue any aspect of the Service with notice when possible. Service interruptions do not entitle users to refunds except as outlined in Section 5.</p><p>8. INTELLECTUAL PROPERTY</p><p>All Service content, features, and functionality are owned by us and protected by copyright and trademark laws. You receive a limited, non-exclusive, non-transferable license to use the Service. You may not copy, modify, distribute, or reverse engineer any part of the Service.</p><p>9. PRIVACY AND DATA PROTECTION</p><p>Your privacy is important to us. Our Privacy Policy explains what data we collect, how we use it, and your rights. We do NOT log browsing history, DNS queries, or traffic content. We only retain minimal connection metadata necessary for service operation.</p><p>10. LIMITATION OF LIABILITY</p><p>THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE ARE NOT LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES. OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID IN THE 12 MONTHS PRECEDING THE CLAIM.</p><p>11. INDEMNIFICATION</p><p>You agree to indemnify and hold harmless 12345APP from any claims, damages, losses, and expenses arising from your use or misuse of the Service, your violation of this Agreement, or your violation of any applicable laws.</p><p>12. TERMINATION</p><p>You may terminate your account at any time. Termination does not entitle you to any refund for unused access periods. We may suspend or terminate your account immediately, without notice or refund, for violation of this Agreement, fraudulent activity, abuse of resources, or legal requirements. All outstanding amounts remain due upon termination.</p><p>13. DISPUTE RESOLUTION</p><p>This Agreement is governed by applicable law. Disputes shall be resolved through binding arbitration on an individual basis. YOU WAIVE ANY RIGHT TO PARTICIPATE IN CLASS-ACTION LAWSUITS OR CLASS-WIDE ARBITRATION.</p><p>14. AFFILIATE PROGRAM</p><p>We may offer an affiliate/referral program. Affiliates earn rewards on referred customer payments. Reward rates and terms are subject to change. We reserve the right to withhold rewards for fraudulent referrals.</p><p>Affiliate Rewards: Payouts are processed only via Wise. Minimum withdrawal thresholds apply.</p><p>Prohibited Activities: False advertising, trademark misuse, spam, cookie stuffing, and other fraudulent techniques.</p><p>15. ACCOUNT DELETION AND DATA RIGHTS</p><p>Account Deletion: You may request account deletion at any time by contacting support@root-corporation.com. Upon deletion, your account data will be permanently removed within 30 days, except where retention is required by law.</p><p>Data Access: You have the right to request a copy of your personal data. Contact privacy@root-corporation.com to exercise this right.</p><p>Data Portability: You can export your account data before deletion by requesting it through our support channels.</p><p>16. APP PERMISSIONS</p><p>App Permissions (iOS/Android/Windows/macOS): The app may request the following permissions:<br>- Network Access: Required to establish secure encrypted tunnel connections<br>- Tunnel Configuration: Required to route traffic through our servers<br>- Notifications: Optional, for service alerts and access period expiration reminders<br>- Storage: Minimal, for app preferences and configuration</p><p>All permissions are used solely for service functionality. We do not access personal files, contacts, location, camera, microphone, or other sensitive device data.</p><p>17. MODIFICATIONS</p><p>We reserve the right to modify these Terms at any time. Changes will be effective 30 days after notice for existing users (via email or in-app notification). Continued use after changes constitutes acceptance. Major changes will require re-acceptance in the app.</p><p>18. CONTACT AND SUPPORT</p><p>Customer Support:<br>- Email: support@root-corporation.com<br>- Website: https://root-corporation.com<br>- In-App: Use the support feature in the app</p><p>Legal Inquiries:<br>- Email: legal@root-corporation.com</p><p>Privacy Matters:<br>- Email: privacy@root-corporation.com</p><p>Response Time: We aim to respond within 48 hours for general inquiries and 24 hours for urgent security matters.</p><p>19. PLATFORM COMPLIANCE</p><p>This Service complies with:<br>- Apple App Store Review Guidelines<br>- Google Play Developer Program Policies<br>- Microsoft Store Policies<br>- Applicable laws in all jurisdictions where offered</p><p>Platform-Specific Terms: Your use is also governed by the terms of service of the platform from which you downloaded the app (Apple, Google, or Microsoft).</p><p>BY USING THE SERVICE, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS.<br></p></div>
-                <div id="legal-privacy" class="hidden"><p>PRIVACY POLICY</p><p>Last Updated: December 06, 2025</p><p>1. INTRODUCTION</p><p>12345APP ("we," "us," or "our") is a privacy-focused service committed to protecting your personal data and online privacy. Our core mission is to provide secure, private network access. This Privacy Policy applies to our applications available on iOS, Android, Windows, and macOS.</p><p>App Store Compliance: This policy meets requirements for Apple App Store, Mac App Store, Google Play Store, and Microsoft Store.</p><p>Privacy URL: https://root-corporation.com/privacy</p><p>Legal Compliance: GDPR (EU), CCPA (California), COPPA (USA), PIPEDA (Canada), and other applicable international privacy laws.</p><p>BY USING OUR SERVICE, YOU CONSENT TO THE DATA PRACTICES DESCRIBED IN THIS POLICY.</p><p>2. DATA SAFETY SUMMARY (App Stores)</p><p>Privacy First: Our service is designed to protect your privacy. We collect only the minimum data necessary to operate the service. All user data is stored exclusively in Australia and never leaves Australian jurisdiction.</p><p>Data Collected:<br>- Email address, account credentials (encrypted)<br>- Device information (OS type: Windows, iOS, Android, macOS; device model/version for compatibility)<br>- Payment transaction records (amount, date, status only - card details handled exclusively by Stripe)</p><p>Data NOT Collected (Privacy Protection):<br>- Browsing history or websites visited<br>- DNS queries or search history<br>- Traffic content or communications<br>- Bandwidth usage or data transfer amounts<br>- Cookies or tracking identifiers<br>- Payment card details or financial information (handled exclusively by Stripe)<br>- Location data (see Location Data Disclosure below)<br>- Personal files or contacts<br>- Photos, videos, or audio files</p><p>Location Data Disclosure: LOCATION data is accessed by the app but not disclosed in privacy policy. We do not collect or store your location. Location data is used solely on-device to create encrypted tunnels by selecting optimal servers based on your approximate region. This data never leaves your device and is not transmitted to our servers.</p><p>Data Sharing: We do NOT sell your data. We do NOT share your data with advertisers. Limited sharing only with payment processors (Stripe, Wise) and email service providers for essential account communications.</p><p>Security: Data encrypted in transit and at rest using industry-standard encryption (TLS 1.3, Ed25519).</p><p>Data Storage Location: All user data stored exclusively in Australia. Global encrypted tunnel servers do NOT store any user data.</p><p>2. INFORMATION WE COLLECT</p><p>Account Information:<br>- Email address (required for account creation and communications)<br>- Password (encrypted using Ed25519 cryptographic signatures)</p><p>Payment Transaction Records:<br>- Transaction amount, currency, date, and status only<br>- Payment card details are forwarded to Stripe at frontend and are NOT stored on our servers<br>- We never collect, store, or have access to your payment card information<br>- Payout information for affiliate rewards (processed by Wise)</p><p>Usage Data:<br>- Account creation and access period expiration dates<br>- Purchased access package and status<br>- Device connection count and timestamps</p><p>Technical Data:<br>- Device authentication tokens and device information (OS type: Windows, iOS, Android, macOS; device model and version for service compatibility and support)<br>- Connection metadata (timestamps, duration)<br>- Temporary IP addresses (for authentication only)</p><p>No-Logs Policy:<br>- We do NOT log browsing history, websites visited, or DNS queries<br>- We do NOT log traffic content or source IP addresses after authentication<br>- We only retain minimal connection metadata necessary for service operation</p><p>3. HOW WE USE YOUR INFORMATION</p><p>We use your information to: provide and manage the Service, process payments, authenticate access, provide customer support, detect and prevent fraud, optimize service performance, send service notifications, and comply with legal obligations.</p><p>4. HOW WE SHARE YOUR INFORMATION</p><p>Third-Party Processors:<br>- Stripe (payment processing for access packages)<br>- Wise (affiliate rewards payouts)<br>- Email service providers (account and service notifications)</p><p>Legal Requirements:<br>We may disclose information when required by law, in response to valid legal requests, to protect our rights and safety, or to prevent fraud. We will notify you of legal requests unless legally prohibited.</p><p>WE DO NOT SELL YOUR PERSONAL DATA TO THIRD PARTIES.</p><p>5. DATA RETENTION</p><p>Active Accounts: Account data retained while active; transaction records retained for 7 years (tax and accounting requirements - amount, date, status only, no payment card details); connection metadata retained for 30 days maximum.</p><p>Closed Accounts: Most data deleted within 30 days; transaction records retained for legal requirements (7 years); backups deleted within 90 days.</p><p>6. DATA SECURITY</p><p>We use industry-standard encryption (TLS 1.3, Ed25519), role-based access controls, regular security audits, DDoS protection, and secure server configurations. However, no security system is 100% impenetrable. You are responsible for protecting your account credentials.</p><p>7. YOUR PRIVACY RIGHTS</p><p>All Users:<br>- Access: Request a copy of your personal data<br>- Correction: Update or correct inaccurate information<br>- Deletion: Request deletion of your account and data<br>- Portability: Receive your data in machine-readable format<br>- Objection: Object to certain data processing activities</p><p>GDPR Rights (EU Residents):<br>Additional rights including data portability, restriction of processing, objection to automated decision-making, and right to lodge complaints with supervisory authorities.</p><p>CCPA Rights (California Residents):<br>Right to know what information is collected, right to deletion, right to opt-out of data sales (we do not sell data), and right to non-discrimination.</p><p>To exercise your rights: Email privacy@root-corporation.com or use your account dashboard. We respond within 30-45 days.</p><p>8. DATA STORAGE AND LOCATION</p><p>Data Storage: All user data, including account information, transaction records, and connection metadata, is stored exclusively in Australia. Our API server and database are both located in Australia and your data never leaves Australian jurisdiction.</p><p>Global Service Delivery: We operate encrypted tunnel servers in multiple countries worldwide for service delivery. These servers only handle encrypted traffic routing and do NOT store any user data. Your connection metadata and personal information remain in Australia at all times.</p><p>Privacy Advantage: This architecture ensures your data is protected under Australian privacy laws while still providing global service access.</p><p>9. CHILDREN'S PRIVACY</p><p>Our Service is NOT intended for children under 18 years of age. We do not knowingly collect data from children. If you believe your child has provided us with data, contact us at privacy@root-corporation.com.</p><p>10. DATA BREACH NOTIFICATION</p><p>In the event of a data breach, we will notify affected users within 72 hours where required by law, report to relevant authorities, and take immediate action to mitigate harm.</p><p>11. COOKIES AND TRACKING</p><p>We do NOT use cookies. Session authentication and user preferences are managed through secure server-side mechanisms without browser cookies. We do NOT use tracking technologies or analytics cookies.</p><p>12. AFFILIATE PRIVACY</p><p>If you participate in our affiliate program, we track referral relationships and process affiliate reward payments via Wise. We do not share referred users' personal information with affiliates without consent.</p><p>13. CHANGES TO THIS POLICY</p><p>We may update this Privacy Policy periodically. Material changes will be notified via email or service notification. Continued use after changes constitutes acceptance.</p><p>14. CONTACT INFORMATION</p><p>Privacy Inquiries:<br>- Email: privacy@root-corporation.com<br>- Support: support@root-corporation.com<br>- Website: https://root-corporation.com</p><p>BY USING OUR SERVICE, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THIS PRIVACY POLICY.<br></p></div>
+                <div id="legal-agreement"><p>TERMS OF SERVICE</p><p>Last Updated: January 03, 2026</p><p>1. ACCEPTANCE OF TERMS</p><p>By downloading, installing, or using the 12345APP application ("Service", "App", "we", "us", or "our"), you ("User", "you", or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree, you must immediately cease using the Service and uninstall the App.</p><p>AGE REQUIREMENT: You must be at least 18 years of age to use this Service. By using the Service, you represent and warrant that you are 18 years or older. We do not knowingly collect information from or direct any of our content specifically to children under 18.</p><p>2. SERVICE DESCRIPTION</p><p>The Service provides privacy protection and secure network access through encrypted tunnel technology and our global server infrastructure. Our core mission is to protect your online privacy. All user data is stored exclusively in Australia. Available on iOS (Apple App Store), Android (Google Play Store), Windows (Microsoft Store), and macOS (Mac App Store). Services include encrypted tunnel connections, multiple server locations worldwide for traffic routing (tunnel servers do not store user data), privacy-focused traffic management, account management, and customer support.</p><p>3. ACCOUNT REGISTRATION AND SECURITY</p><p>You must provide accurate and complete information during registration. You are responsible for maintaining the confidentiality of your account credentials. Each account is limited to a specified number of concurrent device connections. You must notify us immediately of any unauthorized access or security breach.</p><p>4. PAYMENT AND ACCESS PERIODS</p><p>Payment Processing: All payments are processed through Stripe as single purchases. We do not process payments through app stores. Your payment card details are forwarded to Stripe at frontend for processing and are NEVER stored on our servers. We only retain transaction records (amount, date, status) for accounting purposes.</p><p>Access Period Packages: We offer various time-based access packages (e.g., 30 days, 90 days, etc.). Each purchase is a one-time payment for a specific access period. Prices displayed in Australian dollars (AUD). Access periods do NOT automatically renew - you must purchase a new access period before expiration to continue using the service.</p><p>Account Access: You can access your account on any supported platform (iOS, Android, Windows, macOS) by logging in with your credentials.</p><p>5. REFUND POLICY</p><p>General Policy: Due to the nature of our service, all sales are final. When you purchase an access period package, our infrastructure costs (server resources, bandwidth, encrypted tunnel capacity) are incurred immediately upon activation. These operational costs cannot be recovered once service access has been provided.</p><p>Important Notice: Refunds are generally not available for digital services after activation. This includes but is not limited to: change of mind, failure to use the service, dissatisfaction with performance, account termination for policy violations, inability to access due to external factors (local network restrictions, government regulations, device compatibility), or user error.</p><p>Refund Requests: In exceptional circumstances and at our sole discretion, we may evaluate refund requests on a case-by-case basis. All refund decisions are final and non-appealable. To request consideration, contact support@root-corporation.com within 7 days of purchase with your order details.</p><p>Approved Refunds: If approved, refunds are partial only (calculated based on infrastructure costs already incurred and service usage). Refunds are NOT processed through Stripe. You must provide valid government-issued identification (passport or driver's license) and corresponding bank account information for identity verification. Refunds are processed exclusively via Wise international bank transfer. Processing takes 5-10 business days after identity verification and bank details are confirmed. Original Stripe payment processing fees are non-refundable and will be deducted from any approved refund amount.</p><p>Legal Compliance: This policy does not affect your statutory rights under mandatory consumer protection laws where applicable.</p><p>6. ACCEPTABLE USE POLICY</p><p>You agree NOT to use the Service for: any illegal activities, distributing malware, unauthorized access to systems (hacking), harassment or threats, distributing child exploitation material, spamming or phishing, copyright infringement, DDoS attacks, or any activity that violates the rights of others. Accounts found violating this policy will be immediately terminated without refund.</p><p>7. SERVICE AVAILABILITY</p><p>We strive to maintain high uptime but do not guarantee uninterrupted service. Server availability may vary by location. Brief service interruptions for maintenance, updates, or technical issues may occur. We reserve the right to modify, suspend, or discontinue any aspect of the Service with notice when possible. Service interruptions do not entitle users to refunds except as outlined in Section 5.</p><p>8. INTELLECTUAL PROPERTY</p><p>All Service content, features, and functionality are owned by us and protected by copyright and trademark laws. You receive a limited, non-exclusive, non-transferable license to use the Service. You may not copy, modify, distribute, or reverse engineer any part of the Service.</p><p>9. PRIVACY AND DATA PROTECTION</p><p>Your privacy is important to us. Our Privacy Policy explains what data we collect, how we use it, and your rights. We do NOT log browsing history, DNS queries, or traffic content. We only retain minimal connection metadata necessary for service operation.</p><p>10. LIMITATION OF LIABILITY</p><p>THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE ARE NOT LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES. OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID IN THE 12 MONTHS PRECEDING THE CLAIM.</p><p>11. INDEMNIFICATION</p><p>You agree to indemnify and hold harmless 12345APP from any claims, damages, losses, and expenses arising from your use or misuse of the Service, your violation of this Agreement, or your violation of any applicable laws.</p><p>12. TERMINATION</p><p>You may terminate your account at any time. Termination does not entitle you to any refund for unused access periods. We may suspend or terminate your account immediately, without notice or refund, for violation of this Agreement, fraudulent activity, abuse of resources, or legal requirements. All outstanding amounts remain due upon termination.</p><p>13. DISPUTE RESOLUTION</p><p>This Agreement is governed by applicable law. Disputes shall be resolved through binding arbitration on an individual basis. YOU WAIVE ANY RIGHT TO PARTICIPATE IN CLASS-ACTION LAWSUITS OR CLASS-WIDE ARBITRATION.</p><p>14. AFFILIATE PROGRAM</p><p>We may offer an affiliate/referral program. Affiliates earn rewards on referred customer payments. Reward rates and terms are subject to change. We reserve the right to withhold rewards for fraudulent referrals.</p><p>Affiliate Rewards: Payouts are processed only via Wise. Minimum withdrawal thresholds apply.</p><p>Prohibited Activities: False advertising, trademark misuse, spam, cookie stuffing, and other fraudulent techniques.</p><p>15. ACCOUNT DELETION AND DATA RIGHTS</p><p>Account Deletion: You may request account deletion at any time by contacting support@root-corporation.com. Upon deletion, your account data will be permanently removed within 30 days, except where retention is required by law.</p><p>Data Access: You have the right to request a copy of your personal data. Contact privacy@root-corporation.com to exercise this right.</p><p>Data Portability: You can export your account data before deletion by requesting it through our support channels.</p><p>16. APP PERMISSIONS</p><p>App Permissions (iOS/Android/Windows/macOS): The app may request the following permissions:<br>- Network Access: Required to establish secure encrypted tunnel connections<br>- Tunnel Configuration: Required to route traffic through our servers<br>- Notifications: Optional, for service alerts and access period expiration reminders<br>- Storage: Minimal, for app preferences and configuration</p><p>All permissions are used solely for service functionality. We do not access personal files, contacts, location, camera, microphone, or other sensitive device data.</p><p>17. MODIFICATIONS</p><p>We reserve the right to modify these Terms at any time. Changes will be effective 30 days after notice for existing users (via email or in-app notification). Continued use after changes constitutes acceptance. Major changes will require re-acceptance in the app.</p><p>18. CONTACT AND SUPPORT</p><p>Customer Support:<br>- Email: support@root-corporation.com<br>- Website: https://root-corporation.com<br>- In-App: Use the support feature in the app</p><p>Legal Inquiries:<br>- Email: legal@root-corporation.com</p><p>Privacy Matters:<br>- Email: privacy@root-corporation.com</p><p>Response Time: We aim to respond within 48 hours for general inquiries and 24 hours for urgent security matters.</p><p>19. PLATFORM COMPLIANCE</p><p>This Service complies with:<br>- Apple App Store Review Guidelines<br>- Google Play Developer Program Policies<br>- Microsoft Store Policies<br>- Applicable laws in all jurisdictions where offered</p><p>Platform-Specific Terms: Your use is also governed by the terms of service of the platform from which you downloaded the app (Apple, Google, or Microsoft).</p><p>BY USING THE SERVICE, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS.<br></p></div>
+                <div id="legal-privacy" class="hidden"><p>PRIVACY POLICY</p><p>Last Updated: January 03, 2026</p><p>1. INTRODUCTION</p><p>12345APP ("we," "us," or "our") is a privacy-focused service committed to protecting your personal data and online privacy. Our core mission is to provide secure, private network access. This Privacy Policy applies to our applications available on iOS, Android, Windows, and macOS.</p><p>App Store Compliance: This policy meets requirements for Apple App Store, Mac App Store, Google Play Store, and Microsoft Store.</p><p>Privacy URL: https://root-corporation.com/privacy</p><p>Legal Compliance: GDPR (EU), CCPA (California), COPPA (USA), PIPEDA (Canada), and other applicable international privacy laws.</p><p>BY USING OUR SERVICE, YOU CONSENT TO THE DATA PRACTICES DESCRIBED IN THIS POLICY.</p><p>2. DATA SAFETY SUMMARY (App Stores)</p><p>Privacy First: Our service is designed to protect your privacy. We collect only the minimum data necessary to operate the service. All user data is stored exclusively in Australia and never leaves Australian jurisdiction.</p><p>Data Collected:<br>- Email address, account credentials (encrypted)<br>- Device information (OS type: Windows, iOS, Android, macOS; device model/version for compatibility)<br>- Payment transaction records (amount, date, status only - card details handled exclusively by Stripe)</p><p>Data NOT Collected (Privacy Protection):<br>- Browsing history or websites visited<br>- DNS queries or search history<br>- Traffic content or communications<br>- Bandwidth usage or data transfer amounts<br>- Cookies or tracking identifiers<br>- Payment card details or financial information (handled exclusively by Stripe)<br>- Location data (see Location Data Disclosure below)<br>- Personal files or contacts<br>- Photos, videos, or audio files</p><p>Location Data Disclosure: LOCATION data is accessed by the app but not disclosed in privacy policy. We do not collect or store your location. Location data is used solely on-device to create encrypted tunnels by selecting optimal servers based on your approximate region. This data never leaves your device and is not transmitted to our servers.</p><p>Data Sharing: We do NOT sell your data. We do NOT share your data with advertisers. Limited sharing only with payment processors (Stripe, Wise) and email service providers for essential account communications.</p><p>Security: Data encrypted in transit and at rest using industry-standard encryption (TLS 1.3, Ed25519).</p><p>Data Storage Location: All user data stored exclusively in Australia. Global encrypted tunnel servers do NOT store any user data.</p><p>2. INFORMATION WE COLLECT</p><p>Account Information:<br>- Email address (required for account creation and communications)<br>- Password (encrypted using Ed25519 cryptographic signatures)</p><p>Payment Transaction Records:<br>- Transaction amount, currency, date, and status only<br>- Payment card details are forwarded to Stripe at frontend and are NOT stored on our servers<br>- We never collect, store, or have access to your payment card information<br>- Payout information for affiliate rewards (processed by Wise)</p><p>Usage Data:<br>- Account creation and access period expiration dates<br>- Purchased access package and status<br>- Device connection count and timestamps</p><p>Technical Data:<br>- Device authentication tokens and device information (OS type: Windows, iOS, Android, macOS; device model and version for service compatibility and support)<br>- Connection metadata (timestamps, duration)<br>- Temporary IP addresses (for authentication only)</p><p>No-Logs Policy:<br>- We do NOT log browsing history, websites visited, or DNS queries<br>- We do NOT log traffic content or source IP addresses after authentication<br>- We only retain minimal connection metadata necessary for service operation</p><p>ENCRYPTED TUNNEL DATA COLLECTION DISCLOSURE (App Store Compliance):</p><p>What user information is collected through the encrypted tunnel connection?<br>Our encrypted tunnel service is designed with privacy as the core principle. During tunnel operation:<br>- We do NOT collect, monitor, or log any websites you visit<br>- We do NOT collect, inspect, or store any of your internet traffic content<br>- We do NOT collect or log DNS queries or search history<br>- We do NOT track or record your original IP address after initial authentication<br>- We do NOT monitor bandwidth usage or data transfer amounts<br>- We do NOT use any tracking technologies, analytics, or advertising identifiers<br>The only data collected is minimal connection metadata (connection timestamp and duration) solely for service operation and troubleshooting.</p><p>For what purposes is this information collected?<br>The minimal connection metadata we collect serves these specific purposes only:<br>- Service Authentication: To verify your subscription status and authorize encrypted tunnel access<br>- Connection Management: To enforce device limits per account (maximum 5 concurrent devices)<br>- Service Quality: To identify and resolve technical issues affecting your connection<br>- Security: To detect and prevent unauthorized access or abuse of the service<br>We do NOT use any collected data for advertising, profiling, or any purpose beyond providing the encrypted tunnel service itself.</p><p>Is data shared with third parties? Where is it stored?<br>- Third-Party Sharing: We do NOT sell, rent, or share your encrypted tunnel usage data with any third parties. We do NOT share data with advertisers, data brokers, or analytics companies. The only third parties involved are payment processors (Stripe for payments, Wise for affiliate payouts) who only receive payment transaction data, never tunnel usage data.<br>- Data Storage Location: All user account data is stored exclusively in Australia under Australian privacy law jurisdiction. Our encrypted tunnel servers located globally do NOT store any user data whatsoever - they only route encrypted traffic in real-time. No logs, no browsing history, no user information is retained on tunnel servers.</p><p>3. HOW WE USE YOUR INFORMATION</p><p>We use your information to: provide and manage the Service, process payments, authenticate access, provide customer support, detect and prevent fraud, optimize service performance, send service notifications, and comply with legal obligations.</p><p>4. HOW WE SHARE YOUR INFORMATION</p><p>Third-Party Processors:<br>- Stripe (payment processing for access packages)<br>- Wise (affiliate rewards payouts)<br>- Email service providers (account and service notifications)</p><p>Legal Requirements:<br>We may disclose information when required by law, in response to valid legal requests, to protect our rights and safety, or to prevent fraud. We will notify you of legal requests unless legally prohibited.</p><p>WE DO NOT SELL YOUR PERSONAL DATA TO THIRD PARTIES.</p><p>5. DATA RETENTION</p><p>Active Accounts: Account data retained while active; transaction records retained for 7 years (tax and accounting requirements - amount, date, status only, no payment card details); connection metadata retained for 30 days maximum.</p><p>Closed Accounts: Most data deleted within 30 days; transaction records retained for legal requirements (7 years); backups deleted within 90 days.</p><p>6. DATA SECURITY</p><p>We use industry-standard encryption (TLS 1.3, Ed25519), role-based access controls, regular security audits, DDoS protection, and secure server configurations. However, no security system is 100% impenetrable. You are responsible for protecting your account credentials.</p><p>7. YOUR PRIVACY RIGHTS</p><p>All Users:<br>- Access: Request a copy of your personal data<br>- Correction: Update or correct inaccurate information<br>- Deletion: Request deletion of your account and data<br>- Portability: Receive your data in machine-readable format<br>- Objection: Object to certain data processing activities</p><p>GDPR Rights (EU Residents):<br>Additional rights including data portability, restriction of processing, objection to automated decision-making, and right to lodge complaints with supervisory authorities.</p><p>CCPA Rights (California Residents):<br>Right to know what information is collected, right to deletion, right to opt-out of data sales (we do not sell data), and right to non-discrimination.</p><p>To exercise your rights: Email privacy@root-corporation.com or use your account dashboard. We respond within 30-45 days.</p><p>8. DATA STORAGE AND LOCATION</p><p>Data Storage: All user data, including account information, transaction records, and connection metadata, is stored exclusively in Australia. Our API server and database are both located in Australia and your data never leaves Australian jurisdiction.</p><p>Global Service Delivery: We operate encrypted tunnel servers in multiple countries worldwide for service delivery. These servers only handle encrypted traffic routing and do NOT store any user data. Your connection metadata and personal information remain in Australia at all times.</p><p>Privacy Advantage: This architecture ensures your data is protected under Australian privacy laws while still providing global service access.</p><p>9. CHILDREN'S PRIVACY</p><p>Our Service is NOT intended for children under 18 years of age. We do not knowingly collect data from children. If you believe your child has provided us with data, contact us at privacy@root-corporation.com.</p><p>10. DATA BREACH NOTIFICATION</p><p>In the event of a data breach, we will notify affected users within 72 hours where required by law, report to relevant authorities, and take immediate action to mitigate harm.</p><p>11. COOKIES AND TRACKING</p><p>We do NOT use cookies. Session authentication and user preferences are managed through secure server-side mechanisms without browser cookies. We do NOT use tracking technologies or analytics cookies.</p><p>12. AFFILIATE PRIVACY</p><p>If you participate in our affiliate program, we track referral relationships and process affiliate reward payments via Wise. We do not share referred users' personal information with affiliates without consent.</p><p>13. CHANGES TO THIS POLICY</p><p>We may update this Privacy Policy periodically. Material changes will be notified via email or service notification. Continued use after changes constitutes acceptance.</p><p>14. CONTACT INFORMATION</p><p>Privacy Inquiries:<br>- Email: privacy@root-corporation.com<br>- Support: support@root-corporation.com<br>- Website: https://root-corporation.com</p><p>BY USING OUR SERVICE, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THIS PRIVACY POLICY.<br></p></div>
             </div>
         </div>
     </section>
@@ -691,10 +1126,288 @@ function setupMobileMenu() {
     });
 }
 
+// Download Section
+const ROOM_HASH = 'RqWhZb7hdJnt9a+y+zr+Q7Ojgi4JPAyoHzcWBJZa8bk=';
+const API_BASE = 'https://api.root-corporation.com';
+const EMBEDDED_PACKAGES = JSON.parse("[{\"link\":\"https://bit.ly/12345APPWindows-v103\",\"platform\":\"windows\",\"store\":\"https://bit.ly/12345APPWindows\",\"version\":\"1.0.3\"},{\"link\":\"https://bit.ly/12345APPAndroid-v103\",\"platform\":\"android\",\"store\":\"https://bit.ly/12345APPAndroid\",\"version\":\"1.0.3\"}]" || "[]");
+
+const platformConfig = {
+    windows: {
+        name: 'Windows',
+        icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>`,
+        badge: 'assets/badges/windows.svg',
+        storeLabel: 'Microsoft Store',
+        directLabel: 'Download .exe'
+    },
+    android: {
+        name: 'Android',
+        icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341c-.5 0-.919-.176-1.254-.524-.336-.349-.504-.782-.504-1.3 0-.518.168-.948.504-1.29.335-.342.754-.513 1.254-.513.501 0 .92.171 1.255.513.335.342.504.772.504 1.29 0 .518-.169.951-.504 1.3-.336.348-.754.524-1.255.524zm-11.046 0c-.5 0-.919-.176-1.254-.524-.336-.349-.504-.782-.504-1.3 0-.518.168-.948.504-1.29.335-.342.754-.513 1.254-.513.5 0 .919.171 1.254.513.336.342.504.772.504 1.29 0 .518-.168.951-.504 1.3-.335.348-.754.524-1.254.524zM17.839 5.55l1.645-2.985c.09-.164.038-.306-.157-.427-.195-.12-.384-.1-.567.061L17.073 5.24c-1.425-.65-3.015-.975-4.773-.975-1.758 0-3.348.325-4.773.975L5.84 2.199c-.183-.161-.372-.181-.567-.061-.195.121-.247.263-.157.427L6.761 5.55C3.556 7.297 1.954 9.904 1.954 13.37h20.092c0-3.466-1.602-6.073-4.207-7.82z"/><path d="M6.954 14.37v7.629c0 .553.447 1 1 1h1.5v3c0 .553.447 1 1 1s1-.447 1-1v-3h3v3c0 .553.447 1 1 1s1-.447 1-1v-3h1.5c.553 0 1-.447 1-1V14.37h-12z"/><path d="M4.454 14.37c-.553 0-1 .447-1 1v6c0 .553.447 1 1 1s1-.447 1-1v-6c0-.553-.447-1-1-1zm15.092 0c-.553 0-1 .447-1 1v6c0 .553.447 1 1 1s1-.447 1-1v-6c0-.553-.447-1-1-1z"/></svg>`,
+        badge: 'assets/badges/android.svg',
+        storeLabel: 'Google Play',
+        directLabel: 'Download .apk'
+    },
+    ios: {
+        name: 'iOS',
+        icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>`,
+        badge: 'assets/badges/apple.svg',
+        storeLabel: 'App Store',
+        directLabel: 'Download .ipa'
+    }
+};
+
+// Platform Detection
+function detectPlatform() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Android detection
+    if (/android/i.test(ua)) {
+        return 'android';
+    }
+
+    // iOS detection
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+        return 'ios';
+    }
+
+    // Windows detection
+    if (/Win/.test(navigator.platform) || /Windows/.test(ua)) {
+        return 'windows';
+    }
+
+    // macOS detection
+    if (/Mac/.test(navigator.platform)) {
+        return 'macos';
+    }
+
+    // Linux detection
+    if (/Linux/.test(navigator.platform)) {
+        return 'linux';
+    }
+
+    return null;
+}
+
+// Popup Management
+const POPUP_DISMISSED_KEY = 'platform_popup_dismissed';
+let detectedPackage = null;
+
+function hasPopupBeenDismissed() {
+    try {
+        const dismissed = sessionStorage.getItem(POPUP_DISMISSED_KEY);
+        return dismissed === 'true';
+    } catch {
+        return false;
+    }
+}
+
+function setPopupDismissed() {
+    try {
+        sessionStorage.setItem(POPUP_DISMISSED_KEY, 'true');
+    } catch {
+        // Session storage not available
+    }
+}
+
+function showPlatformPopup(pkg) {
+    const config = platformConfig[pkg.platform];
+    if (!config) return;
+
+    const popup = document.getElementById('platform-popup');
+    const iconEl = document.getElementById('popup-icon');
+    const titleEl = document.getElementById('popup-title');
+    const subtitleEl = document.getElementById('popup-subtitle');
+    const versionEl = document.getElementById('popup-version');
+    const actionsEl = document.getElementById('popup-actions');
+
+    // Set icon
+    iconEl.innerHTML = config.icon;
+
+    // Set title
+    titleEl.textContent = `Get 12345APP for ${config.name}`;
+
+    // Set subtitle
+    subtitleEl.textContent = `We detected you're using ${config.name}. Download the app now!`;
+
+    // Set version
+    versionEl.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Version ${pkg.version}`;
+
+    // Build actions
+    const hasStore = pkg.store && pkg.store.trim() !== '';
+    const hasLink = pkg.link && pkg.link.trim() !== '';
+
+    let actionsHTML = '';
+
+    if (hasStore) {
+        actionsHTML += `
+            <a href="${pkg.store}" target="_blank" rel="noopener noreferrer" class="platform-popup-badge-link" onclick="setPopupDismissed()">
+                <img src="${config.badge}" alt="Get it on ${config.storeLabel}" class="platform-popup-badge">
+            </a>
+        `;
+    }
+
+    if (hasStore && hasLink) {
+        actionsHTML += '<div class="platform-popup-divider">or download directly</div>';
+    }
+
+    if (hasLink) {
+        actionsHTML += `
+            <a href="${pkg.link}" target="_blank" rel="noopener noreferrer" class="platform-popup-btn platform-popup-btn-primary" onclick="setPopupDismissed()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                ${config.directLabel}
+            </a>
+        `;
+    }
+
+    actionsHTML += `
+        <button class="platform-popup-btn platform-popup-btn-secondary" onclick="closePlatformPopup()">
+            Browse all platforms
+        </button>
+    `;
+
+    actionsEl.innerHTML = actionsHTML;
+
+    // Show popup
+    popup.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePlatformPopup() {
+    const popup = document.getElementById('platform-popup');
+    popup.classList.remove('active');
+    document.body.style.overflow = '';
+    setPopupDismissed();
+}
+
+function setupPopupListeners() {
+    const popup = document.getElementById('platform-popup');
+    const closeBtn = document.getElementById('popup-close');
+
+    closeBtn.addEventListener('click', closePlatformPopup);
+
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            closePlatformPopup();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popup.classList.contains('active')) {
+            closePlatformPopup();
+        }
+    });
+}
+
+function checkAndShowPopup(packages) {
+    if (hasPopupBeenDismissed()) return;
+    if (!packages || packages.length === 0) return;
+
+    const userPlatform = detectPlatform();
+    if (!userPlatform) return;
+
+    // Find matching package for user's platform
+    const matchingPkg = packages.find(pkg => pkg.platform === userPlatform);
+    if (!matchingPkg) return;
+
+    // Small delay for better UX
+    setTimeout(() => {
+        showPlatformPopup(matchingPkg);
+    }, 800);
+}
+
+function createDownloadCard(pkg) {
+    const config = platformConfig[pkg.platform];
+    if (!config) return '';
+
+    const hasStore = pkg.store && pkg.store.trim() !== '';
+    const hasLink = pkg.link && pkg.link.trim() !== '';
+
+    return `
+        <div class="download-card">
+            <div class="download-card-header">
+                <div class="download-platform-icon">${config.icon}</div>
+                <div class="download-platform-info">
+                    <h3>${config.name}</h3>
+                    <div class="download-version">
+                        <span class="download-version-badge">v${pkg.version}</span>
+                        <span>Latest</span>
+                    </div>
+                </div>
+            </div>
+            <div class="download-options">
+                ${hasStore ? `
+                    <a href="${pkg.store}" target="_blank" rel="noopener noreferrer" class="download-badge-link">
+                        <img src="${config.badge}" alt="Get it on ${config.storeLabel}" class="download-btn-badge">
+                    </a>
+                ` : ''}
+                ${hasStore && hasLink ? '<div class="download-divider">or</div>' : ''}
+                ${hasLink ? `
+                    <a href="${pkg.link}" class="download-btn download-btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        ${config.directLabel}
+                    </a>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+function renderDownloads(packages) {
+    const container = document.getElementById('download-content');
+    if (!packages || packages.length === 0) {
+        container.innerHTML = `
+            <div class="download-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin: 0 auto 16px; color: var(--text-dim);">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p>No downloads available at this time.</p>
+            </div>
+        `;
+        return;
+    }
+    container.innerHTML = packages.map(pkg => createDownloadCard(pkg)).join('');
+
+    // Check if we should show platform popup
+    checkAndShowPopup(packages);
+}
+
+function renderDownloadError(message) {
+    const container = document.getElementById('download-content');
+    container.innerHTML = `
+        <div class="download-error">
+            <svg class="download-error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <p>${message || 'Unable to load downloads. Please try again later.'}</p>
+        </div>
+    `;
+}
+
+function initDownloads() {
+    // Use embedded packages data (pre-rendered by CI)
+    // The HTML is already rendered, just need to trigger popup check
+    if (EMBEDDED_PACKAGES && EMBEDDED_PACKAGES.length > 0) {
+        checkAndShowPopup(EMBEDDED_PACKAGES);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupPricingNavigation();
     setupLegalTabs();
     setupMobileMenu();
+    setupPopupListeners();
+    initDownloads();
 });
     </script>
 </body>
