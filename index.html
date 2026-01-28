@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Corporation - Privacy Protection Services</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <style>
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    --accent: #22d3ee;
+    --bg-dark: #0a0a0f;
+    --bg-card: #12121a;
+    --bg-card-hover: #1a1a25;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border: #1e293b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+    --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 0;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+    background: var(--gradient-1);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3); }
+
+/* Mobile Menu */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+    z-index: 101;
+}
+
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-dark);
+    z-index: 99;
+    padding: 80px 24px 24px;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+.mobile-menu.active { display: flex; }
+
+.mobile-menu a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+}
+
+.mobile-menu a:hover { border-color: var(--primary); background: var(--bg-card-hover); }
+
+.mobile-menu a:first-child { margin-top: 16px; }
+
+.mobile-menu .mobile-cta {
+    background: var(--gradient-1);
+    border: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.mobile-menu .lang-switcher {
+    width: 100%;
+}
+
+.mobile-menu .lang-switcher-toggle {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    font-size: 1.1rem;
+    color: var(--text);
+    justify-content: space-between;
+}
+
+.mobile-menu .lang-switcher-toggle:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+}
+
+.mobile-menu .lang-dropdown {
+    position: static;
+    margin-top: 8px;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn { display: block; }
+    .nav-cta { display: none; }
+}
+
+/* Hero */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    animation: pulse 15s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.hero .container { position: relative; z-index: 1; text-align: center; }
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    margin-bottom: 24px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; }
+
+.btn {
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4); }
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--bg-card); border-color: var(--primary); }
+
+/* Section Styles */
+section { padding: 100px 0; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+.section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+/* Apps Grid (Main Page) */
+#apps { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); }
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.app-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+}
+
+.app-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--gradient-1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.app-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
+.app-card .app-hash { font-family: monospace; font-size: 0.7rem; color: var(--text-dim); word-break: break-all; margin-bottom: 16px; }
+.app-card .app-cta { color: var(--primary-light); font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.app-card .app-cta::after { content: '→'; transition: transform 0.2s; }
+.app-card:hover .app-cta::after { transform: translateX(4px); }
+
+/* Features */
+#features { background: var(--bg-dark); }
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s;
+}
+
+.feature-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+
+.feature-icon {
+    width: 48px; height: 48px;
+    background: var(--gradient-1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+.feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+/* Footer */
+footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 60px 0 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-brand .logo { margin-bottom: 16px; display: inline-block; }
+.footer-brand p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
+.footer-links h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+.footer-links ul { list-style: none; }
+.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: block; padding: 6px 0; transition: color 0.2s; }
+.footer-links a:hover { color: var(--primary-light); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 30px; text-align: center; color: var(--text-dim); font-size: 0.85rem; }
+
+/* Form focus states */
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary) !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    #contact .container > div:last-child {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    nav .lang-switcher { display: none; }
+    nav .container { padding: 0 16px; }
+    .nav-cta { padding: 8px 16px; font-size: 0.85rem; }
+    .logo { font-size: 1.25rem; }
+
+    .hero { padding: 100px 0 60px; min-height: auto; }
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 1rem; margin-bottom: 32px; }
+    .hero-badge { font-size: 0.75rem; padding: 6px 12px; }
+
+    section { padding: 60px 0; }
+    .section-header { margin-bottom: 40px; }
+    .section-header h2 { font-size: 1.75rem; }
+    .section-header p { font-size: 0.95rem; }
+    .container { padding: 0 16px; }
+
+    .apps-grid { grid-template-columns: 1fr; gap: 16px; }
+    .app-card { padding: 24px; }
+    .app-icon { width: 56px; height: 56px; font-size: 1.75rem; }
+    .app-card h3 { font-size: 1.25rem; }
+
+    .features-grid { grid-template-columns: 1fr; gap: 16px; }
+    .feature-card { padding: 24px; }
+
+    #contact { padding: 60px 0; }
+    #contact .container > div:last-child { gap: 40px; }
+    #contact h3 { font-size: 1.1rem; }
+    #contact-form .btn { width: 100%; max-width: none; }
+
+    footer { padding: 40px 0 20px; }
+    .footer-content { grid-template-columns: 1fr !important; text-align: center; gap: 32px; }
+    .footer-brand p { max-width: 100%; }
+    .footer-links h4 { margin-bottom: 12px; }
+
+    .btn { width: 100%; max-width: 300px; padding: 12px 24px; }
+    .hero .btn { max-width: none; }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { font-size: 1.75rem; }
+    .section-header h2 { font-size: 1.5rem; }
+}
+
+/* Language Switcher */
+.lang-switcher {
+    position: relative;
+    display: inline-block;
+}
+
+.lang-switcher-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lang-switcher-toggle:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+}
+
+.lang-switcher-toggle svg {
+    transition: transform 0.2s;
+}
+
+.lang-switcher.open .lang-switcher-toggle svg {
+    transform: rotate(180deg);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+    z-index: 200;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.lang-switcher.open .lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lang-option {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.lang-option:hover {
+    background: var(--bg-card-hover);
+    color: var(--text);
+}
+
+.lang-option.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-light);
+}
+
+/* RTL Support */
+html[dir="rtl"] {
+    direction: rtl;
+}
+
+html[dir="rtl"] .nav-links {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .lang-dropdown {
+    right: auto;
+    left: 0;
+}
+
+html[dir="rtl"] .lang-option {
+    text-align: right;
+}
+
+html[dir="rtl"] .app-card .app-cta::after {
+    content: '←';
+}
+
+html[dir="rtl"] .app-card:hover .app-cta::after {
+    transform: translateX(-4px);
+}
+
+html[dir="rtl"] .feature-card,
+html[dir="rtl"] .app-card {
+    text-align: right;
+}
+
+html[dir="rtl"] .footer-content {
+    direction: rtl;
+}
+
+html[dir="rtl"] .footer-links {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    html[dir="rtl"] .footer-content,
+    html[dir="rtl"] .footer-links {
+        text-align: center;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">Root Corporation</a>
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="#apps" data-i18n="nav.solutions">Solutions</a></li>
+                <li><a href="#features" data-i18n="nav.features">Features</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <button class="lang-switcher-toggle" aria-label="Select language">
+                    <span class="lang-switcher-current">English</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="lang-dropdown">
+                    <button class="lang-option active" data-locale="en">English</button>
+                    <button class="lang-option" data-locale="zh">中文</button>
+                    <button class="lang-option" data-locale="hi">हिन्दी</button>
+                    <button class="lang-option" data-locale="id">Bahasa Indonesia</button>
+                    <button class="lang-option" data-locale="ms">Bahasa Melayu</button>
+                    <button class="lang-option" data-locale="ru">Русский</button>
+                    <button class="lang-option" data-locale="tr">Türkçe</button>
+                    <button class="lang-option" data-locale="ar">العربية</button>
+                    <button class="lang-option" data-locale="fa">فارسی</button>
+                </div>
+            </div>
+            <a href="#apps" class="nav-cta" data-i18n="nav.exploreApps">Explore Apps</a>
+            <button class="mobile-menu-btn" id="mobile-menu-btn" data-i18n-aria="nav.menu" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="index.html" class="mobile-menu-link" data-i18n="nav.home">Home</a>
+        <a href="#apps" class="mobile-menu-link" data-i18n="nav.solutions">Solutions</a>
+        <a href="#features" class="mobile-menu-link" data-i18n="nav.features">Features</a>
+        <a href="#contact" class="mobile-menu-link" data-i18n="contact.title">Contact</a>
+        <!-- Mobile Language Switcher -->
+        <div class="lang-switcher">
+            <button class="lang-switcher-toggle" aria-label="Select language">
+                <span class="lang-switcher-current">English</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="lang-dropdown">
+                <button class="lang-option active" data-locale="en">English</button>
+                <button class="lang-option" data-locale="zh">中文</button>
+                <button class="lang-option" data-locale="hi">हिन्दी</button>
+                <button class="lang-option" data-locale="id">Bahasa Indonesia</button>
+                <button class="lang-option" data-locale="ms">Bahasa Melayu</button>
+                <button class="lang-option" data-locale="ru">Русский</button>
+                <button class="lang-option" data-locale="tr">Türkçe</button>
+                <button class="lang-option" data-locale="ar">العربية</button>
+                <button class="lang-option" data-locale="fa">فارسی</button>
+            </div>
+        </div>
+        <a href="#apps" class="mobile-cta mobile-menu-link" data-i18n="nav.getStarted">Get Started</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span data-i18n="hero.badge">Enterprise-Grade Security</span>
+            </div>
+            <h1 data-i18n-html="hero.title">Your Privacy<br>Is Our Priority</h1>
+            <p data-i18n="hero.description">Protect your digital footprint with our advanced privacy protection solutions. Take control of your online identity and browse with confidence.</p>
+            <a href="#apps" class="btn btn-primary" data-i18n="hero.cta">Explore Solutions</a>
+        </div>
+    </section>
+
+    <!-- Apps Section -->
+    <section id="apps">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="apps.title">Privacy Solutions</h2>
+                <p data-i18n="apps.description">Choose the privacy protection service that best fits your needs.</p>
+            </div>
+            <div id="apps-grid" class="apps-grid"><a href="RqWhZb7hdJnt9a+y+zr+Q7Ojgi4JPAyoHzcWBJZa8bk=.html" class="app-card"><div class="app-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>12345APP</h3><span class="app-cta" data-i18n="apps.viewDetails">View Details</span></a></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="features.title">Why Choose Us</h2>
+                <p data-i18n="features.description">Industry-leading privacy protection across all our services.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <h3 data-i18n="features.zeroData.title">Zero Data Collection</h3>
+                    <p data-i18n="features.zeroData.description">We never track, collect, or share your personal data. Your privacy is guaranteed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                    <h3 data-i18n="features.encryption.title">End-to-End Encryption</h3>
+                    <p data-i18n="features.encryption.description">Advanced encryption protocols ensure your communications remain private and secure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <h3 data-i18n="features.anonymous.title">Anonymous Browsing</h3>
+                    <p data-i18n="features.anonymous.description">Protect your identity online and prevent tracking by third parties.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                    <h3 data-i18n="features.global.title">Global Infrastructure</h3>
+                    <p data-i18n="features.global.description">Distributed network ensures reliable privacy protection worldwide.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                    <h3 data-i18n="features.multiPlatform.title">Multi-Platform</h3>
+                    <p data-i18n="features.multiPlatform.description">Protect all your devices with a single subscription - desktop, mobile, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                    <h3 data-i18n="features.support.title">24/7 Support</h3>
+                    <p data-i18n="features.support.description">Our privacy experts are available around the clock to assist you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%); padding: 100px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="contact.title">Contact us</h2>
+                <p data-i18n="contact.description">We're here to help. Reach out to our team for any questions or support.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1000px; margin: 0 auto;">
+                <!-- Contact Info -->
+                <div>
+                    <h3 style="font-size: 1.25rem; margin-bottom: 24px; color: var(--text);" data-i18n="contact.infoTitle">Contact Information</h3>
+
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-light);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9rem; color: var(--text); margin-bottom: 4px;" data-i18n="contact.email">Email</h4>
+                                <a href="mailto:developer@root-corporation.com" style="color: var(--primary-light); text-decoration: none; font-size: 0.9rem;">developer@root-corporation.com</a>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-light);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9rem; color: var(--text); margin-bottom: 4px;" data-i18n="contact.businessReg">Business Registration</h4>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">ABN 34 686 229 532</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div>
+                    <h3 style="font-size: 1.25rem; margin-bottom: 24px; color: var(--text);" data-i18n="contact.formTitle">Send us a Message</h3>
+                    <form id="contact-form" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;" data-i18n="contact.form.name">Name</label>
+                                <input type="text" id="contact-name" data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Your Name" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; transition: border-color 0.2s;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;" data-i18n="contact.form.email">Email</label>
+                                <input type="email" id="contact-email" data-i18n-placeholder="contact.form.emailPlaceholder" placeholder="yourname@example.com" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; transition: border-color 0.2s;">
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;" data-i18n="contact.form.subject">Subject</label>
+                            <input type="text" id="contact-subject" data-i18n-placeholder="contact.form.subjectPlaceholder" placeholder="How can we help?" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; transition: border-color 0.2s;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;" data-i18n="contact.form.message">Message</label>
+                            <textarea id="contact-message" data-i18n-placeholder="contact.form.messagePlaceholder" placeholder="Tell us more about your inquiry..." rows="5" required style="width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; resize: vertical; transition: border-color 0.2s;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;" data-i18n="contact.form.submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" data-i18n="footer.brand">Root Corporation</a>
+                    <p style="margin-top: 16px;" data-i18n="footer.brandDescription">Protect your digital privacy with our advanced privacy protection services. Trusted by users worldwide.</p>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.solutions">Solutions</h4>
+                    <ul id="footer-apps"><li><a href="RqWhZb7hdJnt9a+y+zr+Q7Ojgi4JPAyoHzcWBJZa8bk=.html">12345APP</a></li></ul>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                        <li><a href="#features" data-i18n="nav.features">Features</a></li>
+                        <li><a href="#contact" data-i18n="footer.support">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.contactUs">Contact Us</h4>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem;">
+                        <li style="padding: 6px 0;"><a href="mailto:developer@root-corporation.com">developer@root-corporation.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border); padding-top: 30px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <p style="color: var(--text-dim); font-size: 0.85rem;" data-i18n="footer.copyright">&copy; 2025 Root Corporation Pty Ltd. All rights reserved.</p>
+                <p style="color: var(--text-dim); font-size: 0.85rem;" data-i18n="footer.abn">ABN 34 686 229 532 · Australia</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+// Mobile menu
+function setupMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+
+    menuBtn.addEventListener('click', () => {
+        const isOpen = menu.classList.contains('active');
+        menu.classList.toggle('active', !isOpen);
+        document.body.style.overflow = isOpen ? '' : 'hidden';
+    });
+
+    menu.addEventListener('click', (e) => {
+        if (e.target.classList.contains('mobile-menu-link')) {
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
+// Contact form
+function setupContactForm() {
+    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contact-name').value;
+        const email = document.getElementById('contact-email').value;
+        const subject = document.getElementById('contact-subject').value;
+        const message = document.getElementById('contact-message').value;
+        const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+        window.location.href = `mailto:developer@root-corporation.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupMobileMenu();
+    setupContactForm();
+});
+    </script>
+
+    <!-- i18n Scripts -->
+    <script src="assets/i18n.js"></script>
+    <script src="assets/locales/en.js"></script>
+    <script src="assets/locales/zh.js"></script>
+    <script src="assets/locales/hi.js"></script>
+    <script src="assets/locales/id.js"></script>
+    <script src="assets/locales/ms.js"></script>
+    <script src="assets/locales/ru.js"></script>
+    <script src="assets/locales/tr.js"></script>
+    <script src="assets/locales/ar.js"></script>
+    <script src="assets/locales/fa.js"></script>
+    <script>I18n.init();</script>
+</body>
+</html>
