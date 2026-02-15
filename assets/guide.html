@@ -1,0 +1,332 @@
+<div class="container">
+    <div class="section-header">
+        <h2 data-i18n="accountGuide.title">Account Setup Guide</h2>
+        <p data-i18n="accountGuide.description">Create an international Apple ID, Google Account, or Microsoft Account to download apps from your preferred platform store.</p>
+    </div>
+
+    <!-- Platform Selector -->
+    <div class="platform-selector">
+        <button class="platform-card active" data-platform="apple">
+            <div class="platform-card-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            </div>
+            <div class="platform-card-info">
+                <span class="platform-card-name" data-i18n="accountGuide.appleName">Apple ID</span>
+                <span class="platform-card-desc" data-i18n="accountGuide.appleDesc">iPhone &amp; iPad</span>
+            </div>
+        </button>
+        <button class="platform-card" data-platform="android">
+            <div class="platform-card-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 0 0 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+            </div>
+            <div class="platform-card-info">
+                <span class="platform-card-name" data-i18n="accountGuide.androidName">Google Account</span>
+                <span class="platform-card-desc" data-i18n="accountGuide.androidDesc">Android Devices</span>
+            </div>
+        </button>
+        <button class="platform-card" data-platform="windows">
+            <div class="platform-card-icon">
+                <svg viewBox="-3 -3 30 30" fill="currentColor" width="28" height="28"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+            </div>
+            <div class="platform-card-info">
+                <span class="platform-card-name" data-i18n="accountGuide.windowsName">Microsoft Account</span>
+                <span class="platform-card-desc" data-i18n="accountGuide.windowsDesc">Windows PC</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- ==================== APPLE GUIDE ==================== -->
+    <div class="guide-platform-content active" id="guide-apple">
+        <div class="guide-content">
+            <div class="guide-region-tabs">
+                <button class="guide-region-tab active" data-region="au" data-i18n="accountGuide.tabAU">Australia</button>
+                <button class="guide-region-tab" data-region="us" data-i18n="accountGuide.tabUS">United States</button>
+                <button class="guide-region-tab" data-region="hk" data-i18n="accountGuide.tabHK">Hong Kong</button>
+            </div>
+
+            <div class="guide-step">
+                <div class="guide-step-number">1</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.apple.step1Title">Preparation</h3>
+                    <p data-i18n="accountGuide.apple.step1Desc">Prepare an email address (Gmail, Outlook, etc.) that is not already linked to an Apple ID. You will also need a phone number that can receive SMS verification codes. Use a browser (Safari or Chrome) on your computer or phone.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">2</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.apple.step2Title">Register Your Account</h3>
+                    <div class="guide-region-content active" data-region-content="au">
+                        <p data-i18n="accountGuide.apple.au.step2Desc">Visit account.apple.com in your browser and click "Create Your Apple ID". Select "Australia" as the country/region. Fill in your name, email, password, and phone number. Verify both your email and phone number with the codes Apple sends you.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="us">
+                        <p data-i18n="accountGuide.apple.us.step2Desc">Visit account.apple.com in your browser and click "Create Your Apple ID". Select "United States" as the country/region. Fill in your name, email, password, and phone number. Verify both your email and phone number with the codes Apple sends you.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="hk">
+                        <p data-i18n="accountGuide.apple.hk.step2Desc">Visit account.apple.com in your browser and click "Create Your Apple ID". Select "Hong Kong" as the country/region. Fill in your name, email, password, and phone number. Verify both your email and phone number with the codes Apple sends you.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">3</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.apple.step3Title">Add a Shipping Address</h3>
+                    <div class="guide-region-content active" data-region-content="au">
+                        <p data-i18n="accountGuide.apple.au.step3Desc">After registration, go to "Payment &amp; Shipping" in your account settings. Add an Australian shipping address. You can use any valid address, for example: 1 Infinite Loop, Sydney NSW 2000. Set payment method to "None".</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="us">
+                        <p data-i18n="accountGuide.apple.us.step3Desc">After registration, go to "Payment &amp; Shipping" in your account settings. Add a shipping address using a US tax-free state: Alaska (99801), Montana (59001), Oregon (97201), or Delaware (19901). You can use any valid street address in these states. Set payment method to "None".</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="hk">
+                        <p data-i18n="accountGuide.apple.hk.step3Desc">After registration, go to "Payment &amp; Shipping" in your account settings. Add a Hong Kong shipping address. You can use any valid address, for example: 1 Queen's Road, Central, Hong Kong. Set payment method to "None".</p>
+                    </div>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">4</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.apple.step4Title">Sign In with New Apple ID</h3>
+                    <p data-i18n="accountGuide.apple.step4Desc">On your iPhone or iPad, open the App Store. Tap the profile icon in the top right, scroll down, and tap "Sign Out". Then sign in with your new Apple ID. Do NOT sign out from Settings — only sign out from the App Store.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">5</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.apple.step5Title">Activate Your Account</h3>
+                    <div class="guide-region-content active" data-region-content="au">
+                        <p data-i18n="accountGuide.apple.au.step5Desc">Search for and download any free app from the Australian App Store. A "Review" prompt will appear — tap "Review" and agree to the terms. Enter your Australian address and postcode again. Once completed, your Australian Apple ID is fully activated and ready to use.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="us">
+                        <p data-i18n="accountGuide.apple.us.step5Desc">Search for and download any free app from the US App Store. A "Review" prompt will appear — tap "Review" and agree to the terms. Enter your US address and zip code again. Once completed, your US Apple ID is fully activated and ready to use.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="hk">
+                        <p data-i18n="accountGuide.apple.hk.step5Desc">Search for and download any free app from the Hong Kong App Store. A "Review" prompt will appear — tap "Review" and agree to the terms. Enter your Hong Kong address again. Once completed, your Hong Kong Apple ID is fully activated and ready to use.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-tip">
+                <div class="guide-tip-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <p data-i18n="accountGuide.apple.tip">Never sign out of your Apple ID from Settings — only switch accounts within the App Store. Your iCloud data will remain safe.</p>
+            </div>
+
+            <div class="guide-faq">
+                <h3 data-i18n="accountGuide.apple.faqTitle">Frequently Asked Questions</h3>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.apple.faq1Q">Can I use my existing email to register?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.apple.faq1A">No, if your email is already associated with an Apple ID, you need to use a different email address. You can create a new Gmail or Outlook account for this purpose.</p>
+                    </div>
+                </div>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.apple.faq2Q">Will this affect my iCloud data?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.apple.faq2A">No. Only sign out from the App Store, not from Settings > Apple ID. Your iCloud data, photos, contacts, and other services will remain unchanged.</p>
+                    </div>
+                </div>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.apple.faq3Q">Can I switch between Apple IDs?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.apple.faq3A">Yes, you can freely switch between your original Apple ID and your regional Apple ID in the App Store at any time. Apps downloaded with one ID will remain installed even after switching.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ANDROID GUIDE ==================== -->
+    <div class="guide-platform-content" id="guide-android">
+        <div class="guide-content">
+            <div class="guide-region-tabs">
+                <button class="guide-region-tab active" data-region="au" data-i18n="accountGuide.tabAU">Australia</button>
+                <button class="guide-region-tab" data-region="us" data-i18n="accountGuide.tabUS">United States</button>
+                <button class="guide-region-tab" data-region="hk" data-i18n="accountGuide.tabHK">Hong Kong</button>
+            </div>
+
+            <div class="guide-step">
+                <div class="guide-step-number">1</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.android.step1Title">Preparation</h3>
+                    <p data-i18n="accountGuide.android.step1Desc">You will need a working phone number for verification and a backup email address (optional). Make sure you have access to the Google Play Store on your Android device. Use a browser or the Gmail app to create your new account.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">2</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.android.step2Title">Create a Google Account</h3>
+                    <div class="guide-region-content active" data-region-content="au">
+                        <p data-i18n="accountGuide.android.au.step2Desc">Visit accounts.google.com/signup in your browser. Enter your first and last name, choose a Gmail username, and set a strong password. When prompted for your country, select "Australia". Complete phone verification to finish creating your account.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="us">
+                        <p data-i18n="accountGuide.android.us.step2Desc">Visit accounts.google.com/signup in your browser. Enter your first and last name, choose a Gmail username, and set a strong password. When prompted for your country, select "United States". Complete phone verification to finish creating your account.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="hk">
+                        <p data-i18n="accountGuide.android.hk.step2Desc">Visit accounts.google.com/signup in your browser. Enter your first and last name, choose a Gmail username, and set a strong password. When prompted for your country, select "Hong Kong". Complete phone verification to finish creating your account.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">3</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.android.step3Title">Add Account to Your Device</h3>
+                    <p data-i18n="accountGuide.android.step3Desc">On your Android device, go to Settings > Accounts (or Users &amp; accounts). Tap "Add account" and select Google. Sign in with your new Google account credentials. This will link the account to your device and the Play Store.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">4</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.android.step4Title">Switch Account in Play Store</h3>
+                    <p data-i18n="accountGuide.android.step4Desc">Open the Google Play Store. Tap your profile icon in the top right and tap the down arrow next to your name. Select your new Google account from the list. The Play Store will reload with content available for that account's region.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">5</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.android.step5Title">Download Your App</h3>
+                    <p data-i18n="accountGuide.android.step5Desc">Search for the app in the Play Store while signed in with your new account. Tap "Install" to download. If prompted, accept the terms of service. The app will be linked to your new Google account for future updates.</p>
+                </div>
+            </div>
+
+            <div class="guide-tip">
+                <div class="guide-tip-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <p data-i18n="accountGuide.android.tip">You can have multiple Google accounts on your Android device simultaneously. Switch between them in the Play Store without removing any account.</p>
+            </div>
+
+            <div class="guide-faq">
+                <h3 data-i18n="accountGuide.android.faqTitle">Frequently Asked Questions</h3>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.android.faq1Q">Do I need to remove my existing Google account?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.android.faq1A">No. Android supports multiple Google accounts. You can add the new account alongside your existing one and switch between them in the Play Store.</p>
+                    </div>
+                </div>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.android.faq2Q">Will my existing apps or data be affected?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.android.faq2A">No. Adding a new Google account does not affect your existing apps, contacts, photos, or any other data. Each account operates independently.</p>
+                    </div>
+                </div>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.android.faq3Q">Can I use the app without a Google account?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.android.faq3A">You can install the APK directly from the download section without a Google account. However, using the Play Store ensures automatic updates and verified installations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== WINDOWS GUIDE ==================== -->
+    <div class="guide-platform-content" id="guide-windows">
+        <div class="guide-content">
+            <div class="guide-region-tabs">
+                <button class="guide-region-tab active" data-region="au" data-i18n="accountGuide.tabAU">Australia</button>
+                <button class="guide-region-tab" data-region="us" data-i18n="accountGuide.tabUS">United States</button>
+                <button class="guide-region-tab" data-region="hk" data-i18n="accountGuide.tabHK">Hong Kong</button>
+            </div>
+
+            <div class="guide-step">
+                <div class="guide-step-number">1</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.windows.step1Title">Preparation</h3>
+                    <p data-i18n="accountGuide.windows.step1Desc">You will need a working email address or phone number. Make sure your Windows PC is connected to the internet. You can create a Microsoft account through a browser or directly from Windows Settings.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">2</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.windows.step2Title">Create a Microsoft Account</h3>
+                    <div class="guide-region-content active" data-region-content="au">
+                        <p data-i18n="accountGuide.windows.au.step2Desc">Visit account.microsoft.com and click "Create a Microsoft account". Enter your email address or choose "Get a new email address" for an Outlook account. Set a strong password. When prompted for your country/region, select "Australia". Complete the verification steps.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="us">
+                        <p data-i18n="accountGuide.windows.us.step2Desc">Visit account.microsoft.com and click "Create a Microsoft account". Enter your email address or choose "Get a new email address" for an Outlook account. Set a strong password. When prompted for your country/region, select "United States". Complete the verification steps.</p>
+                    </div>
+                    <div class="guide-region-content" data-region-content="hk">
+                        <p data-i18n="accountGuide.windows.hk.step2Desc">Visit account.microsoft.com and click "Create a Microsoft account". Enter your email address or choose "Get a new email address" for an Outlook account. Set a strong password. When prompted for your country/region, select "Hong Kong". Complete the verification steps.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">3</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.windows.step3Title">Sign In on Windows</h3>
+                    <p data-i18n="accountGuide.windows.step3Desc">On your Windows PC, open Settings > Accounts > "Email &amp; accounts" and click "Add a Microsoft account". Sign in with your new credentials. Alternatively, you can sign in directly through the Microsoft Store app.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">4</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.windows.step4Title">Open the Microsoft Store</h3>
+                    <p data-i18n="accountGuide.windows.step4Desc">Open the Microsoft Store from the taskbar or Start menu. Click your profile icon in the top right corner and make sure you are signed in with your new Microsoft account. If you have multiple accounts, select the correct one.</p>
+                </div>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-number">5</div>
+                <div class="guide-step-body">
+                    <h3 data-i18n="accountGuide.windows.step5Title">Download Your App</h3>
+                    <p data-i18n="accountGuide.windows.step5Desc">Search for the app in the Microsoft Store. Click "Get" or "Install" to download. If this is your first download, you may need to accept the terms of service. The app will be associated with your Microsoft account for future updates.</p>
+                </div>
+            </div>
+
+            <div class="guide-tip">
+                <div class="guide-tip-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <p data-i18n="accountGuide.windows.tip">You can also download the app directly from the download section above without using the Microsoft Store. The direct download works without a Microsoft account.</p>
+            </div>
+
+            <div class="guide-faq">
+                <h3 data-i18n="accountGuide.windows.faqTitle">Frequently Asked Questions</h3>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.windows.faq1Q">Do I need a Microsoft account to use the app?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.windows.faq1A">Not necessarily. You can download the app directly from the download section without a Microsoft account. A Microsoft account is only needed if you want to install from the Microsoft Store.</p>
+                    </div>
+                </div>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.windows.faq2Q">Can I use my existing Microsoft account?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.windows.faq2A">Yes, you can use any existing Microsoft account (Outlook, Hotmail, Xbox, etc.) to sign in to the Microsoft Store and download the app.</p>
+                    </div>
+                </div>
+                <div class="guide-faq-item">
+                    <button class="guide-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span data-i18n="accountGuide.windows.faq3Q">Will the app update automatically?</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="guide-faq-answer">
+                        <p data-i18n="accountGuide.windows.faq3A">If installed from the Microsoft Store, updates are handled automatically. For direct downloads, you may need to download the latest version manually from this page.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
