@@ -1,0 +1,294 @@
+name: Build
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  push:
+    paths:
+      - 'index.html'
+      - 'assets/guide.html'
+      - 'assets/product.html'
+      - 'assets/template.html'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch API data and generate static HTML
+        run: |
+          API='https://api.root-corporation.com'
+
+          echo "Fetching rooms list..."
+          ROOMS_JSON=$(curl -sX GET "$API/v1/public/room")
+
+          ROOM_COUNT=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | length')
+          echo "Found $ROOM_COUNT rooms"
+
+          FOOTER_APPS_HTML=$(echo "$ROOMS_JSON" | jq -r '.data.rooms // [] | map("<li><a href=\"\(.hash).html\">\(.name)</a></li>") | join("")')
+
+          # Read product card template once
+          CARD_TEMPLATE=$(cat assets/product.html)
+
+          # Initialize accumulated cards file
+          > /tmp/apps_cards.html
+
+          echo "$ROOMS_JSON" | jq -c '.data.rooms // [] | .[]' | while read -r room; do
+            ROOM_NAME=$(echo "$room" | jq -r '.name')
+            ROOM_HASH=$(echo "$room" | jq -r '.hash')
+            ROOM_LOGO=$(echo "$room" | jq -r '.logo // ""')
+
+            echo "Processing room: $ROOM_NAME"
+
+            SERVERS=$(curl -sX GET "$API/v1/public/server" -H "X-Room-Id: $ROOM_HASH")
+            PRODUCTS=$(curl -sX POST "$API/v1/public/product" -H "X-Room-Id: $ROOM_HASH")
+            BONUSES=$(curl -sX POST "$API/v1/public/bonus" -H "X-Room-Id: $ROOM_HASH")
+            RULES=$(curl -sX GET "$API/v1/public/rule" -H "X-Room-Id: $ROOM_HASH")
+            LEGAL=$(curl -sX GET "$API/v1/public/legal" -H "X-Room-Id: $ROOM_HASH")
+            PACKAGES=$(curl -sX GET "$API/v1/public/pkg" -H "X-Room-Id: $ROOM_HASH")
+
+            # --- Card metadata extraction ---
+
+            # Logo: <img> or SVG fallback
+            if [ -n "$ROOM_LOGO" ]; then
+              ROOM_LOGO_IMG="<img src=\"$ROOM_LOGO\" alt=\"$ROOM_NAME\">"
+            else
+              ROOM_LOGO_IMG='<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+            fi
+
+            # Version from first package
+            APP_VERSION=$(echo "$PACKAGES" | jq -r '(.data.pkgs // [])[0].version // "1.0"')
+
+            # Server count
+            SERVER_COUNT=$(echo "$SERVERS" | jq -r '.data.servers // [] | length')
+
+            # Plan count
+            PLAN_COUNT=$(echo "$PRODUCTS" | jq -r '.data.products // [] | length')
+
+            # Platform count (unique platforms from packages)
+            PLATFORM_COUNT=$(echo "$PACKAGES" | jq -r '[.data.pkgs // [] | .[].platform] | unique | length')
+
+            # Minimum price formatted as A$X.XX
+            MIN_PRICE=$(echo "$PRODUCTS" | jq -r '
+              [.data.products // [] | .[].price] |
+              if length == 0 then "A$0.00"
+              else min / 100 | "A$\(tostring | if contains(".") then . else . + ".00" end)"
+              end')
+
+            # Server country badges (unique countries, max 6 shown + "more" badge)
+            NODES_HTML=$(echo "$SERVERS" | jq -r '
+              [.data.servers // [] | .[].country] | unique |
+              if length == 0 then ""
+              else
+                (if length > 6 then (length - 6) else 0 end) as $extra |
+                (if length > 6 then .[:6] else . end | map("<span class=\"app-node-badge\">\(.)</span>") | join("")) +
+                (if $extra > 0 then "<span class=\"app-node-more\">+\($extra)</span>" else "" end)
+              end')
+
+            # Welcome bonus teaser (first welcome_bonus entry, or empty)
+            BONUS_HTML=$(echo "$BONUSES" | jq -r '
+              def format_days: if . < (1/24) then "\(. * 24 * 60 | round) <span data-i18n=\"apps.bonusMinsFree\">Mins Free</span>"
+                elif . < 1 then "\(. * 24 | round) <span data-i18n=\"apps.bonusHoursFree\">Hours Free</span>"
+                else "\(. | round) <span data-i18n=\"apps.bonusDaysFree\">Days Free</span>" end;
+              [.data // [] | .[]] |
+              if length == 0 then ""
+              else max_by(.days) | "<div class=\"app-bonus-teaser\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 12v10H4V12\"/><path d=\"M2 7h20v5H2z\"/><path d=\"M12 22V7\"/></svg><span class=\"app-bonus-text\">\(.days | format_days)</span></div>"
+              end')
+
+            # Platform SVG icons from packages
+            PLATFORMS_SVG=$(echo "$PACKAGES" | jq -r '
+              def platform_icon:
+                if . == "windows" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801\"/></svg>"
+                elif . == "apple" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z\"/></svg>"
+                elif . == "android" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 0 0 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z\"/></svg>"
+                else "" end;
+              [.data.pkgs // [] | .[].platform] | unique | map(platform_icon) | join("")')
+
+            # --- Render card from product.html template via perl ---
+
+            printf '%s' "$ROOM_LOGO_IMG" > /tmp/card_logo_img.txt
+            printf '%s' "$NODES_HTML" > /tmp/card_nodes.txt
+            printf '%s' "$BONUS_HTML" > /tmp/card_bonus.txt
+            printf '%s' "$PLATFORMS_SVG" > /tmp/card_platforms.txt
+
+            perl -0777 -e '
+              sub rf { local $/; open my $f, "<", $_[0] or return ""; my $c = <$f>; close $f; chomp $c; $c }
+              my $card = rf("assets/product.html");
+              my $logo_img = rf("/tmp/card_logo_img.txt");
+              my $nodes = rf("/tmp/card_nodes.txt");
+              my $bonus = rf("/tmp/card_bonus.txt");
+              my $platforms = rf("/tmp/card_platforms.txt");
+              my $name = $ARGV[0];
+              my $hash = $ARGV[1];
+              my $version = $ARGV[2];
+              my $server_count = $ARGV[3];
+              my $platform_count = $ARGV[4];
+              my $plan_count = $ARGV[5];
+              my $min_price = $ARGV[6];
+              $card =~ s/\{\{ROOM_HASH\}\}/$hash/g;
+              $card =~ s/\{\{ROOM_NAME\}\}/$name/g;
+              $card =~ s/\{\{ROOM_LOGO_IMG\}\}/$logo_img/g;
+              $card =~ s/\{\{VERSION\}\}/$version/g;
+              $card =~ s/\{\{SERVER_COUNT\}\}/$server_count/g;
+              $card =~ s/\{\{PLATFORM_COUNT\}\}/$platform_count/g;
+              $card =~ s/\{\{PLAN_COUNT\}\}/$plan_count/g;
+              $card =~ s/\{\{MIN_PRICE\}\}/$min_price/g;
+              $card =~ s/\{\{NODES\}\}/$nodes/g;
+              $card =~ s/\{\{BONUS\}\}/$bonus/g;
+              $card =~ s/\{\{PLATFORMS\}\}/$platforms/g;
+              print $card;
+            ' "$ROOM_NAME" "$ROOM_HASH" "$APP_VERSION" "$SERVER_COUNT" "$PLATFORM_COUNT" "$PLAN_COUNT" "$MIN_PRICE" >> /tmp/apps_cards.html
+
+            echo "Generated card for $ROOM_NAME"
+
+            # --- Generate detail page from template.html ---
+
+            SERVERS_HTML=$(echo "$SERVERS" | jq -r '.data.servers // [] | map("<div class=\"server-card\"><div class=\"server-flag\">\(.country)</div><div class=\"server-info\"><h4>\(.city)</h4><p>\(.zone)</p></div></div>") | join("")')
+            [ -z "$SERVERS_HTML" ] && SERVERS_HTML='<p style="text-align:center;color:var(--text-muted)">No nodes available</p>'
+
+            PRICING_HTML=$(echo "$PRODUCTS" | jq -r '
+              [.data.products // [] | sort_by(.period) | to_entries[] | {i: .key, p: .value}] |
+              map((.p.period | floor) as $days | "<div class=\"pricing-card\(if .i == 1 then " featured" else "" end)\" data-index=\"\(.i)\"><div class=\"pricing-name\">\(.p.name)</div><div class=\"pricing-period\">\($days) <span data-i18n=\"pricing.\(if $days != 1 then "days" else "day" end)\">\(if $days != 1 then "Days" else "Day" end)</span></div><div class=\"pricing-price\"><span class=\"currency\">A$</span><span class=\"amount\">\(.p.price / 100 | tostring | if contains(".") then . else . + ".00" end)</span></div><ul class=\"pricing-features\"><li data-i18n=\"pricing.featurePrivacy\">Full Privacy Protection</li><li data-i18n=\"pricing.featureNodes\">All Global Nodes</li><li data-i18n=\"pricing.featureBandwidth\">Unlimited Bandwidth</li><li data-i18n=\"pricing.featureSupport\">24/7 Privacy Support</li></ul><a href=\"#\" class=\"btn btn-primary\" data-i18n=\"nav.getStarted\">Get Started</a></div>") | join("")')
+            [ -z "$PRICING_HTML" ] && PRICING_HTML='<p style="text-align:center;color:var(--text-muted)">No plans available</p>'
+
+            BONUSES_HTML=$(echo "$BONUSES" | jq -r '
+              def format_days: if . < (1/24) then "\(. * 24 * 60 | round) <span data-i18n=\"bonuses.minutesFree\">Minutes Free</span>" elif . < 1 then "\(. * 24 | round) <span data-i18n=\"bonuses.hoursFree\">Hours Free</span>" else "\(. | round) <span data-i18n=\"bonuses.daysFree\">Days Free</span>" end;
+              def get_title: {"welcome_bonus": "Welcome Bonus", "refer_bonus": "Referral Bonus", "share_bonus": "Share Bonus"}[.] // .;
+              def get_desc: {"welcome_bonus": "Get free access when you sign up", "refer_bonus": "Earn days for each friend you refer", "share_bonus": "Share on social media and get rewarded"}[.] // "Special bonus reward";
+              def get_i18n: {"welcome_bonus": "bonuses.welcomeBonus", "refer_bonus": "bonuses.referralBonus", "share_bonus": "bonuses.shareBonus"}[.] // "";
+              def get_icon: {"welcome_bonus": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 12v10H4V12\"/><path d=\"M2 7h20v5H2z\"/><path d=\"M12 22V7\"/><path d=\"M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z\"/><path d=\"M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z\"/></svg>", "refer_bonus": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M23 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/></svg>", "share_bonus": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"18\" cy=\"5\" r=\"3\"/><circle cx=\"6\" cy=\"12\" r=\"3\"/><circle cx=\"18\" cy=\"19\" r=\"3\"/><line x1=\"8.59\" y1=\"13.51\" x2=\"15.42\" y2=\"17.49\"/><line x1=\"15.41\" y1=\"6.51\" x2=\"8.59\" y2=\"10.49\"/></svg>"}[.] // "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polygon points=\"12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\"/></svg>";
+              .data // [] | map((.name | get_i18n) as $key | "<div class=\"bonus-card\"><div class=\"bonus-icon\">\(.name | get_icon)</div><h3 data-i18n=\"\($key).title\">\(.name | get_title)</h3><div class=\"bonus-value\">\(.days | format_days)</div><p data-i18n=\"\($key).description\">\(.name | get_desc)</p></div>") | join("")')
+            [ -z "$BONUSES_HTML" ] && BONUSES_HTML='<p style="text-align:center;color:var(--text-muted)">No bonuses available</p>'
+
+            AFFILIATE_HTML=$(echo "$RULES" | jq -r '
+              .data.rule as $rule |
+              ($rule.commission_rates // [] | length) as $tierCount |
+              (($rule.commission_rates // [])[0] // 0.1 | . * 100 | floor | tostring) as $startingRate |
+              ["Bronze", "Silver", "Gold", "Platinum", "Diamond"] as $levels |
+              ["affiliate.tierBronze", "affiliate.tierSilver", "affiliate.tierGold", "affiliate.tierPlatinum", "affiliate.tierDiamond"] as $tierKeys |
+              ["<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#cd7f32\" stroke-width=\"2\"><circle cx=\"12\" cy=\"8\" r=\"6\"/><path d=\"M15.477 12.89L17 22l-5-3-5 3 1.523-9.11\"/></svg>", "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#c0c0c0\" stroke-width=\"2\"><circle cx=\"12\" cy=\"8\" r=\"6\"/><path d=\"M15.477 12.89L17 22l-5-3-5 3 1.523-9.11\"/></svg>", "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#ffd700\" stroke-width=\"2\"><circle cx=\"12\" cy=\"8\" r=\"6\"/><path d=\"M15.477 12.89L17 22l-5-3-5 3 1.523-9.11\"/></svg>", "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#a0e0e0\" stroke-width=\"2\"><path d=\"M6 3h12l4 6-10 13L2 9z\"/></svg>", "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#f472b6\" stroke-width=\"2\"><path d=\"M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 17l-6.3 4 2.3-7-6-4.6h7.6z\"/></svg>"] as $icons |
+              "<div class=\"affiliate-hero\"><h3 data-i18n=\"affiliate.heroTitle\">Earn With Every Referral</h3><p data-i18n=\"affiliate.heroDescription\">Turn your network into income. Share privacy protection and get rewarded for every successful referral.</p><div class=\"affiliate-benefits\"><div class=\"affiliate-benefit\"><div class=\"affiliate-benefit-value\">\($startingRate)%+</div><div class=\"affiliate-benefit-label\" data-i18n=\"affiliate.startingCommission\">Starting Commission</div></div><div class=\"affiliate-benefit\"><div class=\"affiliate-benefit-value\">\($tierCount)</div><div class=\"affiliate-benefit-label\" data-i18n=\"affiliate.commissionTiers\">Commission Tiers</div></div><div class=\"affiliate-benefit\"><div class=\"affiliate-benefit-value\" data-i18n=\"affiliate.anytime\">Anytime</div><div class=\"affiliate-benefit-label\" data-i18n=\"affiliate.payouts\">Payouts</div></div></div><div class=\"affiliate-tiers-row\">" + ([$rule.commission_rates // [] | to_entries[] | "<span class=\"affiliate-tier-badge\">\($icons[.key] // "")<span data-i18n=\"\($tierKeys[.key] // "")\">\($levels[.key] // "Level \(.key + 1)")</span></span>"] | join("")) + "</div><div class=\"affiliate-cta\"><a href=\"index.html#contact\" class=\"btn btn-primary\" data-i18n=\"affiliate.becomePartner\">Become a Partner</a></div></div>"')
+
+            LEGAL_AGREEMENT=$(echo "$LEGAL" | jq -r '.data.legal.user_agreement // "No content available." | gsub("\n\n"; "</p><p>") | gsub("\n"; "<br>") | "<p>" + . + "</p>"')
+            LEGAL_PRIVACY=$(echo "$LEGAL" | jq -r '.data.legal.privacy_policy // "No content available." | gsub("\n\n"; "</p><p>") | gsub("\n"; "<br>") | "<p>" + . + "</p>"')
+
+            # Generate App Stores section HTML (platforms with store links)
+            STORES_HTML=$(echo "$PACKAGES" | jq -r '
+              def platform_badge: if . == "windows" then "assets/badges/windows.svg" elif . == "android" then "assets/badges/android.svg" elif . == "apple" then "assets/badges/apple.svg" else "" end;
+              def platform_store_label: if . == "windows" then "Microsoft Store" elif . == "android" then "Google Play" elif . == "apple" then "App Store" else "Store" end;
+              [.data.pkgs // [] | .[] | select(.store and .store != "")] |
+              if length == 0 then "<p style=\"color:var(--text-muted);text-align:center\">No store downloads available</p>"
+              else map((.platform | if . == "apple" then "<small>Learn to create</small><span>Apple ID</span>" elif . == "android" then "<small>Learn to create</small><span>Google Account</span>" elif . == "windows" then "<small>Learn to create</small><span>Microsoft Account</span>" else "Create Account" end) as $label | "<div class=\"download-store-item\"><a href=\"\(.store)\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"\(.platform | platform_badge)\" alt=\"\(.platform | platform_store_label)\" class=\"download-store-badge\"></a><a href=\"#account-guide\" class=\"store-guide-link\" onclick=\"navigateToGuide(\u0027\(.platform)\u0027);return false;\" data-i18n-html=\"download.storeGuideHint.\(.platform)\">\($label)</a></div>") | join("")
+              end')
+
+            # Generate Binary Downloads section HTML (platforms with direct links)
+            BINARIES_HTML=$(echo "$PACKAGES" | jq -r '
+              def platform_icon:
+                if . == "windows" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801\"/></svg>"
+                elif . == "android" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 0 0 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z\"/></svg>"
+                elif . == "apple" then "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z\"/></svg>"
+                else "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>" end;
+              def platform_name: if . == "windows" then "Windows" elif . == "android" then "Android" elif . == "apple" then "Apple" else . end;
+              [.data.pkgs // [] | .[] | select(.link and .link != "")] |
+              if length == 0 then ""
+              else map("<div class=\"download-binary-card\"><div class=\"download-binary-icon\">\(.platform | platform_icon)</div><h4 data-i18n=\"download.\(.platform).name\">\(.platform | platform_name)</h4><div class=\"download-binary-version\">v\(.version)</div><a href=\"\(.link)\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"download-binary-btn\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg><span data-i18n=\"download.downloadNow\">Download</span></a></div>") | join("")
+              end')
+
+            # Generate packages JSON for popup (escaped for embedding)
+            PACKAGES_JSON=$(echo "$PACKAGES" | jq -c '.data.pkgs // []' | sed 's/"/\\"/g')
+
+            printf '%s' "$SERVERS_HTML" > /tmp/servers.html
+            printf '%s' "$PRICING_HTML" > /tmp/pricing.html
+            printf '%s' "$BONUSES_HTML" > /tmp/bonuses.html
+            printf '%s' "$AFFILIATE_HTML" > /tmp/affiliate.html
+            printf '%s' "$LEGAL_AGREEMENT" > /tmp/legal_agreement.html
+            printf '%s' "$LEGAL_PRIVACY" > /tmp/legal_privacy.html
+            printf '%s' "$STORES_HTML" > /tmp/stores.html
+            printf '%s' "$BINARIES_HTML" > /tmp/binaries.html
+            printf '%s' "$PACKAGES_JSON" > /tmp/packages_json.txt
+            printf '%s' "$ROOM_NAME" > /tmp/room_name.txt
+            printf '%s' "$ROOM_HASH" > /tmp/room_hash.txt
+            printf '%s' "$ROOM_LOGO" > /tmp/room_logo.txt
+            if [ -n "$ROOM_LOGO" ]; then
+              printf '%s' "$ROOM_LOGO" > /tmp/room_logo_favicon.txt
+            else
+              printf '%s' "assets/logo.svg" > /tmp/room_logo_favicon.txt
+            fi
+            printf '%s' "$API" > /tmp/api_base.txt
+            printf '%s' "$FOOTER_APPS_HTML" > /tmp/footer.html
+
+            perl -0777 -e '
+              sub rf { local $/; open my $f, "<", $_[0] or return ""; my $c = <$f>; close $f; chomp $c; $c }
+              my $html = rf("assets/template.html");
+              my $name = rf("/tmp/room_name.txt");
+              my $hash = rf("/tmp/room_hash.txt");
+              my $logo = rf("/tmp/room_logo.txt");
+              my $logo_favicon = rf("/tmp/room_logo_favicon.txt");
+              my $api_base = rf("/tmp/api_base.txt");
+              my $servers = rf("/tmp/servers.html");
+              my $pricing = rf("/tmp/pricing.html");
+              my $bonuses = rf("/tmp/bonuses.html");
+              my $affiliate = rf("/tmp/affiliate.html");
+              my $legal_agreement = rf("/tmp/legal_agreement.html");
+              my $legal_privacy = rf("/tmp/legal_privacy.html");
+              my $stores = rf("/tmp/stores.html");
+              my $binaries = rf("/tmp/binaries.html");
+              my $packages_json = rf("/tmp/packages_json.txt");
+              my $footer = rf("/tmp/footer.html");
+              $html =~ s/\{\{ROOM_NAME\}\}/$name/g;
+              $html =~ s/\{\{ROOM_HASH\}\}/$hash/g;
+              $html =~ s/\{\{ROOM_LOGO\}\}/$logo/g;
+              $html =~ s/\{\{ROOM_LOGO_FAVICON\}\}/$logo_favicon/g;
+              $html =~ s/\{\{API_BASE\}\}/$api_base/g;
+              $html =~ s/\{\{SERVERS\}\}/$servers/g;
+              $html =~ s/\{\{PRICING\}\}/$pricing/g;
+              $html =~ s/\{\{BONUSES\}\}/$bonuses/g;
+              $html =~ s/\{\{AFFILIATE\}\}/$affiliate/g;
+              $html =~ s/\{\{LEGAL_AGREEMENT\}\}/$legal_agreement/g;
+              $html =~ s/\{\{LEGAL_PRIVACY\}\}/$legal_privacy/g;
+              $html =~ s/\{\{STORES\}\}/$stores/g;
+              $html =~ s/\{\{BINARIES\}\}/$binaries/g;
+              $html =~ s/\{\{PACKAGES_JSON\}\}/$packages_json/g;
+              $html =~ s/\{\{FOOTER_APPS\}\}/$footer/g;
+              open my $out, ">", "$hash.html"; print $out $html; close $out;
+            '
+
+            echo "Generated $ROOM_HASH.html"
+          done
+
+          # Inject accumulated cards and footer into index.html
+          printf '%s' "$FOOTER_APPS_HTML" > /tmp/footer.html
+
+          perl -0777 -e '
+            sub rf { local $/; open my $f, "<", $_[0] or return ""; my $c = <$f>; close $f; $c }
+            my $html = rf("index.html");
+            my $apps = rf("/tmp/apps_cards.html");
+            my $footer = rf("/tmp/footer.html");
+            $html =~ s/<div id="apps-grid" class="apps-grid">.*?<\/div>\s*<\/div>\s*<\/section>/<div id="apps-grid" class="apps-grid">$apps<\/div>\n        <\/div>\n    <\/section>/s;
+            $html =~ s/(<ul id="footer-apps">).*?(<\/ul>)/$1$footer$2/s;
+            open my $out, ">", "index.html"; print $out $html; close $out;
+          '
+
+          echo "Updated index.html"
+
+          rm -f /tmp/*.html /tmp/*.txt
+          echo "Static HTML generation complete"
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage all changes and squash into single commit
+          git add -A
+          git commit -m "chore: update embedded API data" || true
+          git reset $(git commit-tree HEAD^{tree} -m "chore: update embedded API data")
+          git push --force

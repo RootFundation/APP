@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)})()</script>
+    <title>{{ROOM_NAME}} - Privacy Protection</title>
+    <link rel="icon" href="{{ROOM_LOGO_FAVICON}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #a5b4fc;
+    --accent: #22d3ee;
+    --accent-warm: #f472b6;
+    --bg-dark: #05050a;
+    --bg-card: rgba(15, 15, 25, 0.6);
+    --bg-card-solid: #0f0f19;
+    --bg-card-hover: rgba(25, 25, 40, 0.8);
+    --text: #eef2ff;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border: rgba(99, 102, 241, 0.12);
+    --border-strong: rgba(99, 102, 241, 0.25);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+    --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+    --glass: rgba(15, 15, 25, 0.5);
+    --glass-border: rgba(99, 102, 241, 0.15);
+    --glow: 0 0 80px rgba(99, 102, 241, 0.15);
+    --radius: 20px;
+    --font-display: 'Sora', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+}
+
+[data-theme="light"] {
+    --bg-dark: #f0f2f8;
+    --bg-card: rgba(255, 255, 255, 0.7);
+    --bg-card-solid: #ffffff;
+    --bg-card-hover: rgba(241, 245, 249, 0.9);
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+    --border: rgba(99, 102, 241, 0.1);
+    --border-strong: rgba(99, 102, 241, 0.2);
+    --glass: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(99, 102, 241, 0.12);
+    --glow: 0 0 60px rgba(99, 102, 241, 0.08);
+}
+
+[data-theme="light"] nav {
+    background: rgba(240, 242, 248, 0.85);
+    border-bottom-color: rgba(0,0,0,0.06);
+}
+
+[data-theme="light"] .hero h1 {
+    background: linear-gradient(180deg, #0f172a 0%, #334155 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme="light"] .lang-dropdown {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+.theme-toggle:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+    transform: scale(1.05);
+}
+.theme-icon-light { display: none; }
+[data-theme="light"] .theme-icon-dark { display: none; }
+[data-theme="light"] .theme-icon-light { display: block; }
+.theme-toggle.mobile-only { display: none; }
+@media (max-width: 768px) {
+    .theme-toggle.mobile-only { display: flex; }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 16px 0;
+    background: rgba(5, 5, 10, 0.6);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.4s;
+}
+
+nav.scrolled { padding: 10px 0; background: rgba(5, 5, 10, 0.85); }
+[data-theme="light"] nav.scrolled { background: rgba(240, 242, 248, 0.92); }
+
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 400;
+    transition: color 0.3s;
+    position: relative;
+}
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1.5px;
+    background: var(--gradient-1);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.mobile-nav-actions { display: none; align-items: center; gap: 6px; }
+
+.nav-cta {
+    background: var(--gradient-1);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4); }
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+    z-index: 101;
+}
+
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg-dark);
+    z-index: 99;
+    padding: 80px 24px 24px;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+.mobile-menu.active { display: flex; }
+
+.mobile-menu a {
+    color: var(--text);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.mobile-menu a:hover { border-color: var(--primary); background: var(--bg-card-hover); }
+
+.mobile-menu a:first-child { margin-top: 16px; }
+
+.mobile-menu .mobile-cta {
+    background: var(--gradient-1);
+    border: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.mobile-menu .lang-switcher {
+    width: 100%;
+}
+
+.mobile-menu .lang-switcher-toggle {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    font-size: 1.1rem;
+    color: var(--text);
+    justify-content: space-between;
+}
+
+.mobile-menu .lang-switcher-toggle:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+}
+
+.mobile-menu .lang-dropdown {
+    position: static;
+    margin-top: 8px;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn { display: block; }
+    .mobile-nav-actions { display: flex; }
+    .nav-cta { display: none; }
+    #download { padding: 60px 0; }
+    .download-grid { gap: 20px; }
+    .download-card { padding: 24px; min-width: 100%; }
+}
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 140px 0 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Aurora background for hero */
+.hero-aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0.6;
+}
+.aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    will-change: transform;
+}
+.aurora-blob-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, transparent 70%);
+    top: -10%; left: 15%;
+    animation: aurora1 18s ease-in-out infinite;
+}
+.aurora-blob-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    top: 25%; right: 10%;
+    animation: aurora2 22s ease-in-out infinite;
+}
+.aurora-blob-3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.2) 0%, transparent 70%);
+    bottom: 15%; left: 35%;
+    animation: aurora3 20s ease-in-out infinite;
+}
+@keyframes aurora1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(80px, 40px) scale(1.1); }
+    66% { transform: translate(-40px, 60px) scale(0.95); }
+}
+@keyframes aurora2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-60px, 50px) scale(1.15); }
+    66% { transform: translate(40px, -30px) scale(0.9); }
+}
+@keyframes aurora3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -40px) scale(1.05); }
+    66% { transform: translate(-60px, 20px) scale(1.1); }
+}
+
+[data-theme="light"] .hero-aurora { opacity: 0.3; }
+
+.hero .container { position: relative; z-index: 2; text-align: center; }
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--primary-light);
+    margin-bottom: 32px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    animation: badgeFade 1s ease-out 0.2s both;
+}
+.hero-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+@keyframes badgeFade {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 28px;
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, #fff 0%, rgba(148, 163, 184, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: heroTitle 1s ease-out 0.4s both;
+}
+@keyframes heroTitle {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto 48px;
+    line-height: 1.8;
+    animation: heroDesc 1s ease-out 0.6s both;
+}
+@keyframes heroDesc {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn {
+    padding: 15px 36px;
+    border-radius: 14px;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+}
+
+.btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    position: relative;
+    overflow: hidden;
+}
+.btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 40px rgba(99, 102, 241, 0.45); }
+
+.btn-secondary {
+    background: var(--glass);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    backdrop-filter: blur(10px);
+}
+.btn-secondary:hover { background: var(--bg-card-hover); border-color: var(--primary); transform: translateY(-2px); }
+
+section { padding: 120px 0; position: relative; }
+.section-header { text-align: center; margin-bottom: 72px; }
+.section-header h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; }
+.section-header p { color: var(--text-muted); font-size: 1.05rem; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+/* Scroll Reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* Noise overlay */
+.noise-overlay {
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px;
+}
+[data-theme="light"] .noise-overlay { opacity: 0.015; }
+
+#pricing { background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%); }
+
+.pricing-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin: 0 auto;
+}
+
+.pricing-nav {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 1.25rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.pricing-nav:hover { background: var(--primary); border-color: var(--primary); }
+.pricing-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+.pricing-nav:disabled:hover { background: var(--bg-card); border-color: var(--border); }
+
+.pricing-wrapper {
+    overflow-x: hidden;
+    overflow-y: visible;
+    flex: 1;
+    min-width: 0;
+    padding-top: 16px;
+}
+
+.pricing-grid {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.3s ease;
+}
+
+.pricing-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    padding-top: 40px;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+    flex: 0 0 calc((100% - 48px) / 3);
+    box-sizing: border-box;
+}
+
+.pricing-card.featured {
+    border-color: var(--primary);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, var(--bg-card) 100%);
+}
+
+.pricing-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient-1);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.pricing-name { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
+.pricing-period { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+.pricing-price { font-size: 2rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.pricing-price .currency { font-size: 1.25rem; color: var(--text-muted); font-weight: 400; }
+.pricing-price .amount { font-size: 2.5rem; }
+
+.pricing-features { list-style: none; margin-bottom: 32px; }
+.pricing-features li { padding: 10px 0; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 0.95rem; }
+.pricing-features li::before { content: '✓'; color: var(--success); font-weight: 600; }
+.pricing-card .btn { width: 100%; text-align: center; }
+
+.pricing-dots {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.pricing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pricing-dot.active {
+    background: var(--primary);
+    width: 24px;
+    border-radius: 4px;
+}
+
+#servers { background: var(--bg-dark); }
+
+.servers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.server-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+}
+
+.server-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+.server-flag { font-size: 2rem; }
+.server-info h4 { font-size: 1rem; margin-bottom: 4px; }
+.server-info p { font-size: 0.8rem; color: var(--text-muted); }
+
+#bonuses { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); }
+
+.bonus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.bonus-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.bonus-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.bonus-icon { margin-bottom: 16px; color: var(--accent); }
+.bonus-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+.bonus-value { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+.bonus-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+#affiliate { background: var(--bg-dark); }
+
+.affiliate-content { margin: 0 auto; }
+
+.affiliate-hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.affiliate-hero h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.affiliate-hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 32px; }
+
+.affiliate-benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+.affiliate-benefit { text-align: center; }
+.affiliate-benefit-value { font-size: 2.5rem; font-weight: 700; color: var(--primary-light); margin-bottom: 8px; }
+.affiliate-benefit-label { color: var(--text-muted); font-size: 0.9rem; }
+
+.affiliate-tiers-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+
+.affiliate-tier-badge {
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.affiliate-cta { display: flex; justify-content: center; }
+
+#legal { background: var(--bg-card); }
+
+.legal-tabs { display: flex; gap: 8px; margin-bottom: 32px; justify-content: center; }
+
+.legal-tab {
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.legal-tab:hover { border-color: var(--primary); }
+.legal-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+.legal-content {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin: 0 auto;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.legal-content p { margin-bottom: 16px; color: var(--text-muted); line-height: 1.8; }
+
+footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 60px 0 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+    gap: 32px;
+    margin-bottom: 40px;
+}
+
+.footer-brand .logo { margin-bottom: 16px; display: inline-block; }
+.footer-brand p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
+.footer-links h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+.footer-links ul { list-style: none; }
+.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: block; padding: 6px 0; transition: color 0.2s; }
+.footer-links a:hover { color: var(--primary-light); }
+
+.footer-platforms { list-style: none; }
+.footer-platform-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 6px 0;
+    transition: color 0.2s;
+}
+.footer-platform-link:hover { color: var(--primary-light); }
+.footer-platform-link svg { flex-shrink: 0; width: 18px; height: 18px; }
+.footer-platform-link:first-child svg { width: 15px; height: 15px; }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 30px; text-align: center; color: var(--text-dim); font-size: 0.85rem; }
+
+.hidden { display: none !important; }
+
+input:focus, textarea:focus { outline: none; border-color: var(--primary) !important; }
+
+/* Download Section */
+#download { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%); padding: 80px 0; }
+
+.download-content { margin: 0 auto; }
+
+/* App Stores Section */
+.download-stores {
+    margin-bottom: 48px;
+}
+
+.download-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.download-stores-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.download-store-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: transform 0.2s;
+    flex: 1;
+    min-width: 0;
+}
+
+.download-store-item:hover {
+    transform: translateY(-4px);
+}
+
+.download-store-item > a:first-child {
+    display: flex;
+    width: 100%;
+}
+
+.download-store-badge {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.download-store-badge:hover {
+    filter: brightness(1.1);
+}
+
+/* Binary Downloads Section */
+.download-binaries {
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+}
+
+.download-binaries-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.download-binary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    flex: 1;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.download-binary-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(99, 102, 241, 0.15);
+}
+
+.download-binary-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.download-binary-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--primary-light);
+}
+
+.download-binary-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.download-binary-version {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.download-binary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.download-binary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+}
+
+.download-binary-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.download-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+/* Download Guide Hint */
+.download-guide-hint {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.download-guide-hint:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: var(--text);
+}
+
+.download-guide-hint .mobile-br { display: none; }
+
+.download-guide-hint-link {
+    color: var(--primary-light);
+    font-weight: 600;
+}
+
+.download-guide-hint svg:last-child {
+    flex-shrink: 0;
+    color: var(--primary-light);
+    transition: transform 0.2s;
+}
+
+.download-guide-hint:hover svg:last-child {
+    transform: translateX(3px);
+}
+
+/* Store Guide Link (per-badge) */
+.store-guide-link {
+    width: 100%;
+    height: 56px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(99, 102, 241, 0.35);
+    background: rgba(99, 102, 241, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    color: var(--primary-light);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    transition: all 0.2s;
+    animation: guideGlow 2.5s ease-in-out infinite;
+}
+
+.store-guide-link small {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.store-guide-link span {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+@keyframes guideGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+    50% { box-shadow: 0 0 12px 2px rgba(99, 102, 241, 0.25); }
+}
+
+.store-guide-link:hover {
+    background: rgba(99, 102, 241, 0.18);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: var(--text);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+    animation: none;
+}
+
+.store-guide-link:hover small {
+    opacity: 1;
+}
+
+/* Platform Popup Modal */
+.platform-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.platform-popup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.platform-popup {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px 24px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s;
+    position: relative;
+}
+
+.platform-popup-overlay.active .platform-popup {
+    transform: scale(1) translateY(0);
+}
+
+.platform-popup-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.platform-popup-close:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.platform-popup-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--gradient-1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+.platform-popup-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+}
+
+.platform-popup h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.platform-popup-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+}
+
+.platform-popup-version {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--success);
+    margin-bottom: 0;
+}
+
+.platform-popup-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.platform-popup-footer-sep {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+.platform-popup-footer .platform-popup-btn-secondary {
+    padding: 0;
+    font-size: 0.85rem;
+}
+
+.platform-popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.platform-popup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.platform-popup-btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.platform-popup-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.platform-popup-btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.platform-popup-btn-secondary:hover {
+    color: var(--text);
+}
+
+.platform-popup-btn-guide {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: rgba(99, 102, 241, 0.06);
+    color: var(--text-muted);
+    text-align: center;
+    white-space: normal;
+}
+
+.platform-popup-btn-guide .mobile-br { display: none; }
+@media (max-width: 480px) {
+    .platform-popup-btn-guide .mobile-br { display: block; }
+}
+
+.platform-popup-btn-guide:hover {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: var(--text);
+}
+
+.platform-popup-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.platform-popup-badge-link {
+    display: flex;
+    justify-content: center;
+}
+
+.platform-popup-badge {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.platform-popup-badge:hover {
+    transform: scale(1.02);
+}
+
+.platform-popup-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin: 4px 0;
+}
+
+.platform-popup-divider::before,
+.platform-popup-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+@media (max-width: 768px) {
+    /* Platform popup - mobile bottom sheet style */
+    .platform-popup-overlay {
+        padding: 0.5rem;
+        align-items: flex-end;
+    }
+    .platform-popup {
+        border-radius: 24px 24px 0 0;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+    }
+    .platform-popup-close {
+        top: 12px;
+        right: 12px;
+    }
+    .platform-popup-actions {
+        gap: 10px;
+    }
+    .platform-popup-btn {
+        padding: 14px 20px;
+        font-size: 0.9rem;
+    }
+    .platform-popup-btn-guide {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .platform-popup-overlay { padding: 0; }
+    .platform-popup { padding: 24px; border-radius: 0; max-height: 100vh; }
+    .platform-popup h3 { font-size: 1.25rem; }
+    .platform-popup-icon { width: 64px; height: 64px; }
+    .platform-popup-icon svg { width: 32px; height: 32px; }
+}
+
+@media (max-width: 900px) {
+    .pricing-card { flex: 0 0 calc((100% - 24px) / 2); }
+    .affiliate-benefits { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .affiliate-benefit-value { font-size: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    nav .lang-switcher { display: none; }
+    nav .theme-toggle.desktop-only { display: none; }
+    nav .container { padding: 0 16px; }
+    .logo { font-size: 1.25rem; }
+    .hero { padding: 100px 0 60px; min-height: auto; }
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 1rem; margin-bottom: 32px; }
+    section { padding: 60px 0; }
+    .section-header { margin-bottom: 40px; }
+    .section-header h2 { font-size: 1.75rem; }
+    .container { padding: 0 16px; }
+    .pricing-container { flex-direction: column; gap: 16px; }
+    .pricing-nav { display: none; }
+    .pricing-wrapper { overflow-x: auto; overflow-y: visible; width: 100%; padding: 16px 0; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+    .pricing-wrapper::-webkit-scrollbar { display: none; }
+    .pricing-grid { display: flex; flex-direction: row; gap: 16px; padding: 0 4px; }
+    .pricing-card { flex: 0 0 calc(100% - 32px); min-width: calc(100% - 32px); padding: 24px; padding-top: 32px; text-align: center; scroll-snap-align: center; }
+    .pricing-card .pricing-features li { justify-content: center; }
+    .pricing-dots { display: flex !important; }
+    /* Servers - horizontal scroll */
+    .servers-grid { display: flex; overflow-x: auto; gap: 12px; padding: 8px 4px; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+    .servers-grid::-webkit-scrollbar { display: none; }
+    .server-card { flex: 0 0 160px; min-width: 160px; scroll-snap-align: start; padding: 16px; }
+    .server-flag { font-size: 1.5rem; }
+    .server-info h4 { font-size: 0.9rem; }
+    .server-info p { font-size: 0.75rem; }
+    /* Bonuses - horizontal scroll */
+    .bonus-grid { display: flex; overflow-x: auto; gap: 16px; padding: 8px 4px; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+    .bonus-grid::-webkit-scrollbar { display: none; }
+    .bonus-card { flex: 0 0 calc(85% - 8px); min-width: calc(85% - 8px); scroll-snap-align: center; padding: 24px; }
+    .bonus-value { font-size: 1.75rem; }
+    /* Affiliate - optimized */
+    .affiliate-hero { padding: 24px 16px; border-radius: 16px; }
+    .affiliate-hero h3 { font-size: 1.5rem; }
+    .affiliate-hero p { font-size: 0.95rem; margin-bottom: 24px; }
+    .affiliate-benefits { display: flex; overflow-x: auto; gap: 16px; padding: 8px 0; margin-bottom: 24px; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+    .affiliate-benefits::-webkit-scrollbar { display: none; }
+    .affiliate-benefit { flex: 0 0 auto; min-width: 120px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; }
+    .affiliate-benefit-value { font-size: 1.75rem; }
+    .affiliate-benefit-label { font-size: 0.8rem; }
+    .affiliate-tiers-row { gap: 6px; }
+    .affiliate-tier-badge { padding: 8px 12px; font-size: 0.8rem; }
+    .legal-tabs { flex-wrap: wrap; gap: 8px; }
+    .legal-tab { padding: 10px 16px; font-size: 0.85rem; flex: 1; min-width: 120px; text-align: center; }
+    .legal-content { padding: 24px; max-height: 400px; }
+    footer { padding: 40px 0 20px; }
+    .footer-content { grid-template-columns: 1fr !important; text-align: center; gap: 32px; }
+    .footer-brand p { max-width: 100%; }
+    .btn { width: 100%; max-width: 300px; }
+    .hero div[style*="display:flex"] { flex-direction: column; align-items: center; gap: 12px !important; }
+    /* Download stores - horizontal on mobile, badge + guide link side by side */
+    .download-stores-grid { flex-direction: column; gap: 12px; align-items: stretch; }
+    .download-store-item { width: 100%; flex-direction: row; justify-content: center; gap: 12px; }
+    .download-store-badge { height: 44px; width: auto; }
+    .download-store-item > a:first-child { width: auto; }
+    .download-store-item { flex: none; }
+    .store-guide-link { width: 171px; height: 44px; }
+    .store-guide-link small { font-size: 0.55rem; }
+    .store-guide-link span { font-size: 0.8rem; }
+    .download-guide-hint { font-size: 0.85rem; padding: 10px 16px; flex-wrap: wrap; }
+    .download-guide-hint .mobile-br { display: block; }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { font-size: 1.75rem; }
+    .section-header h2 { font-size: 1.5rem; }
+}
+
+/* Language Switcher */
+.lang-switcher {
+    position: relative;
+    display: inline-block;
+}
+
+.lang-switcher-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.lang-switcher-toggle:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+}
+
+.lang-switcher-toggle svg {
+    transition: transform 0.2s;
+}
+
+.lang-switcher.open .lang-switcher-toggle svg {
+    transform: rotate(180deg);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 8px;
+    min-width: 190px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    backdrop-filter: blur(20px);
+}
+
+.lang-switcher.open .lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lang-option {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.lang-option:hover {
+    background: var(--bg-card-hover);
+    color: var(--text);
+}
+
+.lang-option.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-light);
+}
+
+/* RTL Support */
+html[dir="rtl"] {
+    direction: rtl;
+}
+
+html[dir="rtl"] .nav-links {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .lang-dropdown {
+    right: auto;
+    left: 0;
+}
+
+html[dir="rtl"] .lang-option {
+    text-align: right;
+}
+
+html[dir="rtl"] .feature-card,
+html[dir="rtl"] .pricing-card,
+html[dir="rtl"] .bonus-card,
+html[dir="rtl"] .server-card {
+    text-align: right;
+}
+
+html[dir="rtl"] .pricing-features li {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .server-card {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .download-card-header {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .download-guide-hint svg:last-child {
+    transform: scaleX(-1);
+}
+
+html[dir="rtl"] .download-guide-hint:hover svg:last-child {
+    transform: scaleX(-1) translateX(3px);
+}
+
+html[dir="rtl"] .footer-content {
+    direction: rtl;
+}
+
+html[dir="rtl"] .footer-links {
+    text-align: right;
+}
+
+html[dir="rtl"] .affiliate-hero,
+html[dir="rtl"] .legal-content {
+    text-align: right;
+}
+
+html[dir="rtl"] .guide-substeps li { padding-left: 0; padding-right: 3.2em; }
+html[dir="rtl"] .guide-substeps li::before { left: auto; right: 0; }
+
+@media (max-width: 768px) {
+    html[dir="rtl"] .footer-content,
+    html[dir="rtl"] .footer-links,
+    html[dir="rtl"] .affiliate-hero {
+        text-align: center;
+    }
+}
+
+/* Account Guide Section */
+#account-guide {
+    background: var(--bg-dark);
+}
+
+/* Platform Selector Cards */
+.platform-selector {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.platform-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 24px;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: var(--text-muted);
+    flex: 1;
+    min-width: 0;
+}
+
+.platform-card:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+}
+
+.platform-card.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--text);
+    box-shadow: 0 0 0 1px var(--primary), 0 8px 24px rgba(99, 102, 241, 0.15);
+}
+
+.platform-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card-hover);
+    flex-shrink: 0;
+    transition: all 0.25s;
+}
+
+.platform-card.active .platform-card-icon {
+    background: var(--gradient-1);
+    color: white;
+}
+
+.platform-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+}
+
+.platform-card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.platform-card-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+/* Platform Content Panels */
+.guide-platform-content {
+    display: none;
+}
+
+.guide-platform-content.active {
+    display: block;
+    animation: guideFadeIn 0.3s ease;
+}
+
+@keyframes guideFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Region Tabs (Apple) */
+.guide-region-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    justify-content: center;
+}
+
+.guide-region-tab {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.guide-region-tab:hover { border-color: var(--primary); color: var(--text); }
+.guide-region-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+/* Region Content */
+.guide-region-content {
+    display: none;
+}
+
+.guide-region-content.active {
+    display: block;
+}
+
+/* Guide Content */
+.guide-content {
+    margin: 0 auto;
+}
+
+/* Step Cards */
+.guide-step {
+    display: flex;
+    gap: 20px;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+}
+
+.guide-step:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+}
+
+.guide-step-number {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.guide-step-body h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.guide-step-body p {
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.7;
+}
+
+.guide-substeps {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+    counter-reset: substep;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.guide-substeps li {
+    counter-increment: substep;
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.7;
+    padding-left: 3.2em;
+    position: relative;
+}
+.guide-substeps li::before {
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: var(--primary-light);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    min-width: 2.8em;
+}
+.guide-substeps[data-step="1"] li::before { content: "1." counter(substep); }
+.guide-substeps[data-step="2"] li::before { content: "2." counter(substep); }
+.guide-substeps[data-step="3"] li::before { content: "3." counter(substep); }
+.guide-substeps[data-step="4"] li::before { content: "4." counter(substep); }
+.guide-substeps[data-step="5"] li::before { content: "5." counter(substep); }
+
+/* Tip Box */
+.guide-tip {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.guide-tip-icon {
+    flex-shrink: 0;
+    color: var(--primary-light);
+    margin-top: 1px;
+}
+
+.guide-tip p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* FAQ */
+.guide-faq {
+    margin-top: 36px;
+}
+
+.guide-faq > h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.guide-faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.guide-faq-question {
+    width: 100%;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 0.93rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+    transition: color 0.2s;
+}
+
+.guide-faq-question:hover {
+    color: var(--primary-light);
+}
+
+.guide-faq-question svg {
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+.guide-faq-item.open .guide-faq-question svg {
+    transform: rotate(180deg);
+}
+
+.guide-faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.guide-faq-item.open .guide-faq-answer {
+    max-height: 200px;
+}
+
+.guide-faq-answer p {
+    padding: 0 20px 16px;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+/* RTL Support */
+html[dir="rtl"] .guide-step {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .guide-faq-question {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .guide-faq-answer p {
+    text-align: right;
+}
+
+html[dir="rtl"] .platform-card {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .platform-card-info {
+    text-align: right;
+}
+
+html[dir="rtl"] .guide-tip {
+    flex-direction: row-reverse;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .platform-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .platform-card {
+        min-width: unset;
+        padding: 14px 18px;
+    }
+    .platform-card-icon {
+        width: 42px;
+        height: 42px;
+    }
+    .platform-card-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+    .guide-step {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+    }
+    .guide-step-number {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    html[dir="rtl"] .guide-step {
+        flex-direction: column;
+    }
+    .guide-region-tabs { flex-wrap: wrap; gap: 8px; }
+    .guide-region-tab { padding: 10px 16px; font-size: 0.85rem; flex: 1; min-width: 100px; text-align: center; }
+    .guide-tip {
+        flex-direction: column;
+        gap: 10px;
+    }
+    html[dir="rtl"] .guide-tip {
+        flex-direction: column;
+    }
+    .guide-substeps li { padding-left: 2.8em; }
+    html[dir="rtl"] .guide-substeps li { padding-left: 0; padding-right: 2.8em; }
+}
+    </style>
+</head>
+<body>
+    <!-- Platform Detection Popup -->
+    <div class="platform-popup-overlay" id="platform-popup">
+        <div class="platform-popup">
+            <button class="platform-popup-close" id="popup-close" aria-label="Close">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="platform-popup-icon" id="popup-icon"></div>
+            <h3 id="popup-title">Download for Your Device</h3>
+            <p class="platform-popup-subtitle" id="popup-subtitle">Get the app optimized for your platform</p>
+            <div class="platform-popup-version" id="popup-version"></div>
+            <div class="platform-popup-actions" id="popup-actions"></div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="container">
+            <a href="{{ROOM_HASH}}.html" class="logo"><img src="{{ROOM_LOGO}}" alt="{{ROOM_NAME}}" style="height:28px;width:28px;border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:8px;" onerror="this.style.display='none'">{{ROOM_NAME}}</a>
+            <ul class="nav-links">
+                <li><a href="#download" data-i18n="nav.download">Download</a></li>
+                <li><a href="#pricing" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="#servers" data-i18n="nav.infrastructure">Infrastructure</a></li>
+                <li><a href="#bonuses" data-i18n="nav.bonuses">Bonuses</a></li>
+                <li><a href="#affiliate" data-i18n="nav.affiliate">Affiliate</a></li>
+                <li><a href="#account-guide" data-i18n="nav.guide">Guide</a></li>
+                <li><a href="#legal" data-i18n="nav.legal">Legal</a></li>
+            </ul>
+            <div class="nav-actions">
+            <a href="#pricing" class="nav-cta" data-i18n="nav.getStarted">Get Started</a>
+            <div class="lang-switcher">
+                <button class="lang-switcher-toggle" aria-label="Select language">
+                    <span class="lang-switcher-current">English</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="lang-dropdown">
+                    <button class="lang-option active" data-locale="en">English</button>
+                    <button class="lang-option" data-locale="zh">中文</button>
+                    <button class="lang-option" data-locale="hi">हिन्दी</button>
+                    <button class="lang-option" data-locale="id">Bahasa Indonesia</button>
+                    <button class="lang-option" data-locale="ms">Bahasa Melayu</button>
+                    <button class="lang-option" data-locale="ru">Русский</button>
+                    <button class="lang-option" data-locale="tr">Türkçe</button>
+                    <button class="lang-option" data-locale="ar">العربية</button>
+                    <button class="lang-option" data-locale="fa">فارسی</button>
+                </div>
+            </div>
+            <button class="theme-toggle desktop-only" id="theme-toggle" aria-label="Toggle theme">
+                <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+            </div>
+            <div class="mobile-nav-actions">
+            <button class="theme-toggle mobile-only" id="theme-toggle-nav" aria-label="Toggle theme">
+                <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+            <button class="mobile-menu-btn" id="mobile-menu-btn" data-i18n-aria="nav.menu" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="index.html" class="mobile-menu-link" data-i18n="nav.allSolutions">← All Solutions</a>
+        <a href="#download" class="mobile-menu-link" data-i18n="nav.download">Download</a>
+        <a href="#pricing" class="mobile-menu-link" data-i18n="nav.pricing">Pricing</a>
+        <a href="#servers" class="mobile-menu-link" data-i18n="nav.infrastructure">Infrastructure</a>
+        <a href="#bonuses" class="mobile-menu-link" data-i18n="nav.bonuses">Bonuses</a>
+        <a href="#affiliate" class="mobile-menu-link" data-i18n="nav.affiliate">Affiliate</a>
+        <a href="#account-guide" class="mobile-menu-link" data-i18n="nav.guide">Guide</a>
+        <a href="#legal" class="mobile-menu-link" data-i18n="nav.legal">Legal</a>
+        <!-- Mobile Language Switcher -->
+        <div class="lang-switcher">
+            <button class="lang-switcher-toggle" aria-label="Select language">
+                <span class="lang-switcher-current">English</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="lang-dropdown">
+                <button class="lang-option active" data-locale="en">English</button>
+                <button class="lang-option" data-locale="zh">中文</button>
+                <button class="lang-option" data-locale="hi">हिन्दी</button>
+                <button class="lang-option" data-locale="id">Bahasa Indonesia</button>
+                <button class="lang-option" data-locale="ms">Bahasa Melayu</button>
+                <button class="lang-option" data-locale="ru">Русский</button>
+                <button class="lang-option" data-locale="tr">Türkçe</button>
+                <button class="lang-option" data-locale="ar">العربية</button>
+                <button class="lang-option" data-locale="fa">فارسی</button>
+            </div>
+        </div>
+        <a href="#pricing" class="mobile-cta mobile-menu-link" data-i18n="nav.getStarted">Get Started</a>
+    </div>
+
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <section class="hero">
+        <div class="hero-aurora" aria-hidden="true">
+            <div class="aurora-blob aurora-blob-1"></div>
+            <div class="aurora-blob aurora-blob-2"></div>
+            <div class="aurora-blob aurora-blob-3"></div>
+        </div>
+        <div class="container">
+            <div class="hero-badge"><span data-i18n="appHero.badge">Privacy Protection</span></div>
+            <div style="margin-bottom:24px;"><img src="{{ROOM_LOGO}}" alt="{{ROOM_NAME}}" style="width:80px;height:80px;border-radius:20px;object-fit:cover;box-shadow:0 4px 16px rgba(99,102,241,0.15);" onerror="this.parentElement.style.display='none'"></div>
+            <h1>{{ROOM_NAME}}</h1>
+            <p data-i18n="appHero.description">Advanced privacy protection with end-to-end encryption, zero data logging, and global infrastructure. Take control of your digital privacy.</p>
+            <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                <a href="#pricing" class="btn btn-primary" data-i18n="appHero.viewPlans">View Plans</a>
+                <a href="index.html" class="btn btn-secondary" data-i18n="nav.allSolutions">← All Solutions</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="download">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="download.title">Download App</h2>
+                <p data-i18n="download.description">Get the app for your device. Choose your platform below.</p>
+            </div>
+            <div class="download-content">
+                <div class="download-stores">
+                    <div class="download-section-title" data-i18n="download.appStores">INSTALL FROM APP STORE(Official)</div>
+                    <div class="download-stores-grid">{{STORES}}</div>
+                    <a href="#account-guide" class="download-guide-hint" id="download-guide-hint">
+                        <span class="guide-hint-text"><span data-i18n="download.guideHint.apple" id="guide-hint-text">Need a region account to access the App Store?</span> <br class="mobile-br"><span class="download-guide-hint-link" data-i18n="download.guideLink.apple" id="guide-link-text">International Apple ID Setup Guide</span></span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+                <div class="download-binaries" id="download-binaries">
+                    <div class="download-section-title" data-i18n="download.directDownload">Download and Install Manually(Optional)</div>
+                    <div class="download-binaries-grid">{{BINARIES}}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="pricing.title">Simple, Transparent Pricing</h2>
+                <p data-i18n="pricing.description">Choose the plan that works best for you. All plans include full access.</p>
+            </div>
+            <div class="pricing-container">
+                <button class="pricing-nav" id="pricing-prev" data-i18n-aria="pricing.previous" aria-label="Previous">&lt;</button>
+                <div class="pricing-wrapper">
+                    <div id="pricing-grid" class="pricing-grid">{{PRICING}}</div>
+                </div>
+                <button class="pricing-nav" id="pricing-next" data-i18n-aria="pricing.next" aria-label="Next">&gt;</button>
+            </div>
+            <div class="pricing-dots" id="pricing-dots"></div>
+        </div>
+    </section>
+
+    <section id="servers">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="servers.title">Global Infrastructure</h2>
+                <p data-i18n="servers.description">Privacy protection nodes distributed worldwide for optimal performance.</p>
+            </div>
+            <div class="servers-grid">{{SERVERS}}</div>
+        </div>
+    </section>
+
+    <section id="bonuses">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="bonuses.title">Exclusive Bonuses</h2>
+                <p data-i18n="bonuses.description">Get rewarded for joining and sharing with friends.</p>
+            </div>
+            <div class="bonus-grid">{{BONUSES}}</div>
+        </div>
+    </section>
+
+    <section id="affiliate">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="affiliate.title">Affiliate Program</h2>
+                <p data-i18n="affiliate.description">Join our partner network and grow with us.</p>
+            </div>
+            <div class="affiliate-content">{{AFFILIATE}}</div>
+        </div>
+    </section>
+
+    <section id="account-guide"></section>
+
+    <section id="legal">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="legal.title">Legal Information</h2>
+                <p data-i18n="legal.description">Transparency is important to us.</p>
+            </div>
+            <div class="legal-tabs">
+                <button class="legal-tab active" data-tab="agreement" data-i18n="legal.userAgreement">User Agreement</button>
+                <button class="legal-tab" data-tab="privacy" data-i18n="legal.privacyPolicy">Privacy Policy</button>
+            </div>
+            <div class="legal-content">
+                <div id="legal-agreement">{{LEGAL_AGREEMENT}}</div>
+                <div id="legal-privacy" class="hidden">{{LEGAL_PRIVACY}}</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" data-i18n="footer.brand">Root Corporation</a>
+                    <p style="margin-top: 16px;" data-i18n="footer.brandDescription">Protect your digital privacy with our advanced privacy protection services. Trusted by users worldwide.</p>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.solutions">Solutions</h4>
+                    <ul>{{FOOTER_APPS}}</ul>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+                        <li><a href="#account-guide" data-i18n="nav.guide">Guide</a></li>
+                        <li><a href="#legal" data-i18n="nav.legal">Legal</a></li>
+                        <li><a href="index.html#contact" data-i18n="footer.support">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.download">Download</h4>
+                    <ul class="footer-platforms">
+                        <li><a href="#download" class="footer-platform-link"><svg viewBox="-3 -3 30 30" fill="currentColor" width="16" height="16"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg><span data-i18n="download.windows.name">Windows</span></a></li>
+                        <li><a href="#download" class="footer-platform-link"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 0 0 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg><span data-i18n="download.android.name">Android</span></a></li>
+                        <li><a href="#download" class="footer-platform-link"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg><span data-i18n="download.apple.name">Apple</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.contactUs">Contact Us</h4>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem;">
+                        <li style="padding: 6px 0;"><a href="mailto:developer@root-corporation.com">developer@root-corporation.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border); padding-top: 30px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <p style="color: var(--text-dim); font-size: 0.85rem;" data-i18n="footer.copyright">&copy; 2025 Root Corporation Pty Ltd. All rights reserved.</p>
+                <p style="color: var(--text-dim); font-size: 0.85rem;" data-i18n="footer.abn">ABN 34 686 229 532 · Australia</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+let currentProductIndex = 0;
+
+function isMobile() { return window.innerWidth <= 768; }
+
+function updatePricingDots() {
+    const dots = document.querySelectorAll('.pricing-dot');
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentProductIndex);
+    });
+}
+
+function updatePricingCarousel() {
+    const grid = document.getElementById('pricing-grid');
+    const cards = grid.querySelectorAll('.pricing-card');
+    if (!cards.length) return;
+    if (isMobile()) {
+        grid.style.transform = `translateX(-${currentProductIndex * 100}%)`;
+    } else {
+        const cardWidth = cards[0].offsetWidth;
+        grid.style.transform = `translateX(-${(cardWidth + 24) * currentProductIndex}px)`;
+    }
+    updatePricingDots();
+}
+
+function goToSlide(index) {
+    const grid = document.getElementById('pricing-grid');
+    const cards = grid.querySelectorAll('.pricing-card');
+    const maxIndex = isMobile() ? cards.length - 1 : Math.max(0, cards.length - 3);
+    currentProductIndex = Math.max(0, Math.min(index, maxIndex));
+    updatePricingCarousel();
+}
+
+function setupPricingNavigation() {
+    const grid = document.getElementById('pricing-grid');
+    const cards = grid.querySelectorAll('.pricing-card');
+    const prevBtn = document.getElementById('pricing-prev');
+    const nextBtn = document.getElementById('pricing-next');
+    const dotsContainer = document.getElementById('pricing-dots');
+    if (!cards.length) return;
+
+    // Generate dots
+    dotsContainer.innerHTML = '';
+    cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'pricing-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentProductIndex > 0) { currentProductIndex--; updatePricingCarousel(); }
+    });
+    nextBtn.addEventListener('click', () => {
+        const visibleCount = isMobile() ? 1 : 3;
+        const maxIndex = Math.max(0, cards.length - visibleCount);
+        if (currentProductIndex < maxIndex) { currentProductIndex++; updatePricingCarousel(); }
+    });
+
+    // Swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const wrapper = document.querySelector('.pricing-wrapper');
+    wrapper.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    wrapper.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0 && currentProductIndex < cards.length - 1) { currentProductIndex++; updatePricingCarousel(); }
+            else if (diff < 0 && currentProductIndex > 0) { currentProductIndex--; updatePricingCarousel(); }
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', updatePricingCarousel);
+}
+
+function setupGuideTabs() {
+    // Platform switching
+    document.querySelectorAll('.platform-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.platform-card').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const platform = btn.dataset.platform;
+            document.querySelectorAll('.guide-platform-content').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'guide-' + platform);
+            });
+        });
+    });
+    // Region tabs within each platform guide (scoped per platform)
+    document.querySelectorAll('.guide-platform-content').forEach(platform => {
+        platform.querySelectorAll('.guide-region-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                platform.querySelectorAll('.guide-region-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const region = btn.dataset.region;
+                platform.querySelectorAll('.guide-region-content').forEach(el => {
+                    el.classList.toggle('active', el.getAttribute('data-region-content') === region);
+                });
+            });
+        });
+    });
+}
+
+function setupLegalTabs() {
+    document.querySelectorAll('.legal-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.legal-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById('legal-agreement')?.classList.toggle('hidden', tab !== 'agreement');
+            document.getElementById('legal-privacy')?.classList.toggle('hidden', tab !== 'privacy');
+        });
+    });
+}
+
+function setupMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+        const isOpen = menu.classList.contains('active');
+        menu.classList.toggle('active', !isOpen);
+        document.body.style.overflow = isOpen ? '' : 'hidden';
+    });
+    menu.addEventListener('click', (e) => {
+        if (e.target.classList.contains('mobile-menu-link')) {
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
+// Download Section
+const ROOM_HASH = '{{ROOM_HASH}}';
+const ROOM_NAME = '{{ROOM_NAME}}';
+const API_BASE = '{{API_BASE}}';
+const EMBEDDED_PACKAGES = JSON.parse("{{PACKAGES_JSON}}" || "[]");
+
+const platformConfig = {
+    windows: {
+        name: 'Windows',
+        icon: `<svg viewBox="-3 -3 30 30" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>`,
+        badge: 'assets/badges/windows.svg',
+        storeLabel: 'Microsoft Store',
+        directLabel: 'Download Now'
+    },
+    android: {
+        name: 'Android',
+        icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 0 0 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>`,
+        badge: 'assets/badges/android.svg',
+        storeLabel: 'Google Play',
+        directLabel: 'Download Now'
+    },
+    apple: {
+        name: 'Apple',
+        icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>`,
+        badge: 'assets/badges/apple.svg',
+        storeLabel: 'App Store',
+        directLabel: 'Download Now'
+    }
+};
+
+// Platform Detection
+function detectPlatform() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Android detection
+    if (/android/i.test(ua)) {
+        return 'android';
+    }
+
+    // iOS detection
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+        return 'apple';
+    }
+
+    // Windows detection
+    if (/Win/.test(navigator.platform) || /Windows/.test(ua)) {
+        return 'windows';
+    }
+
+    // macOS detection
+    if (/Mac/.test(navigator.platform)) {
+        return 'apple';
+    }
+
+    // Linux detection
+    if (/Linux/.test(navigator.platform)) {
+        return 'linux';
+    }
+
+    return null;
+}
+
+// Navigate to account guide with correct platform tab
+function navigateToGuide(platform) {
+    closePlatformPopup();
+    document.querySelectorAll('.platform-card').forEach(function(b) { b.classList.remove('active'); });
+    var targetBtn = document.querySelector('.platform-card[data-platform="' + platform + '"]');
+    if (targetBtn) {
+        targetBtn.classList.add('active');
+        document.querySelectorAll('.guide-platform-content').forEach(function(p) {
+            p.classList.toggle('active', p.id === 'guide-' + platform);
+        });
+    }
+    var el = document.getElementById('account-guide');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Popup Management
+const POPUP_DISMISSED_KEY = 'platform_popup_dismissed';
+let detectedPackage = null;
+
+function hasPopupBeenDismissed() {
+    try {
+        const dismissed = sessionStorage.getItem(POPUP_DISMISSED_KEY);
+        return dismissed === 'true';
+    } catch {
+        return false;
+    }
+}
+
+function setPopupDismissed() {
+    try {
+        sessionStorage.setItem(POPUP_DISMISSED_KEY, 'true');
+    } catch {
+        // Session storage not available
+    }
+}
+
+function showPlatformPopup(pkg) {
+    const config = platformConfig[pkg.platform];
+    if (!config) return;
+
+    const popup = document.getElementById('platform-popup');
+    const iconEl = document.getElementById('popup-icon');
+    const titleEl = document.getElementById('popup-title');
+    const subtitleEl = document.getElementById('popup-subtitle');
+    const versionEl = document.getElementById('popup-version');
+    const actionsEl = document.getElementById('popup-actions');
+
+    // Set icon
+    iconEl.innerHTML = config.icon;
+
+    // Set title
+    var platformName = I18n.t('download.' + pkg.platform + '.name');
+    titleEl.textContent = I18n.t('download.popupTitle', { app: ROOM_NAME, platform: platformName });
+
+    // Set subtitle
+    subtitleEl.innerHTML = I18n.t('download.popupSubtitle', { platform: platformName });
+
+    // Hide static version element (moved into actions)
+    versionEl.style.display = 'none';
+
+    // Build actions
+    const hasStore = pkg.store && pkg.store.trim() !== '';
+    const hasLink = pkg.link && pkg.link.trim() !== '';
+
+    let actionsHTML = '';
+
+    // 1. Hint
+    actionsHTML += `
+        <a href="#account-guide" class="platform-popup-btn-guide" onclick="navigateToGuide('${pkg.platform}')">
+            <span class="guide-hint-text">${I18n.t('download.guideHint.' + pkg.platform)}<br><span style="color:var(--primary-light);font-weight:600;">${I18n.t('download.guideLink.' + pkg.platform)}</span></span>
+        </a>`;
+
+    // 2. Store
+    if (hasStore) {
+        actionsHTML += `
+            <a href="${pkg.store}" target="_blank" rel="noopener noreferrer" class="platform-popup-badge-link" onclick="setPopupDismissed()">
+                <img src="${config.badge}" alt="Get it on ${config.storeLabel}" class="platform-popup-badge">
+            </a>
+        `;
+    }
+
+    if (hasStore && hasLink) {
+        actionsHTML += '<div class="platform-popup-divider">' + I18n.t('download.popupOrDirect') + '</div>';
+    }
+
+    if (hasLink) {
+        actionsHTML += `
+            <a href="${pkg.link}" target="_blank" rel="noopener noreferrer" class="platform-popup-btn platform-popup-btn-primary" onclick="setPopupDismissed()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                ${I18n.t('download.downloadNow')}
+            </a>
+        `;
+    }
+
+    // 3. Version | Browse all platforms
+    actionsHTML += `
+        <div class="platform-popup-footer">
+            <span class="platform-popup-version"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${I18n.t('download.popupVersion', { version: pkg.version })}</span>
+            <span class="platform-popup-footer-sep">|</span>
+            <button class="platform-popup-btn platform-popup-btn-secondary" onclick="closePlatformPopup()">${I18n.t('download.popupBrowseAll')}</button>
+        </div>
+    `;
+
+    actionsEl.innerHTML = actionsHTML;
+
+    // Show popup
+    popup.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePlatformPopup() {
+    const popup = document.getElementById('platform-popup');
+    popup.classList.remove('active');
+    document.body.style.overflow = '';
+    setPopupDismissed();
+}
+
+function setupPopupListeners() {
+    const popup = document.getElementById('platform-popup');
+    const closeBtn = document.getElementById('popup-close');
+
+    closeBtn.addEventListener('click', closePlatformPopup);
+
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            closePlatformPopup();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popup.classList.contains('active')) {
+            closePlatformPopup();
+        }
+    });
+}
+
+function checkAndShowPopup(packages) {
+    if (hasPopupBeenDismissed()) return;
+    if (!packages || packages.length === 0) return;
+
+    const userPlatform = detectPlatform();
+    if (!userPlatform) return;
+
+    // Find matching package for user's platform
+    const matchingPkg = packages.find(pkg => pkg.platform === userPlatform);
+    if (!matchingPkg) return;
+
+    // Small delay for better UX
+    setTimeout(() => {
+        showPlatformPopup(matchingPkg);
+    }, 800);
+}
+
+function createDownloadCard(pkg) {
+    const config = platformConfig[pkg.platform];
+    if (!config) return '';
+
+    const hasStore = pkg.store && pkg.store.trim() !== '';
+    const hasLink = pkg.link && pkg.link.trim() !== '';
+    const storeOnlyClass = hasStore && !hasLink ? ' store-only' : '';
+
+    return `
+        <div class="download-card${storeOnlyClass}">
+            <div class="download-card-header">
+                <div class="download-platform-icon">${config.icon}</div>
+                <div class="download-platform-info">
+                    <h3>${config.name}</h3>
+                    <div class="download-version">
+                        <span class="download-version-badge">v${pkg.version}</span>
+                        <span>Latest</span>
+                    </div>
+                </div>
+            </div>
+            <div class="download-options">
+                ${hasStore ? `
+                    <a href="${pkg.store}" target="_blank" rel="noopener noreferrer" class="download-badge-link">
+                        <img src="${config.badge}" alt="Get it on ${config.storeLabel}" class="download-btn-badge">
+                    </a>
+                ` : ''}
+                ${hasStore && hasLink ? '<div class="download-divider">or</div>' : ''}
+                ${hasLink ? `
+                    <a href="${pkg.link}" class="download-btn download-btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        ${config.directLabel}
+                    </a>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+function renderDownloads(packages) {
+    const container = document.getElementById('download-content');
+    if (!packages || packages.length === 0) {
+        container.innerHTML = `
+            <div class="download-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin: 0 auto 16px; color: var(--text-dim);">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p>No downloads available at this time.</p>
+            </div>
+        `;
+        return;
+    }
+    container.innerHTML = packages.map(pkg => createDownloadCard(pkg)).join('');
+
+    // Check if we should show platform popup
+    checkAndShowPopup(packages);
+}
+
+function renderDownloadError(message) {
+    const container = document.getElementById('download-content');
+    container.innerHTML = `
+        <div class="download-error">
+            <svg class="download-error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <p>${message || 'Unable to load downloads. Please try again later.'}</p>
+        </div>
+    `;
+}
+
+function initDownloads() {
+    // Use embedded packages data (pre-rendered by CI)
+    // The HTML is already rendered, just need to trigger popup check
+    if (EMBEDDED_PACKAGES && EMBEDDED_PACKAGES.length > 0) {
+        checkAndShowPopup(EMBEDDED_PACKAGES);
+    }
+}
+
+function setupGuideHint() {
+    var platform = detectPlatform();
+    if (!platform || (platform !== 'apple' && platform !== 'android' && platform !== 'windows')) platform = 'apple';
+    var hintEl = document.getElementById('guide-hint-text');
+    var linkEl = document.getElementById('guide-link-text');
+    var bannerEl = document.getElementById('download-guide-hint');
+    if (hintEl) {
+        hintEl.setAttribute('data-i18n', 'download.guideHint.' + platform);
+        hintEl.textContent = I18n.t('download.guideHint.' + platform);
+    }
+    if (linkEl) {
+        linkEl.setAttribute('data-i18n', 'download.guideLink.' + platform);
+        linkEl.textContent = I18n.t('download.guideLink.' + platform);
+    }
+    if (bannerEl) {
+        bannerEl.onclick = function(e) { e.preventDefault(); navigateToGuide(platform); };
+    }
+}
+
+// Scroll reveal
+function setupScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// Nav scroll effect
+function setupNavScroll() {
+    const nav = document.querySelector('nav');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                nav.classList.toggle('scrolled', window.scrollY > 50);
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupPricingNavigation();
+    setupLegalTabs();
+    setupMobileMenu();
+    setupScrollReveal();
+    setupNavScroll();
+    setupPopupListeners();
+    initDownloads();
+    document.addEventListener('i18n:localeChanged', setupGuideHint);
+
+    // Load guide.html at runtime so it stays in sync with the source file
+    fetch('assets/guide.html').then(r => r.text()).then(html => {
+        document.getElementById('account-guide').innerHTML = html;
+        setupGuideTabs();
+        if (window.I18n) I18n.translatePage();
+        setupGuideHint();
+    });
+});
+    </script>
+
+    <!-- i18n Scripts -->
+    <script src="assets/i18n.js"></script>
+    <script src="assets/locales/en.js"></script>
+    <script src="assets/locales/zh.js"></script>
+    <script src="assets/locales/hi.js"></script>
+    <script src="assets/locales/id.js"></script>
+    <script src="assets/locales/ms.js"></script>
+    <script src="assets/locales/ru.js"></script>
+    <script src="assets/locales/tr.js"></script>
+    <script src="assets/locales/ar.js"></script>
+    <script src="assets/locales/fa.js"></script>
+    <script>I18n.init(); setupGuideHint();</script>
+    <script>
+(function() {
+    var toggle = document.getElementById('theme-toggle');
+    var toggleMobile = document.getElementById('theme-toggle-nav');
+    var html = document.documentElement;
+    function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    function applyTheme(theme) {
+        html.setAttribute('data-theme', theme);
+    }
+    var saved = localStorage.getItem('theme');
+    applyTheme(saved || getSystemTheme());
+    function handleToggle() {
+        var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+    }
+    toggle.addEventListener('click', handleToggle);
+    toggleMobile.addEventListener('click', handleToggle);
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+        if (!localStorage.getItem('theme')) applyTheme(getSystemTheme());
+    });
+})();
+    </script>
+</body>
+</html>

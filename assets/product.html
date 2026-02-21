@@ -1,0 +1,40 @@
+<a href="{{ROOM_HASH}}.html" class="app-card reveal">
+    <div class="app-card-shimmer"></div>
+    <div class="app-card-banner">
+        <span class="app-version-tag">v{{VERSION}}</span>
+    </div>
+    <div class="app-card-logo">
+        <div class="app-icon">{{ROOM_LOGO_IMG}}</div>
+    </div>
+    <div class="app-card-body">
+        <h3>{{ROOM_NAME}}</h3>
+        <p class="app-desc" data-i18n="apps.cardDesc">Advanced privacy protection with end-to-end encryption and zero data logging.</p>
+        <div class="app-stats-row">
+            <div class="app-stat">
+                <span class="app-stat-value">{{SERVER_COUNT}}</span>
+                <span class="app-stat-label" data-i18n="apps.statNodes">Nodes</span>
+            </div>
+            <div class="app-stat">
+                <span class="app-stat-value">{{PLATFORM_COUNT}}</span>
+                <span class="app-stat-label" data-i18n="apps.statPlatforms">Platforms</span>
+            </div>
+            <div class="app-stat">
+                <span class="app-stat-value">{{PLAN_COUNT}}</span>
+                <span class="app-stat-label" data-i18n="apps.statPlans">Plans</span>
+            </div>
+        </div>
+        <div class="app-price-highlight">
+            <span data-i18n="apps.fromPrice">From</span>
+            <span class="app-price-value">{{MIN_PRICE}}</span>
+        </div>
+        <div class="app-server-badges">{{NODES}}</div>
+        {{BONUS}}
+        <div class="app-badges">
+            <span class="app-badge" data-i18n="apps.badgeEncrypted">Encrypted</span>
+            <span class="app-badge" data-i18n="apps.badgeZeroLogs">Zero Logs</span>
+            <span class="app-badge" data-i18n="apps.badgeGlobal">Global Network</span>
+        </div>
+        <div class="app-platforms">{{PLATFORMS}}</div>
+        <span class="app-cta" data-i18n="apps.viewDetails">View Details</span>
+    </div>
+</a>

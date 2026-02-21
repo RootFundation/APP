@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:bimi="http://bimigroup.org/bimi"
+     version="1.2"
+     baseProfile="tiny-ps"
+     width="256"
+     height="256"
+     viewBox="0 0 512 512">
+  <title>Root Corporation Pty Ltd</title>
+
+  <metadata>
+    <bimi:metadata version="1.0">
+      <bimi:brand>Root Corporation Pty Ltd</bimi:brand>
+    </bimi:metadata>
+  </metadata>
+
+  <rect width="512" height="512" fill="#000000"/>
+
+  <path d="M256,256 L191,99 Q219,70 256,11 Q293,70 321,99 Z" fill="#7B1818"/>
+  <path d="M256,256 L321,99 Q361,98 429,83 Q414,151 413,191 Z" fill="#D4CBBD"/>
+  <path d="M256,256 L413,191 Q442,219 501,256 Q442,293 413,321 Z" fill="#7B1818"/>
+  <path d="M256,256 L413,321 Q414,361 429,429 Q361,414 321,413 Z" fill="#D4CBBD"/>
+  <path d="M256,256 L321,413 Q293,442 256,501 Q219,442 191,413 Z" fill="#7B1818"/>
+  <path d="M256,256 L191,413 Q151,414 83,429 Q98,361 99,321 Z" fill="#D4CBBD"/>
+  <path d="M256,256 L99,321 Q70,293 11,256 Q70,219 99,191 Z" fill="#7B1818"/>
+  <path d="M256,256 L99,191 Q98,151 83,83 Q151,98 191,99 Z" fill="#D4CBBD"/>
+
+  <line x1="256" y1="256" x2="256" y2="11" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="429" y2="83" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="501" y2="256" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="429" y2="429" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="256" y2="501" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="83" y2="429" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="11" y2="256" stroke="#000000" stroke-width="2"/>
+  <line x1="256" y1="256" x2="83" y2="83" stroke="#000000" stroke-width="2"/>
+
+  <line x1="256" y1="256" x2="191" y2="99" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="321" y2="99" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="413" y2="191" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="413" y2="321" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="321" y2="413" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="191" y2="413" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="99" y2="321" stroke="#000000" stroke-width="4"/>
+  <line x1="256" y1="256" x2="99" y2="191" stroke="#000000" stroke-width="4"/>
+</svg>
